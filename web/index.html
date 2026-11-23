@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b8412b">
+<title>Trening skrzydłowego</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Trening">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday: a training companion for a father and his 12-year-old winger
+   IDEA a coach's clipboard on a tartan pitch: today's card, animated drill boards, a logbook, a reward shop
+   PICTURE the live session: drill board that plays the movement, with a thumb-reach counter panel; shop: points balance large
+   COLOUR tartan red header and actions, pitch green boards and balance, cone orange accent, blue for dad
+   TYPE Barlow Condensed 700 + Barlow
+   LAYOUT phone column: header, scrolling content, bottom tabs; sessions swap tabs for a sticky control panel */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#14100e);--bg2:light-dark(#efe9e5,#0d0a09);--ink:light-dark(#1d1613,#f2ebe6);--mut:light-dark(#62574f,#b8ada6);--line:light-dark(#e6ddd8,#302824);--card:light-dark(#faf6f3,#1e1916);--tar:#b8412b;--tar2:light-dark(#9c3522,#e0664d);--grn:#23703f;--cone:#ff8a1a;--blue:light-dark(#245fc2,#7aa6f2);--blue2:#2f6fd6;--ok:light-dark(#1f7a44,#4cc27c)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%;margin:0}
+body{background:var(--bg2);color:var(--ink);font:16px/1.5 Barlow,system-ui,sans-serif;overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+.app{height:100%;max-width:560px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg);position:relative;overflow:hidden}
+header{background:var(--tar);color:#fff;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:58px}
+header h1{font:700 26px/1.05 "Barlow Condensed",sans-serif;margin:0}
+header small{display:block;font-size:13px;opacity:.92}
+.hbtn{width:44px;height:44px;border-radius:10px;border:1px solid rgba(255,255,255,.45);background:transparent;color:#fff;display:grid;place-items:center;cursor:pointer;flex:none}
+.hbtn svg{width:22px;height:22px}
+main{flex:1;overflow-y:auto;padding:16px 16px 28px}
+h2{font:700 28px/1.05 "Barlow Condensed",sans-serif;margin:4px 0 10px}
+h3{font:700 22px/1.1 "Barlow Condensed",sans-serif;margin:0}
+p{margin:0 0 8px}
+a{color:var(--tar2)}
+.mut{color:var(--mut);font-size:15px}
+nav.tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid var(--line);background:var(--bg);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs button{background:none;border:0;min-height:56px;font-weight:600;font-size:15px;color:var(--mut);cursor:pointer;padding:0 2px}
+nav.tabs button[aria-current=true]{color:var(--tar2);box-shadow:inset 0 3px 0 var(--tar)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.card.hero{background:var(--tar);border-color:var(--tar);color:#fff}
+.card.hero .mut{color:#fff;opacity:.92}
+.who{font:700 15px "Barlow Condensed",sans-serif;opacity:.85}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.btn{min-height:46px;padding:10px 18px;border-radius:10px;border:0;background:var(--tar);color:#fff;font-weight:700;cursor:pointer}
+.btn[disabled]{opacity:.45;cursor:default}
+.hero .btn{background:#fff;color:#8f2f1d}
+.btn.sec{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.btn.blue{background:var(--blue2)}
+.btn.ok{background:var(--ok)}
+.btn.wide{width:100%}
+.btn.xl{min-height:58px;font-size:19px;padding:12px 22px}
+.btn+.btn.wide,.wide+.wide{margin-top:8px}
+.btn:focus-visible,nav.tabs button:focus-visible,.chip:focus-visible,.play:focus-visible,.hbtn:focus-visible{outline:3px solid var(--cone);outline-offset:2px}
+.link{background:none;border:0;color:var(--tar2);font-weight:600;padding:10px 0;min-height:44px;cursor:pointer;text-align:left}
+.yt{display:inline-flex;align-items:center;gap:6px;min-height:40px;font-weight:600;font-size:15px;color:var(--tar2);text-decoration:none}
+.yt svg{width:22px;height:16px;flex:none}
+.badge{display:inline-block;background:var(--cone);color:#2a1500;border-radius:6px;padding:1px 8px;font-size:13px;font-weight:700;margin-left:6px;vertical-align:middle}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-bottom:14px}
+.day{border:1px solid var(--line);border-radius:10px;padding:6px 2px;text-align:center;font-size:13px;line-height:1.25}
+.day b{display:block;font:700 16px "Barlow Condensed",sans-serif}
+.day.today{border:2px solid var(--tar);background:color-mix(in srgb,var(--tar) 8%,var(--bg))}
+.day .s{color:var(--tar2);font-weight:600}.day .t{color:var(--blue);font-weight:600}
+.dots{height:10px;display:flex;justify-content:center;gap:3px;margin-top:3px}
+.dots i{width:8px;height:8px;border-radius:50%;display:block}
+.dots .ds{background:var(--tar)}.dots .dt{background:var(--blue2)}
+.meter{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:4px 0 10px}
+.meter i{display:block;height:100%;background:var(--tar)}
+.meter.t i{background:var(--blue2)}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.seg button{min-height:44px;border:0;background:transparent;font-weight:600;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--blue2);color:#fff}
+.list{margin:6px 0 10px;padding-left:20px;color:var(--mut);font-size:15px}
+.list li{padding:2px 0}
+.board{position:relative;width:100%;background:var(--grn);border-radius:12px 12px 0 0;overflow:hidden;max-height:42vh}
+.board svg{position:absolute;inset:0;width:100%;height:100%}
+.play{width:100%;min-height:44px;border:0;border-radius:0 0 12px 12px;background:#174d2b;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;margin-bottom:10px}
+.play svg{width:14px;height:14px}
+.eq{background:color-mix(in srgb,var(--cone) 12%,var(--bg));border:1px solid color-mix(in srgb,var(--cone) 45%,var(--line));border-radius:12px;padding:10px 14px;margin:10px 0;font-size:15px}
+.eq b{display:block;font:700 18px "Barlow Condensed",sans-serif}
+.lvtag{display:inline-block;background:var(--blue2);color:#fff;border-radius:6px;padding:1px 8px;font:700 13px Barlow,sans-serif;margin-left:6px;vertical-align:middle;white-space:nowrap}
+.hero .lvtag{background:#fff;color:#8f2f1d}
+.lvnote{border-left:3px solid var(--blue2);padding-left:12px;font-size:15px;margin:8px 0;font-weight:600}
+.tips{margin:10px 0;border:1px solid var(--line);border-radius:12px;padding:0 14px;background:var(--card)}
+.tips summary{min-height:44px;display:flex;align-items:center;font-weight:600;color:var(--tar2)}
+.tips dl{margin:0 0 12px}.tips dt{font-weight:700;font-size:14px;margin-top:8px}.tips dd{margin:2px 0 0;font-size:15px;color:var(--mut)}
+.track{display:grid;grid-template-columns:minmax(0,1fr) 7.5em;gap:10px;align-items:center;background:color-mix(in srgb,var(--blue2) 8%,var(--bg));border:1px solid color-mix(in srgb,var(--blue2) 35%,var(--line));border-radius:12px;padding:10px 14px;margin:10px 0;font-size:15px}
+.track label{font-weight:600}
+.pack{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start;padding:12px 0;border-top:1px solid var(--line);cursor:pointer;font-size:17px;font-weight:600}
+.pack:first-of-type{border-top:0}
+.pack input{width:24px;height:24px;margin:2px 0 0;accent-color:var(--ok)}
+.pack small{display:block;font-size:14px;font-weight:400;color:var(--mut)}
+.pack input:checked+span{opacity:.5;text-decoration:line-through}
+input[type=time]{width:100%;min-height:44px;font-size:16px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.famcode{font:700 clamp(24px,7.4vw,38px)/1.1 "Barlow Condensed",sans-serif;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-align:center;background:var(--bg);border:2px dashed var(--line);border-radius:12px;padding:12px;margin:8px 0 12px;user-select:all}
+.pcard{display:grid;gap:6px;width:100%;text-align:left;border:0;border-radius:16px;padding:20px;margin-bottom:12px;color:#fff;cursor:pointer;min-height:120px;font:inherit}
+.pcard b{font:700 32px/1.05 "Barlow Condensed",sans-serif}.pcard span{font-size:15px;opacity:.95}
+.pcard.s{background:var(--tar)}.pcard.t{background:var(--blue2)}
+.pcard:focus-visible{outline:3px solid var(--cone);outline-offset:3px}
+.prog{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.prog i{display:block;height:100%;background:var(--cone)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.meta span{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:2px 9px;font-weight:600;font-size:14px;white-space:nowrap}
+.cue{border-left:3px solid var(--cone);padding-left:12px;color:var(--mut);font-size:15px}
+.drill{padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+.panel{display:flex;align-items:center;gap:12px;padding:10px 16px;border-top:1px solid var(--line);background:var(--card)}
+.panel .cnt{flex:1}
+.panel .cnt b{font:700 40px/1 "Barlow Condensed",sans-serif;font-variant-numeric:tabular-nums}
+.panel .cnt b small{font-size:22px;color:var(--mut)}
+.panel .cnt span{display:block;font-size:14px;color:var(--mut);font-weight:600;line-height:1.25}
+.panel .big{font:700 44px/1 "Barlow Condensed",sans-serif;font-variant-numeric:tabular-nums;flex:1}
+.panel .big.done{color:var(--ok)}
+.panel .btn.xl{padding:12px 18px}
+.undo{min-height:44px;min-width:44px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-weight:600;cursor:pointer;padding:0 10px}
+.ex{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.ex .hd{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:baseline}
+.ex .n{font:700 22px "Barlow Condensed",sans-serif;color:var(--blue)}
+.ex .last{font-size:14px;color:var(--mut);margin-top:4px}
+.ex .hint{font-size:14px;color:var(--ok);font-weight:600}
+.plate{font-size:14px;color:var(--blue);font-weight:600;margin-top:4px;min-height:1px}
+.set{display:grid;grid-template-columns:2em minmax(0,1fr) minmax(0,1fr) 52px;gap:8px;align-items:end;margin-top:8px}
+.set label{font-size:13px;color:var(--mut);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.set input{width:100%;min-height:44px;font-size:16px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-variant-numeric:tabular-nums}
+.set .k{font:700 18px "Barlow Condensed",sans-serif;text-align:center;padding-bottom:10px}
+.tick{width:52px;height:44px;border-radius:10px;border:2px solid var(--line);background:var(--bg);cursor:pointer;display:grid;place-items:center}
+.tick svg{width:22px;height:22px;stroke:var(--mut)}
+.tick.on{background:var(--ok);border-color:var(--ok)}
+.tick.on svg{stroke:#fff}
+.foot{display:flex;gap:10px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg)}
+.foot .btn{flex:1}
+.rest{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--blue2);color:#fff}
+.rest b{font:700 34px/1 "Barlow Condensed",sans-serif;font-variant-numeric:tabular-nums;flex:1}
+.rest button{min-height:44px;padding:6px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.6);background:transparent;color:#fff;font-weight:600;cursor:pointer}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:8px 0 12px}
+.form.one{grid-template-columns:minmax(0,1fr)}
+.form label,.lbl{font-size:14px;color:var(--mut);display:block}
+.form input,.wsel select,.inp{width:100%;min-height:44px;font-size:16px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+textarea.inp{min-height:110px;font-size:14px;font-family:ui-monospace,monospace}
+.metric{display:grid;grid-template-columns:minmax(0,1fr) 90px;gap:4px 10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.metric svg{width:90px;height:34px}
+.metric small{color:var(--mut);font-size:14px;display:block}
+.hist{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;padding:10px 0;border-top:1px solid var(--line);align-items:center}
+.hist:first-of-type{border-top:0}
+.hist small{color:var(--mut);font-size:14px;display:block}
+.pp{font:700 18px "Barlow Condensed",sans-serif;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pp.plus{color:var(--ok)}.pp.minus{color:var(--tar2)}
+.del{min-height:44px;padding:4px 10px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--mut);font-size:14px;cursor:pointer}
+.ptab{width:100%;border-collapse:collapse;font-size:15px}
+.ptab td{padding:8px 0;border-top:1px solid var(--line);vertical-align:top}
+.ptab td:last-child{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;padding-left:10px}
+.wsel{display:grid;grid-template-columns:3em minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:center;margin-bottom:8px}
+.wsel b{font:700 18px "Barlow Condensed",sans-serif}
+.bal{background:var(--grn);color:#fff;border-radius:16px;padding:18px;margin-bottom:14px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 16px;align-items:center}
+.bal .coin{width:76px;height:76px}
+.bal b{font:700 clamp(48px,14vw,64px)/1 "Barlow Condensed",sans-serif;font-variant-numeric:tabular-nums}
+.bal span{font-size:15px;opacity:.92}
+.lvl{grid-column:1/3;margin-top:8px;font-size:15px}
+.lvl .meter{background:rgba(255,255,255,.25);margin-bottom:0}
+.lvl .meter i{background:#ffd84a}
+.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.item:first-of-type{border-top:0}
+.item .cost{font:700 20px "Barlow Condensed",sans-serif;color:var(--tar2);white-space:nowrap}
+.item .meter{grid-column:1/3;margin:2px 0 0}
+.goalbtn{background:none;border:0;padding:6px 0;min-height:36px;color:var(--mut);font-size:14px;font-weight:600;cursor:pointer;display:block}
+.goalbtn[aria-pressed=true]{color:var(--cone)}
+.grades{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:8px 0}
+.grades button{min-height:52px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font:700 24px "Barlow Condensed",sans-serif;cursor:pointer}
+.grades button small{display:block;font:600 12px Barlow,sans-serif;color:var(--ok)}
+.ed{display:grid;grid-template-columns:minmax(0,1fr) 5.5em 44px;gap:6px;margin-bottom:6px}
+.ed.it{grid-template-columns:minmax(0,1fr) 5.5em 44px;padding:10px 0;border-top:1px solid var(--line);margin:0}
+.ed.it>input:first-child{grid-column:1/4}
+.ed select{width:100%;min-height:44px;font-size:16px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.chip{min-height:44px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-weight:600;cursor:pointer;white-space:nowrap}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;margin:0 -2px}
+.cats .chip{flex:none;min-height:40px;padding:6px 14px}
+.cats .chip[aria-pressed=true]{background:var(--tar);border-color:var(--tar);color:#fff}
+.cathd{font:700 17px "Barlow Condensed",sans-serif;color:var(--mut);margin:14px 0 0;padding-top:10px;border-top:2px solid var(--line)}
+.cathd:first-of-type{margin-top:4px}
+.badges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 8px;margin-top:10px}
+.bd{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;font-size:13px;line-height:1.25;color:var(--mut)}
+.bd b{display:block;font-size:14px;color:var(--ink);overflow-wrap:anywhere}
+.bd.off b{color:var(--mut)}
+.medal{width:40px;height:48px}
+.heat{display:grid;grid-template-rows:repeat(7,minmax(0,1fr));grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:3px;margin:8px 0}
+.heat i{display:block;aspect-ratio:1;border-radius:3px;background:var(--line)}
+.heat i.s{background:var(--tar)}.heat i.t{background:var(--blue2)}.heat i.st{background:linear-gradient(135deg,var(--tar) 50%,var(--blue2) 50%)}.heat i.m{background:var(--cone)}
+.heat i.f{background:transparent;box-shadow:inset 0 0 0 1px var(--line)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;color:var(--mut)}
+.legend span::before{content:'';display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px;background:var(--c)}
+.stat{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center;margin:8px 0}
+.stat b{display:block;font:700 28px/1 "Barlow Condensed",sans-serif;color:var(--tar2)}
+.stat span{font-size:13px;color:var(--mut)}
+.bars .r{display:grid;grid-template-columns:3.4em minmax(0,1fr) 5.8em;gap:8px;align-items:center;font-size:14px;padding:3px 0}
+.bars .r i{display:block;height:14px;background:var(--blue2);border-radius:3px;min-width:2px}
+.bars .r span:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stepper{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg)}
+.stepper button{height:44px;border:0;background:var(--card);font-size:22px;font-weight:700;cursor:pointer}
+.stepper output{text-align:center;font:700 22px "Barlow Condensed",sans-serif}
+.stars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.stars button{min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font:700 18px "Barlow Condensed",sans-serif;cursor:pointer}
+.stars button[aria-pressed=true]{background:var(--cone);border-color:var(--cone);color:#2a1500}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;border-top:1px solid var(--line);cursor:pointer}
+.sw:first-of-type{border-top:0}
+.sw input{appearance:none;-webkit-appearance:none;width:52px;height:30px;border-radius:15px;background:var(--line);position:relative;cursor:pointer;flex:none;margin:0}
+.sw input::after{content:'';position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.sw input:checked{background:var(--ok)}.sw input:checked::after{left:25px}
+.sw input:focus-visible{outline:3px solid var(--cone);outline-offset:2px}
+.sum{text-align:center;padding:6px 0 10px}
+.sum .big{font:700 clamp(46px,14vw,64px)/1 "Barlow Condensed",sans-serif;color:var(--ok)}
+.sumrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center;margin:12px 0}
+.sumrow b{display:block;font:700 26px/1.1 "Barlow Condensed",sans-serif}
+.sumrow span{font-size:13px;color:var(--mut)}
+.modal{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:30}
+.modal .card{width:100%;max-width:340px;background:var(--bg)}
+canvas.conf{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:35}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;max-width:90vw;z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+.empty{color:var(--mut);font-size:15px;padding:6px 0}
+details summary{cursor:pointer}
+@media(prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<marker id="mw" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#fff"/></marker>
+<marker id="my" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#ffd84a"/></marker>
+</defs></svg>
+<div class="app" id="app">
+<header><div><h1 id="ttl">Trening</h1><small id="sub">skrzydłowy i tata</small></div><button class="hbtn" id="gear" data-a="tab" data-v="ustawienia" aria-label="Ustawienia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></header>
+<div id="restbar"></div>
+<main id="main"></main>
+<div id="bottom"></div>
+<div id="modal"></div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+{
+const VERSION='3.2';
+/* Firebase project used when the app runs on its own site (not inside Claude). Filled at build time. */
+const FB_CFG=/*FB_CFG*/{"apiKey":"AIzaSyA8bdlTbQ1NeD6HAmYb176iDZ4pvonofi0","authDomain":"trening-9ab24.firebaseapp.com","projectId":"trening-9ab24","storageBucket":"trening-9ab24.firebasestorage.app","messagingSenderId":"831323601801","appId":"1:831323601801:web:92d60076e9810a3f27bf58"}/*END_FB_CFG*/;
+const HOSTED=!(window.claude&&window.claude.use);
+const FAM_ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const getFam=()=>{try{return localStorage.getItem('trening-family')||''}catch(e){return ''}};
+const setFam=v=>{try{v?localStorage.setItem('trening-family',v):localStorage.removeItem('trening-family')}catch(e){}};
+const genFam=()=>{const a=new Uint32Array(12);crypto.getRandomValues(a);return Array.from(a,x=>FAM_ABC[x%FAM_ABC.length]).join('')};
+const fmtFam=c=>c.replace(/(.{4})(?=.)/g,'$1-');
+const cleanFam=v=>String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'');const SYNC_URL='https://claude.ai/artifact/5SiQhowsWHoUuvKqsmGm5A';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const NATIVE=(()=>{try{return window.TreningApp||null}catch(e){return null}})();
+const YT=q=>`<a class="yt" href="https://www.youtube.com/results?search_query=${encodeURIComponent(q)}" target="_blank" rel="noopener"><svg viewBox="0 0 22 16" aria-hidden="true"><rect width="22" height="16" rx="4" fill="#e62117"/><path d="M9 4.5v7l6-3.5z" fill="#fff"/></svg>Jak to robić (YouTube)</a>`;
+const DAYS=['Pn','Wt','Śr','Czw','Pt','Sob','Nd'],DAYS_L=['Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota','Niedziela'];
+const SYN_OPT=['Klub','Tartan','Solo','Dom','Mecz','Wolne'],TATA_OPT=['Trening','Tartan','Wolne'];
+const SYN_SH={Klub:'Klub',Tartan:'Tart.',Solo:'Solo',Dom:'Dom',Mecz:'Mecz',Wolne:'—'},TATA_SH={Trening:'Siła',Tartan:'Tart.',Wolne:'—'};
+const DEF_WEEK={syn:['Klub','Tartan','Klub','Dom','Klub','Mecz','Wolne'],tata:['Trening','Tartan','Trening','Trening','Wolne','Trening','Wolne']};
+const CATS=[['jedzenie','Jedzenie'],['czas','Czas i przywileje'],['wyjscia','Wyjścia'],['sprzet','Sprzęt piłkarski'],['gry','Gry'],['inne','Inne']];
+const CAT_N=Object.fromEntries(CATS);
+const SHOP_CAT=2;
+const DEF_ITEMS=[
+['r01','Lody albo shake',40,'jedzenie'],['r02','Ulubione słodycze',40,'jedzenie'],['r03','Bubble tea',70,'jedzenie'],['i2','Wybór obiadu w weekend',80,'jedzenie'],['r04','Zestaw w McDonald\'s',150,'jedzenie'],['r05','Kebab',150,'jedzenie'],['i3','Wyjście na pizzę',200,'jedzenie'],['r06','Obiad na mieście, on wybiera miejsce',250,'jedzenie'],
+['i1','Pół godziny dłużej na konsoli',60,'czas'],['r07','Godzina dłużej przed snem w weekend',70,'czas'],['r08','Dzień bez obowiązków domowych',90,'czas'],['r09','Wieczór filmowy z popcornem, on wybiera film',100,'czas'],['r10','Kolega na noc albo nocowanie u kolegi',300,'czas'],
+['r11','Kino',250,'wyjscia'],['r12','Kręgle albo bilard',300,'wyjscia'],['r13','Park trampolin',350,'wyjscia'],['r14','Aquapark',400,'wyjscia'],['r15','Laser tag',450,'wyjscia'],['i5','Wyjście na mecz ligowy',800,'wyjscia'],
+['r16','Nowe getry',120,'sprzet'],['i4','Nowa piłka',400,'sprzet'],['r18','Koszulka ulubionego klubu',900,'sprzet'],['i6','Nowe korki lub turfy',1200,'sprzet'],['r19','Korki z wyższej półki',2000,'sprzet'],
+['r20','Doładowanie do gry',500,'gry'],['r21','Nowa gra',1500,'gry']].map(([id,n,c,k])=>({id,n,c,k}));
+const DEF_SHOP={cat:SHOP_CAT,items:DEF_ITEMS,rates:{'6':40,'5':25,'4':10,'3':0,'2':0,'1':0},tr:{AB:30,S:20,D:15,test:10,rec:20,match:5,goal:10,assist:10,badge:20}};
+const LR=(a,b)=>Array.from({length:a+b},(_,i)=>i<a?'Z lewej strony':'Z prawej strony');
+const ALT=(n,a,b)=>Array.from({length:n},(_,i)=>i%2?b:a);
+const ZWODY=['Zwód ciałem, 4 × każdą nogą','Nożyce, 4 × każdą nogą','Zwrot Cruyffa, 4 × każdą nogą','La Croqueta, 4 × każdą nogą'];
+const F_ZWOD={w:20,h:12,i:[['drb',[[1,6],[8,6]]],['drb',[[8,6],[11,2.5],[16.4,2.5]]],['drb',[[8,6],[11,9.5],[16.4,9.5]]],['c',10,6],['d',17,1.4],['d',17,3.6],['d',17,8.4],['d',17,10.6],['S',1,6],['txt',9.8,7.6,'zwód'],['txt',1.6,8.2,'start']]};
+
+/* Drill fields: id, t title, m chips, dur block timer (s) | reps + rest (s) with optional work (timed set, s), names per rep, unit,
+   sw stopwatch per rep, tr tracked result {l,max|u,lower}, L per-level overrides [{p:variant text,...}], eq set-up, d how, c key cue,
+   e common errors, ez easier, hd harder, yt YouTube query, f diagram. */
+const WARM={id:'w11',t:'Rozgrzewka FIFA 11+ Kids',m:['12–15 min','6 ćwiczeń','chroni przed kontuzjami'],reps:6,rest:20,
+eq:'1 piłka. Syn startuje z linii, tata stoi 10–15 m dalej i podaje komendy.',
+d:'Program FIFA dla dzieci 7–13 lat, zastępuje zwykłą rozgrzewkę. Licznik prowadzi przez ćwiczenia po kolei. Siódme ćwiczenie programu (przewroty) róbcie tylko na trawie albo macie, nie na tartanie.',
+c:'Kolano zawsze nad stopą, nigdy do środka. Lądowanie ciche i miękkie, na ugiętą nogę, z utrzymaniem równowagi 3 sekundy.',
+e:'Kolano ucieka do środka przy lądowaniu. Twarde lądowanie na prostej nodze. Pośpiech kosztem techniki.',
+ez:'Krótsze skoki, przy staniu na jednej nodze wolno lekko podeprzeć się ręką.',
+hd:'Wyższy poziom włącza się sam co kilka treningów. Przechodźcie dalej tylko przy czystej technice.',
+yt:'FIFA 11+ Kids rozgrzewka ćwiczenia',
+L:[{p:'Poziom 1: nauka poprawnej techniki.',names:['Gra „Uwaga!”: trucht do taty, na „prawa” albo „lewa” staje na tej nodze 3 s. 3 serie po 5 komend','Łyżwiarz: skok z nogi na nogę i 3 s stania. 2 × 10 skoków (5 na nogę)','Stanie na jednej nodze i rzuty piłką z tatą z 3–5 m. 5 rzutów na każdej nodze','Podpór na przedramionach, piłka pod goleniami, powoli przód-tył. 3 × 15 s','Skok na jednej nodze do przodu, 3 s stania po lądowaniu. 2 × (5 na nogę)','Spiderman: podpór, stopa toczy piłkę przód-tył, zmiana nóg. 3 × 15 s']},
+{p:'Poziom 2: więcej uwagi i kontroli piłki.',names:['Gra „Uwaga!”: tata pokazuje ręką, na której nodze stanąć. 3 serie po 5 komend','Łyżwiarz z piłką trzymaną oburącz. 2 × 10 skoków','Stanie na jednej nodze, po każdym rzucie piłka wokół uniesionej nogi. 5 rzutów na nogę','Podpór na dłoniach, piłka toczona ósemką wokół dłoni. 3 × 15 s','Skok na jednej nodze: tata wskazuje do przodu albo do tyłu. 2 × (5 na nogę)','Spiderman: ręce idą do tyłu, potem stopy dochodzą. 3 × 15 s']},
+{p:'Poziom 3: piłka i reakcja.',names:['Gra „Uwaga!” z piłką w rękach. 3 serie po 5 komend','Łyżwiarz z piłką na jednej wyciągniętej dłoni. 2 × 10 skoków','Stanie na jednej nodze i podania wewnętrzną z tatą z 2–5 m. 5 podań na nogę','Podpór na dłoniach, piłka ósemką, zmiana rąk. 3 × 15 s','Skoki na jednej nodze w bok. 2 × (5 na nogę)','Spiderman: na czworakach do przodu 5–10 m. 3 serie']}]};
+const COOL={id:'cool',t:'Schłodzenie',m:['4 min'],dur:240,eq:'Bez sprzętu. Woda.',
+d:'2 minuty truchtu i marszu, potem po 20 s na każdą stronę: łydki, tył uda, przód uda, zginacze bioder, pachwiny. Na koniec picie wody.',
+c:'Rozciąganie spokojne, bez bólu i bez sprężynowania.',e:'Pomijanie schłodzenia po zmęczeniu. Szarpane rozciąganie.',ez:'Samo rozciąganie łydek i ud.',hd:'Dodatkowo 1 minuta rolowania nóg na wałku w domu.',yt:'rozciąganie po treningu piłka nożna dzieci'};
+
+const A=[WARM,
+{id:'a-kw',t:'Prowadzenie w kwadracie',m:['6 min','kwadrat 10 × 10 m'],dur:360,eq:'4 talerzyki w rogach kwadratu 10 × 10 m, 1 piłka. Tata stoi z boku i klaszcze.',yt:'prowadzenie piłki ćwiczenia dla dzieci',
+d:'Po minucie: wewnętrzna, zewnętrzna, podeszwa, obie nogi na zmianę, sama słabsza noga. Na klaśnięcie zwrot o 180° i przyspieszenie na 3 kroki.',c:'Piłka maks. pół metra od stopy, głowa w górze co 2–3 dotknięcia.',
+e:'Piłka odskakuje za daleko. Wzrok cały czas w piłce. Prowadzenie tylko lepszą nogą.',ez:'Większy kwadrat, wolniejsze tempo, bez zwrotów.',hd:'Kwadrat 6 × 6 m, tata wchodzi do środka jako „przeszkadzacz”.',
+L:[{p:'Poziom 1: spokojne tempo, nauka dotknięć.'},{p:'Poziom 2: na klaśnięcie zwrot i sprint do najbliższego rogu.'},{p:'Poziom 3: tata w kwadracie próbuje dotknąć piłki.'}],
+f:{w:14,h:12.5,i:[['c',2,1],['c',12,1],['c',12,11],['c',2,11],['drb',[[3,9.5],[10,9.5],[11,3],[4,2.2],[3,7.5]]],['S',3,9.5],['txt',7,12,'10 m']]}},
+{id:'a-sprint',t:'Slalom i sprint 10 m',m:['pełna przerwa 60 s'],reps:6,rest:60,unit:'sprintów',sw:1,tr:{l:'Najlepszy czas',u:'s',lower:1},eq:'6 tyczek w linii co 1 m. 10 m za ostatnią tyczką 2 talerzyki 2 m od siebie (meta). Tata stoi na mecie z telefonem.',yt:'slalom tyczki sprint trening szybkości piłka nożna',
+d:'Slalom bez piłki, zaraz potem sprint 10 m przez metę. Tata mierzy czas w aplikacji: Start przy ostatniej tyczce, Stop na mecie. Wraca spacerem.',c:'W slalomie krótkie, szybkie kroki, w sprincie mocne odepchnięcia i praca rąk.',
+e:'Zatrzymanie po slalomie zamiast od razu sprintu. Za krótka przerwa, „bo nie jest zmęczony”: szybkość trenuje się tylko wypoczętym.',ez:'Tyczki co 1,5 m.',hd:'Slalom bokiem, sprint z leżenia na sygnał.',
+L:[{p:'Poziom 1: 6 sprintów, slalom przodem.',reps:6},{p:'Poziom 2: 8 sprintów, co drugi slalom bokiem.',reps:8},{p:'Poziom 3: 8 sprintów, ostatnie 5 m z piłką.',reps:8}],
+f:{w:24,h:8,i:[['run',[[1,4],[3,5.3],[4,2.7],[5,5.3],[6,2.7],[7,5.3],[8,2.7],[9.6,4],[20.6,4]]],['p',3,4],['p',4,4],['p',5,4],['p',6,4],['p',7,4],['p',8,4],['d',21,2.4],['d',21,5.6],['S',1,4],['txt',5.5,1.3,'tyczki co 1 m'],['txt',15,6.9,'sprint 10 m']]}},
+{id:'a-zwody',t:'Zwód i wyjście',m:['4 zwody','4 × każdą nogą'],reps:4,rest:45,names:ZWODY,tr:{l:'Udane zwody w ostatniej serii',max:8},eq:'1 pachołek (obrońca). 7 m za nim, 3,5 m w górę i w dół, dwie bramki z talerzyków szerokie na 2 m. Start 9 m przed pachołkiem.',yt:'zwód Cruyffa nożyce la croqueta nauka',
+d:'Prowadzi na pachołek, 1–1,5 m przed nim zwód, wyjście w bok i przyspieszenie 5 m przez bramkę. Każdy zwód 4 razy w lewo i 4 w prawo.',c:'Zwód wolno, wyjście szybko. Pojedynek wygrywa zmiana tempa, nie sam trik.',
+e:'Zwód za daleko od obrońcy. Brak przyspieszenia po zwodzie. Patrzenie w piłkę zamiast na obrońcę.',ez:'Najpierw sam ruch zwodu w miejscu, potem w marszu.',hd:'Zwód jedną nogą, wyjście drugą, bez dodatkowego dotknięcia.',
+L:[{p:'Poziom 1: pachołek jako obrońca.'},{p:'Poziom 2: tata zamiast pachołka, przesuwa się w bok na pół gwizdka.'},{p:'Poziom 3: tata broni aktywnie, syn sam wybiera zwód.'}],f:F_ZWOD},
+{id:'a-1v1',t:'1 na 1 z tatą',m:['przerwa 35 s'],reps:10,rest:35,unit:'pojedynków',tr:{l:'Wygrane pojedynki',max:10},eq:'4 pachołki: prostokąt 10 m szeroki i 15 m długi. Linia między przednimi pachołkami to meta. Tata na środku, syn z piłką na drugim końcu.',yt:'1 na 1 trening skrzydłowy drybling',
+d:'Syn atakuje, tata broni. Punkt, gdy syn przeprowadzi piłkę za linię mety. Po każdym pojedynku przerwa.',c:'Atakuj obrońcę prosto i szybko. Zwód dopiero, gdy obrońca stanie albo przeniesie ciężar.',
+e:'Bieg w obrońcę bez zmiany tempa. Zwód, gdy obrońca jest jeszcze daleko. Piłka za daleko od nogi przy obrońcy.',ez:'Kanał 12 m szeroki.',hd:'Kanał 8 m, limit 6 s na przejście.',
+L:[{p:'Poziom 1: tata broni na 50%, tylko przesuwa się.',reps:8,tr:{l:'Wygrane pojedynki',max:8}},{p:'Poziom 2: tata broni na 70%, może wybić piłkę.'},{p:'Poziom 3: tata broni na 100%, po odbiorze kontratakuje.'}],
+f:{w:14,h:18,i:[['line',2,2,12,2],['c',2,2],['c',12,2],['c',2,17],['c',12,17],['drb',[[7,16],[4.6,11],[9.4,6],[8.5,2.5]]],['run',[[7,7.2],[5.6,9.6],[8,6.4]],1],['S',7,16],['T',7,7.2],['txt',7,0.9,'przejdź z piłką za linię']]}},
+{id:'a-cut',t:'Zejście do środka i strzał',m:['10 strzałów','5 z każdej strony'],reps:10,rest:20,names:LR(5,5),tr:{l:'Celne strzały',max:10},eq:'Bramka (do ręcznej, mini bramka albo ściana z celem). Pachołek 3 m od linii bocznej i 7 m przed bramką. Start przy linii bocznej, 15 m od bramki.',yt:'zejście do środka i strzał skrzydłowy trening',
+d:'Prowadzi wzdłuż linii, przy pachołku ścina do środka na lepszą nogę i strzela po dalszym słupku.',c:'Ostatni dotyk ustawia piłkę na strzał. Uderzenie wewnętrzną z podkręceniem, wzrok na bramkę przed strzałem.',
+e:'Strzał na siłę zamiast z podkręceniem. Ostatni dotyk za blisko nóg. Odchylenie tułowia do tyłu.',ez:'Strzał z 12 m.',hd:'Maks. 2 dotknięcia od zejścia do strzału.',
+L:[{p:'Poziom 1: stałe zejście przy pachołku.'},{p:'Poziom 2: tata przy pachołku jako obrońca, syn decyduje: do środka albo do linii.'},{p:'Poziom 3: od startu do strzału maks. 4 sekundy.'}],
+f:{w:24,h:17,i:[['line',1,1,1,16],['line',1,1,23,1],['g',9,1,15,1],['drb',[[3,15.4],[3,8.4],[9,5.6]]],['pas',[[9.6,5.2],[14.2,1.5]]],['c',4.4,7.6],['S',3,15.4],['txt',17.6,2.6,'dalszy słupek'],['txt',3.4,16.6,'start']]}},
+{id:'a-gra',t:'Gra do 5 goli',m:['5 min'],dur:300,eq:'2 mini bramki (albo po 2 pachołki 2 m od siebie) w odległości 15 m. Jedna piłka.',yt:'gra 1 na 1 małe bramki dzieci piłka nożna',
+d:'1 na 1 na dwie mini bramki. Wygrywa ten, kto pierwszy strzeli 5 goli.',c:'Wszystko z treningu w grze: zwód, zmiana tempa, strzał.',e:'Tata wygrywa za łatwo: dziecko ma kończyć trening z poczuciem sukcesu.',ez:'Tata gra słabszą nogą.',hd:'Gol liczy się tylko po zwodzie.',
+f:{w:16,h:10,i:[['g',1,3.5,1,6.5],['g',15,3.5,15,6.5],['drb',[[5,5],[9,3],[13.6,4.4]]],['run',[[11,5.6],[12.6,5.2]],1],['pas',[[13.6,4.4],[15,4.8]]],['S',5,5],['T',11,5.6],['txt',8,8.9,'pierwszy do 5 goli']]}},
+COOL];
+
+const B=[WARM,
+{id:'b-pary',t:'Podania w parze',m:['6 min','8–10 m'],dur:360,eq:'2 talerzyki 8–10 m od siebie, każdy stoi przy swoim. 1 piłka.',yt:'podania w parach ćwiczenia piłka nożna dzieci',
+d:'Przyjęcie i podanie, połowa podań słabszą nogą. Po każdym podaniu krok w bok, żeby piłka szła w ruchu.',c:'Przyjęcie stopą dalszą od podającego, ciało od razu otwarte do gry.',
+e:'Przyjęcie bliższą nogą (ciało zamknięte). Piłka zatrzymana pod sobą. Podanie czubkiem.',ez:'6 m, 2 dotknięcia.',hd:'1 dotknięcie, 12 m.',
+L:[{p:'Poziom 1: 2 dotknięcia, 8 m.'},{p:'Poziom 2: 1 dotknięcie, 10 m, krok w bok po podaniu.'},{p:'Poziom 3: 1 dotknięcie, tata podaje niedokładnie, syn poprawia ustawienie.'}],
+f:{w:14,h:8,i:[['pas',[[2.6,3.4],[11.4,3.4]]],['run',[[2,4],[2,6]],1],['pas',[[11.4,3.6],[2.6,5.6]]],['S',2,4],['T',12,4],['txt',7,7.4,'1–2 dotknięcia']]}},
+{id:'b-drab',t:'Drabinka i sprint 5 m',m:['8 przejść','przerwa 40 s'],reps:8,rest:40,names:['Jedna noga w każde pole','Jedna noga w każde pole','Obie nogi w każde pole','Obie nogi w każde pole','Bokiem','Bokiem','In-out','In-out'],eq:'Drabinka koordynacyjna na ziemi. 5 m za nią 2 talerzyki (meta).',yt:'drabinka koordynacyjna ćwiczenia piłka nożna',
+d:'Przejście przez drabinkę wzorem z licznika i od razu sprint 5 m.',c:'Szybkie stopy, krótki kontakt z ziemią, ręce pracują.',
+e:'Patrzenie pod nogi. Za długie kroki. Zwolnienie po drabince zamiast sprintu.',ez:'Wolniej, z dokładnością w każdym polu.',hd:'Po drabince sprint z piłką podaną przez tatę.',
+L:[{p:'Poziom 1: technika ważniejsza niż szybkość.'},{p:'Poziom 2: pełne tempo.'},{p:'Poziom 3: na końcu przyjęcie podania od taty i prowadzenie przez metę.'}],
+f:{w:17,h:6,i:[['lad',1.5,2,8,2],['run',[[0.6,3],[15.6,3]]],['d',15.4,1.6],['d',15.4,4.4],['S',0.6,3],['txt',12.5,5.3,'sprint 5 m']]}},
+{id:'b-kier',t:'Przyjęcie kierunkowe',m:['3 serie po 8','przerwa 60 s'],reps:3,rest:60,unit:'serie po 8 podań',tr:{l:'Udane przyjęcia',max:24},eq:'Syn w środku. Tata z piłkami 7 m z boku. Dwie bramki z talerzyków (2 m), 6 m od syna: jedna ukośnie w górę, druga w dół.',yt:'przyjęcie kierunkowe piłka nożna trening',
+d:'Tata podaje i woła „góra” albo „dół”. Syn przyjmuje od razu w tę stronę i prowadzi przez bramkę. Udane przyjęcie: jeden dotyk i piłka idzie w stronę bramki.',c:'Przed podaniem spojrzenie przez ramię. Ciało półotwarte, pierwszy dotyk w kierunku gry.',
+e:'Przyjęcie i dopiero obrót (dwa dotknięcia zamiast jednego). Brak spojrzenia przez ramię.',ez:'Tata woła kierunek przed podaniem.',hd:'Tata po podaniu rusza jako obrońca.',
+L:[{p:'Poziom 1: kierunek wołany przed podaniem.'},{p:'Poziom 2: kierunek wołany, gdy piłka jest w połowie drogi.'},{p:'Poziom 3: tata po podaniu rusza za synem jako obrońca.'}],
+f:{w:17,h:13,i:[['pas',[[2.6,6.5],[9,6.5]]],['drb',[[9,6.5],[14.6,2.6]]],['drb',[[9,6.5],[14.6,10.4]]],['d',15.4,1.4],['d',15.4,3.8],['d',15.4,9.2],['d',15.4,11.6],['S',9,6.5],['T',2,6.5],['txt',7.6,9.6,'zerknij przez ramię'],['txt',13,0.9,'góra'],['txt',13,12.5,'dół']]}},
+{id:'b-cross',t:'Bieg wzdłuż linii i dośrodkowanie',m:['20 dośrodkowań','10 z lewej, 10 z prawej'],reps:20,rest:15,names:LR(10,10),tr:{l:'Dośrodkowania w dobre miejsce',max:20},eq:'Bramka. Talerzyk na 11. metrze. Tata z piłkami 8 m od linii bocznej, ok. 15 m od linii końcowej. Syn przy linii bocznej obok taty.',yt:'dośrodkowanie wycofanie cut back trening skrzydłowy',
+d:'Tata zagrywa wzdłuż linii, syn wbiega, prowadzi do linii końcowej i wycofuje na 11. metr albo gra płasko i mocno na krótki słupek.',c:'Jedno spojrzenie w pole karne przed dośrodkowaniem. Płasko i mocno daje więcej niż wysoko i słabo.',
+e:'Głowa w dół przy dośrodkowaniu. Dośrodkowanie „w ciemno”. Za wysoka, wolna piłka.',ez:'Dośrodkowanie z miejsca, bez biegu.',hd:'Maks. 2 dotknięcia po dojściu do linii.',
+L:[{p:'Poziom 1: spokojnie, bez obrońcy.'},{p:'Poziom 2: tata po podaniu goni syna jako obrońca.'},{p:'Poziom 3: maks. 2 dotknięcia przy linii końcowej.'}],
+f:{w:24,h:18,i:[['line',1,1,23,1],['line',1,1,1,17],['g',10,1,16,1],['pas',[[8.4,14.4],[3,6.4]]],['run',[[2.5,15.2],[3,6.4]],1],['drb',[[3,6.4],[4,2.4]]],['pas',[[4,2.4],[12.6,7.4]]],['pas',[[4,2.4],[10.4,2.2]]],['d',13,7.6],['S',2.5,15.2],['T',9,15],['txt',16.6,8.4,'11 m, wycofanie'],['txt',13.8,3.4,'krótki słupek']]}},
+{id:'b-first',t:'Strzał z pierwszej piłki',m:['2 serie po 8','przerwa 90 s'],reps:2,rest:90,unit:'serie po 8 strzałów',tr:{l:'Celne strzały',max:16},eq:'Bramka. Tata z piłkami przy linii końcowej, 3 m od słupka. Syn startuje 12 m przed bramką.',yt:'strzał z pierwszej piłki trening dzieci',
+d:'Tata wycofuje piłkę na 11. metr, syn wbiega i uderza bez przyjęcia, na zmianę wewnętrzną i podbiciem.',c:'Noga postawna obok piłki, ciało nad piłką. Wtedy strzał idzie nisko.',
+e:'Odchylenie tułowia (strzał w chmury). Noga postawna za piłką. Siła zamiast celności.',ez:'Przyjęcie i strzał.',hd:'Strzał tylko słabszą nogą w drugiej serii.',
+L:[{p:'Poziom 1: tata toczy piłkę wolno.'},{p:'Poziom 2: mocniejsze wycofanie.'},{p:'Poziom 3: druga seria tylko słabszą nogą.'}],
+f:{w:20,h:14,i:[['line',1,1,19,1],['g',7,1,13,1],['pas',[[15.4,2.8],[10.1,6.8]]],['run',[[9,12.2],[10.1,6.8]],1],['pas',[[10.1,6.8],[8,1.5]]],['S',9,12.2],['T',16,2.4],['txt',4.2,7,'1 dotknięcie']]}},
+{id:'b-test',t:'Wyzwanie: 10 dośrodkowań',m:['10 dośrodkowań','punktacja'],reps:10,rest:10,unit:'dośrodkowań',score:1,eq:'Talerzykami zaznacz 2 strefy: 5 × 3 m przy krótkim słupku (2 pkt) i 6 × 4 m na 11. metrze (1 pkt). 10 piłek albo 2–3, które tata donosi.',yt:'crossing drill winger kids',
+d:'10 dośrodkowań z biegu. Strefa przy krótkim słupku to 2 punkty, strefa wycofania to 1 punkt. Wynik wpisz poniżej.',c:'Rywalizacja z samym sobą: pobij wynik z poprzedniego tygodnia.',e:'Liczenie „prawie” jako trafienia.',ez:'Strefy większe o metr.',hd:'Na zmianę lewą i prawą stroną.',
+f:{w:20,h:12,i:[['line',1,0.6,19,0.6],['line',1,0.6,1,11.5],['zone',9,1.2,5,3,'2 pkt'],['zone',9,6,6,4,'1 pkt'],['drb',[[2.4,10.8],[2.4,3.2]]],['pas',[[2.4,3.2],[11.5,2.7]]],['pas',[[2.4,3.2],[12,8]]],['S',2.4,10.8]]}},
+COOL];
+
+const C=[WARM,
+{id:'c-abc',t:'Technika biegu (ABC)',m:['6 min','odcinki 20 m'],dur:360,eq:'2 pachołki 20 m od siebie.',yt:'skip A skip C ćwiczenia biegowe dzieci',
+d:'Po 2 odcinki: skip A (kolana wysoko), skip C (pięty do pośladków), wieloskok (długie, sprężyste kroki), przebieżka na 80%. Powrót marszem.',c:'Lądowanie na przedniej części stopy, ręce zgięte w łokciu pod kątem prostym, pracują przód-tył.',
+e:'„Człapanie” na piętach. Opadające biodra. Ręce krzyżują się przed klatką.',ez:'Odcinki 10 m.',hd:'Ostatnia przebieżka na 95%.',
+f:{w:24,h:6,i:[['c',2,3],['c',22,3],['run',[[2,3],[21.4,3]]],['S',2,3],['txt',12,1.5,'20 m: skip A, skip C, wieloskok, przebieżka']]}},
+{id:'c-react',t:'Starty z reakcji',m:['8 startów','przerwa 45 s'],reps:8,rest:45,names:['Z leżenia przodem','Z leżenia tyłem','Z siadu','Z klęku','Tyłem do kierunku','Z przysiadu','Bokiem','Z leżenia przodem'],eq:'2 talerzyki 10 m od startu (meta). Tata stoi obok startu.',yt:'starty z różnych pozycji ćwiczenia szybkość dzieci',
+d:'Na sygnał taty syn jak najszybciej wstaje i sprintuje 10 m. Tata daje sygnał w różnych momentach, żeby nie dało się zgadnąć.',c:'Pierwsze 3 kroki krótkie i mocne, tułów pochylony do przodu.',
+e:'Falstart. Prostowanie się od razu po starcie. Pierwszy krok w tył.',ez:'Start z pozycji stojącej.',hd:'Sprint 15 m.',
+L:[{p:'Poziom 1: sygnał dźwiękowy (klaśnięcie).'},{p:'Poziom 2: sygnał wzrokowy, tata podnosi rękę.'},{p:'Poziom 3: tata pokazuje lewo albo prawo, sprint do wskazanego talerzyka (2 talerzyki 10 m na skos).'}],
+f:{w:16,h:8,i:[['run',[[2,4],[13,4]]],['d',13.6,2.6],['d',13.6,5.4],['S',2,4],['T',2,6.6],['txt',7.5,2.3,'10 m na sygnał']]}},
+{id:'c-505',t:'Zwinność 5-10-5',m:['6 biegów','przerwa 60 s'],reps:6,rest:60,unit:'biegów',sw:1,tr:{l:'Najlepszy czas',u:'s',lower:1},eq:'3 pachołki w linii co 5 m. Start przy środkowym. Tata z telefonem przy środkowym.',yt:'test zwinności 5-10-5 pro agility',
+d:'Sprint 5 m w prawo, dotknięcie linii ręką, 10 m w lewo, dotknięcie, 5 m z powrotem przez środek. Co drugi raz zaczyna w lewo. Tata mierzy czas w aplikacji.',c:'Przed zmianą kierunku obniża biodra i hamuje krótkimi krokami, odbicie zewnętrzną nogą.',
+e:'Hamowanie na prostych nogach. Obrót całym ciałem w miejscu. Kolano do środka przy hamowaniu.',ez:'Na 80%, nauka hamowania.',hd:'Ostatnie 5 m z piłką.',
+L:[{p:'Poziom 1: na 80%, nauka hamowania.'},{p:'Poziom 2: na 100%.'},{p:'Poziom 3: na 100%, ostatnie 5 m z piłką przy nodze.'}],
+f:{w:14,h:8,i:[['c',2,4],['c',7,4],['c',12,4],['run',[[7,4.8],[11.8,4.8],[11.8,3.2],[2.2,3.2],[2.2,5.6],[7,5.6]]],['S',7,4.8],['txt',9.5,7.2,'5 m'],['txt',4.5,7.2,'5 m']]}},
+{id:'c-luk',t:'Bieg po łuku za obrońcę',m:['10 akcji','przerwa 30 s'],reps:10,rest:30,names:LR(5,5),tr:{l:'Celne strzały',max:10},eq:'Bramka. Pachołek (obrońca) 10 m przed bramką. Syn przy linii bocznej na wysokości pachołka, tata z piłkami 6 m za pachołkiem.',yt:'bieg za plecy obrońcy skrzydłowy trening',
+d:'Syn rusza wzdłuż linii, potem łukiem do środka, za plecy „obrońcy”. Tata zagrywa prostopadle w tempo, syn przyjmuje w biegu i strzela. To typowy ruch skrzydłowego w meczu.',c:'Najpierw od obrońcy, potem za niego: łuk, a nie prosta. Ruszaj, gdy podający podnosi głowę.',
+e:'Bieg prosto (w meczu to spalony albo wejście w obrońcę). Zatrzymanie się, żeby przyjąć. Przyjęcie za daleko od nogi.',ez:'Podanie do nogi zamiast w tempo.',hd:'Strzał z pierwszej piłki.',
+L:[{p:'Poziom 1: spokojne podanie po ziemi.'},{p:'Poziom 2: mocniejsze podanie, maks. 1 dotknięcie przed strzałem.'},{p:'Poziom 3: strzał z pierwszej piłki.'}],
+f:{w:22,h:18,i:[['line',1,1,21,1],['line',1,1,1,17],['g',8,1,14,1],['c',8,9],['run',[[3,12.5],[3,9],[4.2,6],[7,4.4],[9.6,4]]],['pas',[[12,14.4],[9.8,4.6]],1],['pas',[[9.8,4.2],[12.8,1.4]]],['S',3,12.5],['T',12,15],['txt',8,10.6,'obrońca'],['txt',3.2,14.4,'łuk']]}},
+{id:'c-drb20',t:'Sprint z piłką 20 m',m:['6 sprintów','przerwa 60 s'],reps:6,rest:60,unit:'sprintów',sw:1,tr:{l:'Najlepszy czas',u:'s',lower:1},eq:'2 pary talerzyków 20 m od siebie (start i meta). Tata na mecie z telefonem.',yt:'prowadzenie piłki na szybkości ćwiczenie',
+d:'Prowadzenie na pełnej szybkości: dotknięcie zewnętrzną częścią stopy co 3–4 kroki. Tata startuje stoper przy pierwszym dotknięciu i zatrzymuje, gdy piłka minie metę.',c:'Piłka wypuszczana do przodu, a nie prowadzona „drobnymi kroczkami”.',
+e:'Za dużo dotknięć, więc za wolno. Piłka ucieka w bok. Wzrok tylko w piłce.',ez:'Na 80%.',hd:'Co drugi sprint słabszą nogą.',
+L:[{p:'Poziom 1: na 80%, nauka długich dotknięć.'},{p:'Poziom 2: na 100%.'},{p:'Poziom 3: na 100%, co drugi sprint słabszą nogą.'}],
+f:{w:26,h:6,i:[['drb',[[2,3],[22,3]]],['d',2,1.5],['d',2,4.5],['d',22.6,1.5],['d',22.6,4.5],['S',1.2,3],['txt',12,5.4,'20 m, dotknięcie co 3–4 kroki']]}},
+{id:'c-race',t:'Wyścig do piłki',m:['8 wyścigów','przerwa 40 s'],reps:8,rest:40,unit:'wyścigów',tr:{l:'Wygrane wyścigi',max:8},eq:'Mini bramka. Syn i tata obok siebie (2 m), 15 m od bramki.',yt:'1 na 1 wyścig do piłki ćwiczenie dzieci',
+d:'Tata toczy piłkę do przodu i obaj ruszają. Kto pierwszy przy piłce, atakuje bramkę, drugi broni.',c:'Przy piłce wejdź ciałem między piłkę a rywala (zastawienie).',
+e:'Odpuszczanie po przegranym starcie. Brak zastawienia, piłka „na tacy” dla obrońcy.',ez:'Tata daje 1 m przewagi.',hd:'Syn startuje tyłem do kierunku.',
+L:[{p:'Poziom 1: tata daje 1 m przewagi i biegnie na 70%.'},{p:'Poziom 2: równy start.'},{p:'Poziom 3: syn startuje tyłem do kierunku.'}],
+f:{w:16,h:14,i:[['g',6,1,10,1],['pas',[[8,12.4],[8,6.4]]],['run',[[6,13],[7.6,6.6]],1],['run',[[10,13],[8.8,7.4]],1],['drb',[[7.6,6.4],[8,2]]],['S',6,13],['T',10,13],['txt',8,13.4,'start']]}},
+COOL];
+
+const SO=[
+{id:'so-warm',t:'Rozgrzewka solo',m:['5 min'],dur:300,eq:'Ściana, 1 piłka.',yt:'rozgrzewka przed treningiem piłka nożna dzieci',
+d:'2 minuty truchtu, skipy, krążenia bioder i kolan, 2 przebieżki, 10 lekkich podań o ścianę.',c:'Spokojnie, rozgrzewka ma rozgrzać, nie zmęczyć.',e:'Pomijanie rozgrzewki, bo „nikt nie patrzy”.',ez:'Sam trucht i podania.',hd:'Dodaj 2 ćwiczenia z FIFA 11+ Kids: łyżwiarza i skoki na jednej nodze.'},
+{id:'so-pass',t:'Podania o ścianę',m:['4 serie po 60 s','przerwa 30 s'],reps:4,work:60,rest:30,names:['Prawa noga, 2 dotknięcia','Lewa noga, 2 dotknięcia','Na zmianę nogami, 1 dotknięcie','Słabsza noga, 1 dotknięcie'],tr:{l:'Podania słabszą nogą w ostatniej serii',max:80},eq:'Ściana (bandą boiska, ściana szkoły albo rama do odbić), 1 piłka. 4–6 m od ściany.',yt:'podania o ścianę ćwiczenia piłka nożna',
+d:'Stoper sam odlicza serie i przerwy. W ostatniej serii liczy podania słabszą nogą.',c:'Podanie wewnętrzną, kostka usztywniona, noga postawna obok piłki.',
+e:'Podanie czubkiem. Przyjęcie pod siebie. Tylko lepsza noga.',ez:'Bliżej ściany.',hd:'Przed każdym przyjęciem spojrzenie przez ramię.',
+L:[{p:'Poziom 1: 4 m od ściany.'},{p:'Poziom 2: 6 m od ściany.'},{p:'Poziom 3: 6 m i spojrzenie przez ramię przed każdym przyjęciem.'}],
+f:{w:12,h:10,i:[['wall',2,1,10],['pas',[[5.6,6.6],[5.6,1.6]]],['pas',[[6.4,1.6],[6.4,6.6]]],['S',6,7.4],['txt',6,9.2,'4–6 m od ściany']]}},
+{id:'so-dir',t:'Przyjęcie kierunkowe o ścianę',m:['4 serie po 45 s','przerwa 30 s'],reps:4,work:45,rest:30,names:['Przyjęcie w prawo, podanie lewą','Przyjęcie w lewo, podanie prawą','Na zmianę','Na zmianę, szybciej'],eq:'Ściana, 1 piłka. 5 m od ściany.',yt:'przyjęcie kierunkowe ćwiczenie o ścianę',
+d:'Piłka odbija się od ściany, pierwszy dotyk w bok pod kątem 45°, drugi dotyk to podanie z powrotem.',c:'Pierwszy dotyk ustawia piłkę pod kątem, nie zatrzymuje jej.',e:'Zatrzymywanie piłki zamiast przyjęcia w ruchu. Za mocny pierwszy dotyk.',ez:'Wolniej, 2 dotknięcia na ustawienie.',hd:'Przyjęcie zewnętrzną częścią stopy.',
+f:{w:12,h:10,i:[['wall',2,1,10],['pas',[[5,6.6],[6,1.6]]],['pas',[[6,1.6],[6.8,6.4]]],['drb',[[6.8,6.4],[8.8,7.6]]],['pas',[[8.8,7.6],[7.6,1.6]]],['S',5,7.2],['txt',3.4,9,'przyjęcie pod kątem']]}},
+{id:'so-jug',t:'Żonglerka',m:['3 próby','przerwa 30 s'],reps:3,rest:30,unit:'próby',tr:{l:'Rekord żonglerki (odbicia)'},eq:'1 piłka, równe podłoże.',yt:'żonglerka piłką nauka dla dzieci',
+d:'Ile odbić bez upadku piłki? Nogi na zmianę, piłka do wysokości pasa. Wpisz najlepszą próbę.',c:'Kostka usztywniona, palce lekko w górę, odbicie środkiem podbicia.',e:'Za mocne odbicia, piłka ucieka nad głowę. Tylko jedna noga.',ez:'Odbicie, kozioł, odbicie.',hd:'Noga, udo, głowa w kolejności.',
+L:[{p:'Poziom 1: wolno pozwolić piłce odbić się od ziemi.'},{p:'Poziom 2: tylko nogi, bez kozłowania.'},{p:'Poziom 3: noga, udo, głowa w kolejności.'}]},
+{id:'so-zwody',t:'Zwody przy pachołku',m:['4 zwody','4 × każdą nogą'],reps:4,rest:30,names:ZWODY,eq:'1 pachołek albo plecak jako obrońca, 2 talerzyki jako bramki za nim.',yt:'zwody piłka nożna nauka dla dzieci',
+d:'To samo co w treningu A, ale samemu. Każdy zwód 4 razy w lewo i 4 w prawo.',c:'Zwód wolno, wyjście szybko.',e:'Zwód za daleko od pachołka. Brak przyspieszenia po zwodzie.',ez:'Sam ruch zwodu w marszu.',hd:'Dwa zwody pod rząd przed wyjściem.',f:F_ZWOD},
+{id:'so-shot',t:'Strzały w cel na ścianie',m:['20 strzałów','10 każdą nogą'],reps:4,rest:30,names:['Prawa noga, 5 strzałów','Lewa noga, 5 strzałów','Prawa noga, 5 strzałów','Lewa noga, 5 strzałów'],tr:{l:'Trafienia w cel',max:20},eq:'Na ścianie zaznacz kredą albo taśmą prostokąt 1 × 2 m (cel). Strzał z 8–10 m.',yt:'strzał celny technika dla dzieci',
+d:'Strzał wewnętrzną albo podbiciem w zaznaczony cel. Licz trafienia.',c:'Celność przed siłą. Wzrok na cel przed strzałem, na piłkę w momencie uderzenia.',e:'Strzał na siłę. Odchylenie tułowia. Noga postawna za piłką.',ez:'6 m od ściany.',hd:'12 m i cel 1 × 1 m.',
+f:{w:12,h:12,i:[['wall',1,1,11],['zone',4,1.3,4,1.6,'cel'],['pas',[[6,9.6],[6,3.2]]],['S',6,10.2],['txt',8.6,7,'8–10 m']]}},
+{...COOL,id:'cool-s',dur:180,m:['3 min']}];
+
+const HOME=[
+{id:'d-deska',t:'Deska',m:['3 × 30 s','przerwa 30 s'],reps:3,work:30,rest:30,unit:'serie',eq:'Mata albo dywan.',yt:'deska plank technika',d:'Podpór na przedramionach. Stoper sam odlicza serie i przerwy.',c:'Ciało w jednej linii, brzuch i pośladki napięte.',e:'Biodra zapadają się albo są za wysoko. Wstrzymywanie oddechu.',ez:'Na kolanach.',hd:'Unoszenie na zmianę jednej nogi.'},
+{id:'d-bok',t:'Deska bokiem',m:['2 × 20 s na stronę'],reps:4,work:20,rest:15,names:ALT(4,'Lewy bok','Prawy bok'),eq:'Mata albo dywan.',yt:'deska bokiem technika',d:'Podpór na przedramieniu bokiem.',c:'Biodro wysoko, ciało w jednej linii.',e:'Biodro opada. Tułów skręca się do przodu.',ez:'Na kolanie.',hd:'Unoszenie górnej nogi.'},
+{id:'d-kop',t:'Kopenhaga (krótka dźwignia)',m:['2 × 15 s na stronę'],reps:4,work:15,rest:15,names:ALT(4,'Lewa strona','Prawa strona'),eq:'Krzesło albo ławka, mata.',yt:'copenhagen plank krótka dźwignia',d:'Leżenie bokiem, kolano górnej nogi na krześle, dolna noga w powietrzu. Unieś biodra i trzymaj. Wzmacnia pachwiny, które u piłkarzy łatwo nadwyrężyć.',c:'Ciało w linii, biodra nie opadają.',e:'Biodra uciekają do tyłu. Ból w pachwinie: przerwij i skróć czas.',ez:'10 s.',hd:'20 s.'},
+{id:'d-most',t:'Mostek biodrowy na jednej nodze',m:['2 × 10 na nogę'],reps:4,rest:20,names:ALT(4,'Lewa noga, 10 powtórzeń','Prawa noga, 10 powtórzeń'),eq:'Mata albo dywan.',yt:'mostek biodrowy jednonóż technika',d:'Leżąc na plecach, jedna stopa na podłodze, druga noga w górze. Unosi biodra, pauza 1 s.',c:'Biodra równo, miednica się nie przechyla.',e:'Wyginanie lędźwi zamiast pracy pośladka.',ez:'Na obu nogach.',hd:'Stopa na krześle.'},
+{id:'d-bug',t:'Dead bug',m:['2 × 10'],reps:2,rest:30,unit:'serie po 10',eq:'Mata albo dywan.',yt:'dead bug ćwiczenie technika',d:'Leżąc na plecach, ręce i nogi w górze. Opuszcza przeciwną rękę i nogę, wraca.',c:'Lędźwia cały czas przy podłodze.',e:'Odrywanie lędźwi. Szybkie machanie zamiast kontroli.',ez:'Same nogi.',hd:'Wolniej, 3 s w dół.'},
+{id:'d-rown',t:'Stanie na jednej nodze',m:['3 × 20 s na nogę'],reps:6,work:20,rest:10,names:['Lewa noga','Prawa noga','Lewa noga','Prawa noga','Lewa noga, oczy zamknięte','Prawa noga, oczy zamknięte'],eq:'Boso, wolne miejsce obok ściany.',yt:'ćwiczenia równowagi stanie na jednej nodze',d:'Najpierw z otwartymi oczami, w ostatniej serii z zamkniętymi. Równowaga chroni kostki przed skręceniem.',c:'Kolano lekko ugięte, stopa „chwyta” podłogę.',e:'Kolano zablokowane na prosto.',ez:'Ręka przy ścianie.',hd:'Na złożonym kocu.'},
+{id:'d-przys',t:'Przysiad powolny',m:['2 × 12'],reps:2,rest:45,unit:'serie po 12',eq:'Bez sprzętu.',yt:'przysiad technika dla początkujących',d:'3 sekundy w dół, sprawnie w górę.',c:'Kolana w linii stóp, pięty na podłodze, plecy proste.',e:'Kolana do środka. Pięty odrywają się.',ez:'Do krzesła.',hd:'Pauza 2 s na dole.'},
+{id:'d-wyk',t:'Wykrok w tył',m:['2 × 8 na nogę'],reps:4,rest:30,names:ALT(4,'Lewa noga, 8 powtórzeń','Prawa noga, 8 powtórzeń'),eq:'Bez sprzętu.',yt:'wykrok w tył technika',d:'Krok w tył, kolano tylnej nogi prawie dotyka podłogi.',c:'Przednie kolano nad stopą.',e:'Przednie kolano ucieka do środka.',ez:'Mniejszy krok.',hd:'Wolniej, 3 s w dół.'},
+{id:'d-roz',t:'Rozciąganie',m:['3 min'],dur:180,eq:'Mata, ściana do oparcia.',yt:'rozciąganie po treningu piłka nożna',d:'Po 30 s: zginacze biodra w klęku, łydki przy ścianie, tył uda w siadzie.',c:'Spokojny oddech, bez sprężynowania.',e:'Rozciąganie na siłę.',ez:'Krócej.',hd:'Dłużej, po 45 s.'}];
+
+const SYN={A:{n:'Trening A',s:'Drybling i 1 na 1',steps:A,lv:1},B:{n:'Trening B',s:'Przyjęcie, dośrodkowanie, strzał',steps:B,lv:1},C:{n:'Trening C',s:'Szybkość, zwinność, bieg za obrońcę',steps:C,lv:1},S:{n:'Trening solo',s:'Sam przy ścianie, ok. 30 min',steps:SO,lv:1},D:{n:'Dom 15 min',s:'Siła, równowaga, cicho',steps:HOME}};
+const ROT_SYN=['A','B','C'];
+/* what to pack: [item, why] */
+const GEAR={
+A:[['3–5 piłek','przy strzałach mniej biegania po piłki'],['6 tyczek z podstawami','slalom; na tartanie nie wbijesz ich w ziemię'],['5 pachołków','zwody, kanał 1 na 1, zejście do środka'],['8 talerzyków','kwadrat, meta, bramki przy zwodach'],['mini bramka','albo bramka na boisku'],['ochraniacze','do pojedynków 1 na 1'],['turfy'],['woda'],['naładowany telefon','stoper i ćwiczenia w aplikacji']],
+B:[['5 piłek','dośrodkowania i strzały'],['drabinka koordynacyjna'],['12 talerzyków','bramki i strefy dośrodkowań'],['2 pachołki'],['bramka','na boisku albo mini bramka'],['turfy'],['woda'],['naładowany telefon']],
+C:[['3 piłki'],['4 pachołki','bieg 5-10-5 i „obrońca”'],['8 talerzyków','mety i starty'],['mini bramka','wyścig do piłki'],['ochraniacze','wyścig do piłki z tatą'],['turfy'],['woda'],['naładowany telefon','stoper w aplikacji']],
+S:[['1–2 piłki'],['ściana albo rama do odbić'],['kreda albo taśma','cel na ścianie'],['pachołek albo plecak','„obrońca” przy zwodach'],['2 talerzyki'],['turfy'],['woda']],
+D:[['mata albo dywan'],['krzesło albo ławka','do Kopenhagi']]};
+const GEAR_TARTAN='3–5 piłek, 6 tyczek z podstawami, 5 pachołków, 12 talerzyków, drabinka, mini bramka, ochraniacze, turfy, woda';
+const gearShort=k=>GEAR[k].map(g=>g[0]).join(', ');
+const MIN_MIN={A:25,B:25,C:25,S:15,D:8};
+const ptsFor=k=>k==='D'?S.shop.tr.D:k==='S'?S.shop.tr.S:S.shop.tr.AB;
+/* level per training: automatic from completed sessions, or set by dad */
+const lvlOf=k=>{if(!SYN[k]||!SYN[k].lv)return 0;const o=S.settings.lvl;if(o==='1'||o==='2'||o==='3')return +o;const n=S.logs.filter(l=>l.kind==='syn'&&l.key===k&&!l.nopts).length;return n<3?1:n<6?2:3};
+const stepOf=(k,i,lv)=>{const st=SYN[k].steps[i],o=(st.L&&lv&&st.L[lv-1])||{};return{...st,...o}};
+
+/* exercise: [name, sets, tip, equipment: h2 two dumbbells, h1 one dumbbell, b barbell, - bodyweight] */
+const PLANS={
+GA:{n:'Góra A',s:'pchanie i ciągnięcie',ex:[['Wyciskanie hantli na ławce płaskiej','4 × 6–10','Łopatki ściągnięte, w dół 2–3 s.','h2'],['Wiosłowanie hantlem jednorącz','4 × 8–12 / str.','Łokieć ciągniesz do biodra.','h1'],['Wyciskanie hantli nad głowę siedząc','3 × 8–12','Bez ławki regulowanej: na stojąco.','h2'],['Odwrotne rozpiętki w opadzie','3 × 12–15','Lekko, tył barków.','h2'],['Uginanie ramion sztangą','3 × 10–12','Łokcie przy tułowiu.','b'],['Wyciskanie francuskie hantlami leżąc','3 × 10–12','Łokcie w miejscu.','h2']]},
+DA:{n:'Dół A',s:'przysiad i biodra',ex:[['Przysiad goblet','4 × 8–12','Za lekko? 3 s w dół i pauza.','h1'],['Martwy ciąg rumuński sztangą','4 × 8–10','Biodra w tył, plecy proste.','b'],['Przysiad bułgarski','3 × 8–10 / noga','Tylna stopa na ławce.','h2'],['Hip thrust','3 × 10–12','Łopatki na ławce, pauza na górze.','h1'],['Wspięcia na palce jednonóż z hantlem','3 × 12–15','Pełny zakres.','h1'],['Deska','3 × 30–45 s','Bez zapadania bioder.','-']]},
+GB:{n:'Góra B',s:'druga wersja góry',ex:[['Wyciskanie hantli na skosie','4 × 8–10','Bez skosu: sztanga z podłogi.','h2'],['Wiosłowanie sztangą w opadzie','4 × 8–10','Sztanga do pępka.','b'],['Pompki','3 × do 2 przed upadkiem','Trudniej: nogi na ławce.','-'],['Unoszenie hantli bokiem','3 × 12–15','Powoli w dół.','h2'],['Uginanie młotkowe','3 × 10–12','Kciuki do góry.','h2'],['Dead bug','3 × 10','Lędźwia przy podłodze.','-']]},
+DB:{n:'Dół B',s:'jedna noga i stabilizacja',ex:[['Przysiad z hantlami w dłoniach','4 × 10–12','Klatka wysoko.','h2'],['Martwy ciąg rumuński jednonóż','3 × 8 / noga','Hantel w ręce przeciwnej.','h1'],['Wejścia na ławkę','3 × 10 / noga','Tylko stabilna ławka.','h2'],['Hip thrust jednonóż','3 × 10 / noga','Biodra równo.','h1'],['Wspięcia na palce z hantlami','3 × 15','Pauza na górze.','h2'],['Deska bokiem','3 × 30 s / str.','Ciało w linii.','-']]},
+T1:{n:'Trening 1',s:'cały korpus',ex:[['Przysiad goblet','4 × 8–12','Za lekko? 3 s w dół i pauza.','h1'],['Wyciskanie hantli na ławce płaskiej','4 × 6–10','Łopatki ściągnięte.','h2'],['Wiosłowanie hantlem jednorącz','3 × 8–12 / str.','Łokieć do biodra.','h1'],['Martwy ciąg rumuński sztangą','3 × 8–10','Plecy proste.','b'],['Hip thrust','3 × 10–12','Pauza na górze.','h1'],['Deska','3 × 30–45 s','Bez zapadania bioder.','-']]},
+T2:{n:'Trening 2',s:'cały korpus',ex:[['Przysiad bułgarski','3 × 8–10 / noga','Tylna stopa na ławce.','h2'],['Wyciskanie hantli nad głowę siedząc','3 × 8–12','Brzuch napięty.','h2'],['Wiosłowanie sztangą w opadzie','3 × 8–10','Sztanga do pępka.','b'],['Wejścia na ławkę','3 × 10 / noga','Tylko stabilna ławka.','h2'],['Pompki','3 × do 2 przed upadkiem','Trudniej: nogi na ławce.','-'],['Dead bug','3 × 10','Lędźwia przy podłodze.','-']]}};
+const GYM_YT={'Wyciskanie hantli na ławce płaskiej':'wyciskanie hantli na ławce płaskiej technika','Wiosłowanie hantlem jednorącz':'wiosłowanie hantlem jednorącz technika','Wyciskanie hantli nad głowę siedząc':'wyciskanie hantli nad głowę siedząc technika','Odwrotne rozpiętki w opadzie':'odwrotne rozpiętki w opadzie tułowia hantle technika','Uginanie ramion sztangą':'uginanie ramion ze sztangą technika','Wyciskanie francuskie hantlami leżąc':'wyciskanie francuskie hantlami leżąc technika','Przysiad goblet':'przysiad goblet technika','Martwy ciąg rumuński sztangą':'martwy ciąg rumuński technika','Przysiad bułgarski':'przysiad bułgarski hantle technika','Hip thrust':'hip thrust na ławce z hantlem technika','Wspięcia na palce jednonóż z hantlem':'wspięcia na palce jednonóż z hantlem','Deska':'deska plank technika','Wyciskanie hantli na skosie':'wyciskanie hantli na skosie dodatnim technika','Wiosłowanie sztangą w opadzie':'wiosłowanie sztangą w opadzie tułowia technika','Pompki':'pompki technika','Unoszenie hantli bokiem':'unoszenie hantli bokiem technika','Uginanie młotkowe':'uginanie młotkowe hantle technika','Dead bug':'dead bug ćwiczenie technika','Przysiad z hantlami w dłoniach':'przysiad z hantlami technika','Martwy ciąg rumuński jednonóż':'martwy ciąg rumuński na jednej nodze hantel technika','Wejścia na ławkę':'wejścia na ławkę z hantlami step up technika','Hip thrust jednonóż':'hip thrust jednonóż technika','Wspięcia na palce z hantlami':'wspięcia na palce z hantlami technika','Deska bokiem':'deska bokiem technika'};
+const EQ_L={h2:'kg (1 hantel)',h1:'kg (hantel)',b:'kg (sztanga)','-':'kg (dodatkowe)'};
+const ROT4=['GA','DA','GB','DB'],ROT3=['T1','T2'];
+const parse=s=>{const m=s.match(/^(\d+)\s*×\s*(?:(\d+)–)?(\d+)?/);return{n:m?+m[1]:3,top:m&&m[3]?+m[3]:null,time:/\d\s*s\b/.test(s)}};
+const METRICS=[['sprint','Sprint 20 m','s',-1],['slalom','Slalom z piłką','s',-1],['sciana','Ściana 30 s','podań',1],['dosr','10 dośrodkowań','pkt',1]];
+const LEVELS=[[0,'Debiutant'],[100,'Talent'],[250,'Junior'],[450,'Skrzydłowy'],[700,'Szybki skrzydłowy'],[1000,'Drybler'],[1400,'Gwiazda drużyny'],[1900,'Kapitan'],[2500,'Reprezentant'],[3200,'Złota piłka'],[4000,'Legenda']];
+
+const blank=()=>({logs:[],settings:normSettings(null),tests:[],shop:normShop(null),pts:normPts(null),matches:[],body:[],reqs:[]});
+let profile=(()=>{try{const v=localStorage.getItem('trening-profile');return v==='syn'||v==='tata'?v:null}catch(e){return null}})();
+let shopCat='all',S,view='dzis',active=null,rest=null,col=null,pendingRender=false,parentUntil=0,pinCb=null,preview='A',summary=null,syncState='loading',form={g:0,a:0,rate:3};
+
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const today=()=>iso(new Date());
+const dIdx=()=>(new Date().getDay()+6)%7;
+const fmt=s=>{s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+pad(s%60)};
+const plD=s=>{const p=String(s).split('-');return p.length===3?+p[2]+'.'+p[1]:esc(s)};
+const num=v=>{const x=parseFloat(String(v??'').replace(',','.'));return isFinite(x)?x:null};
+const cm=v=>String(Math.round(v*100)/100).replace('.',',');
+const nf=v=>Math.round(v).toLocaleString('pl-PL');
+const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>e.classList.remove('on'),2800)};
+const kid=()=>S.settings.name||'Syn';
+const isKid=()=>profile==='syn';
+function setProfile(v){profile=v;try{localStorage.setItem('trening-profile',v)}catch(e){}view='dzis';render();toast(v==='syn'?'Profil: '+kid():'Profil: Tata')}
+const reqPts=r=>{const t=S.shop.tr;return r.type==='grade'?(num(S.shop.rates[r.g])||0):t.match+(r.m.g||0)*t.goal+(r.m.a||0)*t.assist};
+const reqTxt=r=>r.type==='grade'?`Ocena ${r.g}${r.subj?' ('+r.subj+')':''}`:`Mecz${r.m.opp?' z '+r.m.opp:''}${r.m.res?' '+r.m.res:''}: ${r.m.g||0} G, ${r.m.a||0} A`;
+const shortN=n=>String(n).split(/[:,.(]/)[0].trim();
+const fmtSw=x=>x.toFixed(2).replace('.',',')+' s';
+const validWeek=w=>w&&Array.isArray(w.syn)&&Array.isArray(w.tata)&&w.syn.length==7&&w.tata.length==7&&w.syn.every(x=>SYN_OPT.includes(x))&&w.tata.every(x=>TATA_OPT.includes(x));
+function normShop(v){const d=JSON.parse(JSON.stringify(DEF_SHOP));if(!v)return d;return{cat:num(v.cat)||1,items:Array.isArray(v.items)?v.items.filter(i=>i&&i.n).map(i=>({id:String(i.id||'i'+Math.random().toString(36).slice(2,8)),n:String(i.n).slice(0,80),c:Math.max(0,Math.round(num(i.c)||0)),k:CAT_N[i.k]?i.k:((DEF_ITEMS.find(x=>x.id===i.id)||{}).k||'inne')})):d.items,rates:{...d.rates,...(v.rates||{})},tr:{...d.tr,...(v.tr||{})}}}
+/* adds rewards from newer catalogs without touching the family's own edits */
+function upgradeShop(){if((S.shop.cat||1)>=SHOP_CAT)return false;const have=new Set(S.shop.items.map(i=>i.id));DEF_ITEMS.forEach(i=>{if(!have.has(i.id))S.shop.items.push({...i})});S.shop.cat=SHOP_CAT;saveShop();return true}
+function normPts(v){return{entries:v&&Array.isArray(v.entries)?v.entries:[],orders:v&&Array.isArray(v.orders)?v.orders:[],badges:v&&Array.isArray(v.badges)?v.badges:[],goal:v&&v.goal?String(v.goal):null}}
+const hm=(x,d)=>typeof x==='string'&&/^([01]\d|2[0-3]):[0-5]\d$/.test(x)?x:d;
+function normSettings(v){v=v||{};const n=(x,d,lo,hi)=>{const y=num(x);return y==null?d:Math.min(hi,Math.max(lo,Math.round(y)))};return{week:validWeek(v.week)?v.week:DEF_WEEK,days:v.days===3?3:4,pin:typeof v.pin==='string'?v.pin:'',name:typeof v.name==='string'?v.name.slice(0,20):'',sound:v.sound!==false,voice:v.voice!==false,theme:['light','dark'].includes(v.theme)?v.theme:'auto',restMain:n(v.restMain,120,15,600),restAcc:n(v.restAcc,75,15,600),gymH:typeof v.gymH==='string'?v.gymH:'',gymB:typeof v.gymB==='string'?v.gymB:'',plates:typeof v.plates==='string'?v.plates:'',lvl:['1','2','3'].includes(String(v.lvl))?String(v.lvl):'auto',remOn:v.remOn===true,remEve:v.remEve!==false,remDad:v.remDad!==false,remTime:hm(v.remTime,'16:00'),remEveTime:hm(v.remEveTime,'20:00'),remDadTime:hm(v.remDadTime,'18:30')}}
+S=blank();
+const balance=()=>S.pts.entries.reduce((a,e)=>a+(num(e.p)||0),0);
+const earned=()=>S.pts.entries.reduce((a,e)=>a+(e.p>0&&!e.refund?e.p:0),0);
+const level=()=>{const e=earned();let i=0;LEVELS.forEach((l,j)=>{if(e>=l[0])i=j});const nx=LEVELS[i+1];return{i,name:LEVELS[i][1],e,next:nx?nx[0]:null,from:LEVELS[i][0]}};
+
+const saveLocal=()=>{try{localStorage.setItem('trening-v2',JSON.stringify(S))}catch(e){}};
+const saveDraft=()=>{try{localStorage.setItem('trening-active',JSON.stringify(active?{active,rest}:null))}catch(e){}};
+let q=Promise.resolve();
+const put=(id,data)=>{saveLocal();if(!col)return;q=q.then(()=>col.doc(id).set(data)).catch(e=>toast(e&&e.code==='quota_exceeded'?'Baza jest pełna, usuń stare treningi':'Nie udało się zapisać na koncie, zostało na telefonie'))};
+const del=id=>{saveLocal();if(!col)return;q=q.then(()=>col.doc(id).delete()).catch(()=>toast('Nie udało się usunąć na koncie'))};
+/* one document per record, so two phones never overwrite each other's points */
+const putE=(k,o)=>put(k+'-'+o.id,o),delE=(k,id)=>del(k+'-'+id);
+const saveShop=()=>put('shop',S.shop),saveSet=()=>put('settings',S.settings),saveMeta=()=>put('meta',{badges:S.pts.badges,goal:S.pts.goal});
+const newId=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const pushE=e=>{S.pts.entries.push(e);putE('p',e)};
+const addPts=(p,why,ref,extra)=>{if(!p)return;pushE({id:newId('p'),ts:Date.now(),p,why,ref:ref||null,...(extra||{})})};
+const dropRef=ref=>{S.pts.entries.filter(x=>x.ref===ref).forEach(x=>delE('p',x.id));S.pts.entries=S.pts.entries.filter(x=>x.ref!==ref)};
+function pushAll(){saveSet();saveShop();saveMeta();S.logs.forEach(l=>put(l.id,l));S.pts.entries.forEach(e=>putE('p',e));S.pts.orders.forEach(o=>putE('o',o));S.tests.forEach(t=>putE('t',t));S.matches.forEach(m=>putE('m',m));S.body.forEach(b=>putE('b',b));S.reqs.forEach(q=>putE('q',q))}
+const setSync=s=>{syncState=s;if(view==='ustawienia'){const e=$('#syncTxt');if(e)e.textContent=SYNC_T[s]}if(s==='stale')$('#sub').textContent='Brak połączenia, dane mogą być nieaktualne'};
+const SYNC_T={loading:'Łączę…',cloud:HOSTED?'Połączone. Telefony w rodzinie widzą te same dane na żywo, a bez internetu zmiany czekają i wysyłają się same.':'Wspólnie na koncie Claude. Każdy telefon, na którym otworzysz tę aplikację na tym koncie, widzi te same dane na bieżąco.',local:'Na tym telefonie. Kopia zapasowa przeniesie dane na inny.',stale:'Brak połączenia. Zmiany zapiszą się, gdy wróci internet.',nofam:'Tylko na tym telefonie. Połącz telefony kodem rodziny, żeby się synchronizowały.',readonly:'Na tym telefonie, bez synchronizacji: to konto Claude ma dostęp tylko do podglądu. Żeby synchronizować, zaloguj się tu na konto taty.'};
+
+const logsBy=k=>S.logs.filter(l=>l.kind===k).sort((a,b)=>b.ts-a.ts);
+const nextTartan=()=>{const l=logsBy('syn').find(x=>ROT_SYN.includes(x.key));return l?ROT_SYN[(ROT_SYN.indexOf(l.key)+1)%ROT_SYN.length]:'A'};
+const rot=()=>S.settings.days===3?ROT3:ROT4;
+const nextDad=()=>{const r=rot(),l=logsBy('tata').find(x=>r.includes(x.key));return l?r[(r.indexOf(l.key)+1)%r.length]:r[0]};
+const lastFor=(name,before)=>{for(const l of logsBy('tata')){if(before&&l.ts>=before)continue;const e=(l.ex||[]).find(x=>x.name===name);if(e&&e.sets.some(s=>s.done||s.reps))return{date:l.date,sets:e.sets}}return null};
+const bestKg=(name,before)=>{let b=0;logsBy('tata').forEach(g=>{if(before&&g.ts>=before)return;(g.ex||[]).filter(x=>x.name===name).forEach(x=>x.sets.forEach(s=>{const k=num(s.kg);if(s.done&&k>b)b=k}))});return b};
+const setsTxt=(sets,time)=>sets.filter(s=>s.done||s.reps).map(s=>(s.kg&&!time?s.kg+' kg × ':'')+(s.reps||'–')+(time?' s':'')).join(', ');
+const weekDates=()=>{const d=new Date();d.setDate(d.getDate()-dIdx());return DAYS.map((_,i)=>{const x=new Date(d);x.setDate(d.getDate()+i);return iso(x)})};
+const wkOf=s=>{const x=new Date(s+'T12:00:00');x.setDate(x.getDate()-((x.getDay()+6)%7));return iso(x)};
+const addDays=(s,n)=>{const x=new Date(s+'T12:00:00');x.setDate(x.getDate()+n);return iso(x)};
+function streak(){const set=new Set(S.logs.filter(l=>l.kind==='syn').map(l=>wkOf(l.date)));let k=wkOf(today()),n=0;if(!set.has(k))k=addDays(k,-7);while(set.has(k)){n++;k=addDays(k,-7)}return n}
+function maxStreak(){const ws=[...new Set(S.logs.filter(l=>l.kind==='syn').map(l=>wkOf(l.date)))].sort();let best=0,c=0,prev=null;ws.forEach(w=>{c=prev&&addDays(prev,7)===w?c+1:1;best=Math.max(best,c);prev=w});return best}
+const goals=()=>S.matches.reduce((a,m)=>a+(m.g||0),0),assists=()=>S.matches.reduce((a,m)=>a+(m.a||0),0);
+function plateTxt(kg,eq){const k=num(kg);if(!k||eq==='-')return '';const bar=num(eq==='b'?S.settings.gymB:S.settings.gymH);if(bar==null||!S.settings.plates.trim())return '';
+const sides=eq==='h2'?4:2,per=(k-bar)/2;if(per<-0.01)return 'Lżej niż sam gryf ('+cm(bar)+' kg)';if(per<0.01)return 'Sam gryf, bez talerzy';
+const inv=[];String(S.settings.plates).replace(/(?:(\d+)\s*[×x*]\s*)?(\d+(?:[.,]\d+)?)/g,(m,c,w)=>{inv.push({w:num(w),max:c?Math.floor(+c/sides):99});return m});inv.sort((a,b)=>b.w-a.w);
+let left=per;const use=[];inv.forEach(p=>{let n=0;while(n<p.max&&left>=p.w-0.001){left-=p.w;n++}for(let i=0;i<n;i++)use.push(cm(p.w))});
+if(!use.length)return 'Brak pasujących talerzy';return (eq==='h2'?'Na każdy hantel, na stronę: ':'Na każdą stronę: ')+use.join(' + ')+' kg'+(left>0.01?` (o ${cm(left*2)} kg lżej niż ${cm(k)})`:'')}
+
+/* ---------- reminders ---------- */
+function upcoming(n){const w=S.settings.week,td=today(),r=rot(),out=[];let tk=Math.max(0,ROT_SYN.indexOf(nextTartan())),dk=Math.max(0,r.indexOf(nextDad()));
+const sDone=S.logs.some(l=>l.kind==='syn'&&l.date===td),tDone=S.logs.some(l=>l.kind==='tata'&&l.date===td);
+for(let i=0;i<n;i++){const d=addDays(td,i),wd=(new Date(d+'T12:00:00').getDay()+6)%7,sp=w.syn[wd],tp=w.tata[wd];
+if(!(i===0&&sDone)){if(sp==='Tartan'){out.push({d,who:'syn',k:ROT_SYN[tk%ROT_SYN.length]});tk++}else if(sp==='Solo')out.push({d,who:'syn',k:'S'});else if(sp==='Dom')out.push({d,who:'syn',k:'D'})}
+if(sp==='Mecz')out.push({d,who:'mecz'});
+if(tp==='Trening'&&!(i===0&&tDone)){out.push({d,who:'tata',k:r[dk%r.length]});dk++}}
+return out}
+function remList(){const s=S.settings,kd=isKid(),out=[],at=(d,t)=>new Date(d+'T'+t+':00').getTime();let id=1;
+upcoming(28).forEach(u=>{
+if(u.who==='syn'&&s.remOn){const p=SYN[u.k],g=gearShort(u.k);out.push({id:id++,at:at(u.d,s.remTime),title:`${kid()}: dziś ${p.n}`,text:`${p.s}. Zabierz: ${g}.`});if(s.remEve&&u.k!=='D')out.push({id:id++,at:at(addDays(u.d,-1),s.remEveTime),title:`Jutro ${p.n}`,text:`Spakuj wieczorem: ${g}.`})}
+else if(u.who==='mecz'&&s.remOn&&s.remEve)out.push({id:id++,at:at(addDays(u.d,-1),s.remEveTime),title:'Jutro mecz',text:'Spakuj: korki, getry, ochraniacze, strój klubowy, wodę. Wcześnie spać.'});
+else if(u.who==='tata'&&!kd&&s.remDad){const p=PLANS[u.k];out.push({id:id++,at:at(u.d,s.remDadTime),title:`Twój trening: ${p.n}`,text:`${p.s}, ${p.ex.length} ćwiczeń. Mata pod ławkę.`})}});
+return out.filter(x=>x.at>Date.now()).sort((a,b)=>a.at-b.at)}
+let remSent='',remT=null;
+function syncRem(){clearTimeout(remT);remT=setTimeout(()=>{if(!NATIVE||!NATIVE.setReminders||!profile)return;const j=JSON.stringify(remList());if(j===remSent)return;remSent=j;try{NATIVE.setReminders(j)}catch(e){}},400)}
+const remWhen=t=>{const d=new Date(t);return DAYS[(d.getDay()+6)%7]+' '+d.getDate()+'.'+pad(d.getMonth()+1)+', '+pad(d.getHours())+':'+pad(d.getMinutes())};
+function gcal(title,details,wd,time,mins){const b=new Date();b.setHours(0,0,0,0);b.setDate(b.getDate()+((wd-dIdx()+7)%7));const [H,M]=time.split(':').map(Number);b.setHours(H,M);const e=new Date(b.getTime()+mins*60000),f=d=>d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'T'+pad(d.getHours())+pad(d.getMinutes())+'00';let tz='Europe/Warsaw';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||tz}catch(x){}
+return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(title)+'&details='+encodeURIComponent(details)+'&dates='+f(b)+'/'+f(e)+'&ctz='+encodeURIComponent(tz)+'&recur='+encodeURIComponent('RRULE:FREQ=WEEKLY;BYDAY='+['MO','TU','WE','TH','FR','SA','SU'][wd])}
+function famCard(){if(!HOSTED||!FB_CFG.projectId)return '';const f=getFam();
+if(f)return `<div class="card"><h3>Połączone telefony</h3><p class="mut">Kod rodziny. Wpisz go na kolejnym telefonie, żeby go połączyć:</p><div class="famcode">${fmtFam(f)}</div><button class="btn wide" data-a="famShare">Wyślij kod</button><p class="mut" style="margin-top:10px">Status: <span id="syncTxt">${SYNC_T[syncState]}</span></p><button class="link" data-a="famLeave">Odłącz ten telefon</button></div>`;
+return `<div class="card"><h3>Połącz telefony</h3><p class="mut">Twój telefon i telefon syna będą widziały te same treningi, punkty i zgłoszenia. Na telefonie taty utwórz kod, na telefonie syna go wpisz.</p>${isKid()?'':'<button class="btn wide" data-a="famNew">Utwórz kod rodziny</button>'}<div class="form one" style="margin-top:10px"><div><label for="famIn">Mam kod rodziny</label><input id="famIn" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX"></div></div><button class="btn sec wide" data-a="famJoin">Połącz</button></div>`}
+function remCard(){const s=S.settings,kd=isKid(),sw=(k,t,d)=>`<label class="sw"><span>${t}${d?`<br><small class="mut">${d}</small>`:''}</span><input type="checkbox" data-set="${k}" ${s[k]?'checked':''}></label>`,tm=(k,l)=>`<div><label for="t-${k}">${l}</label><input id="t-${k}" type="time" data-set="${k}" value="${s[k]}"></div>`;
+if(NATIVE&&NATIVE.setReminders){let ok=true;try{ok=NATIVE.notifAllowed?NATIVE.notifAllowed():true}catch(e){}const nx=remList().slice(0,4);
+return `<div class="card"><h3>Przypomnienia</h3>${ok?'':'<p style="color:var(--tar2);font-weight:600">Powiadomienia są zablokowane w telefonie. Naciśnij „Zezwól na powiadomienia”.</p><button class="btn wide" data-a="notifAsk">Zezwól na powiadomienia</button>'}
+${sw('remOn','Treningi syna','W dniu treningu, z listą rzeczy do zabrania')}<div class="form">${tm('remTime','Godzina przypomnienia')}</div>
+${sw('remEve','Dzień wcześniej wieczorem','Żeby spakować torbę. Też przed meczem.')}<div class="form">${tm('remEveTime','Godzina wieczorem')}</div>
+${kd?'':sw('remDad','Twoje treningi siłowe','')+`<div class="form">${tm('remDadTime','Godzina')}</div>`}
+<button class="btn sec wide" data-a="notifTest">Wyślij próbne powiadomienie</button>
+<p class="mut" style="margin-top:10px">${nx.length?'Najbliższe:<br>'+nx.map(x=>`${remWhen(x.at)}: ${esc(x.title)}`).join('<br>'):'Brak zaplanowanych przypomnień. Włącz je wyżej i ustaw plan tygodnia.'}</p></div>`}
+const w=s.week,links=[];DAYS.forEach((d,wd)=>{const sp=w.syn[wd];if(sp==='Tartan')links.push([`${d}: ${kid()}, tartan`,gcal(`Trening ${kid()}: tartan`,`Trening A, B albo C, aplikacja podpowie który. Zabierz: ${GEAR_TARTAN}.`,wd,s.remTime,75)]);else if(sp==='Solo')links.push([`${d}: ${kid()}, solo`,gcal(`Trening ${kid()}: solo przy ścianie`,`Zabierz: ${gearShort('S')}.`,wd,s.remTime,30)]);else if(sp==='Dom')links.push([`${d}: ${kid()}, dom`,gcal(`Trening ${kid()}: dom 15 min`,`Potrzebne: ${gearShort('D')}.`,wd,s.remTime,15)]);if(!kd&&w.tata[wd]==='Trening')links.push([`${d}: Twój trening siłowy`,gcal('Trening siłowy taty','Hantle, ławka, mata pod ławkę.',wd,s.remDadTime,60)])});
+return `<div class="card"><h3>Przypomnienia w kalendarzu</h3><p class="mut">Ta wersja nie wysyła sama powiadomień, dlatego dodaj treningi do kalendarza w telefonie jako wydarzenia co tydzień. Kalendarz przypomni w dniu treningu i wieczorem dzień wcześniej, a w opisie jest lista rzeczy do zabrania.</p><div class="form">${tm('remTime','Godzina treningu syna')}${kd?'':tm('remDadTime','Twoja godzina')}</div>${HOSTED?'<button class="btn wide" data-a="ics">Dodaj do kalendarza w telefonie (iPhone i Android)</button><p class="mut" style="margin-top:8px">Albo pojedynczo do Kalendarza Google:</p>':''}${links.length?links.map(([t,u])=>`<a class="btn sec wide" style="display:flex;align-items:center;justify-content:center;text-decoration:none;margin-top:8px" href="${u}" target="_blank" rel="noopener">Dodaj: ${esc(t)}</a>`).join(''):'<p class="empty">Ustaw plan tygodnia, żeby dodać treningi.</p>'}<p class="mut" style="margin-top:10px">Po zmianie planu tygodnia dodaj wpisy jeszcze raz.</p></div>`}
+
+function icsText(){const s=S.settings,w=s.week,kd=isKid(),now=new Date(),st=now.getUTCFullYear()+pad(now.getUTCMonth()+1)+pad(now.getUTCDate())+'T'+pad(now.getUTCHours())+pad(now.getUTCMinutes())+'00Z',E=t=>String(t).replace(/\\/g,'\\\\').replace(/[,;]/g,m=>'\\'+m).replace(/\n/g,'\\n');
+const ev=[],add=(wd,time,mins,title,desc,eve)=>{const b=new Date();b.setHours(0,0,0,0);b.setDate(b.getDate()+((wd-dIdx()+7)%7));const [H,M]=time.split(':').map(Number);b.setHours(H,M);const f=d=>d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'T'+pad(d.getHours())+pad(d.getMinutes())+'00';
+let al=`BEGIN:VALARM\r\nACTION:DISPLAY\r\nDESCRIPTION:${E(title)}\r\nTRIGGER:-PT0M\r\nEND:VALARM\r\n`;if(eve&&s.remEve){const [eh,em]=s.remEveTime.split(':').map(Number),mins2=(H*60+M)+(24*60-(eh*60+em));if(mins2>0)al+=`BEGIN:VALARM\r\nACTION:DISPLAY\r\nDESCRIPTION:${E('Jutro: '+title+'. Spakuj torbę.')}\r\nTRIGGER:-PT${mins2}M\r\nEND:VALARM\r\n`}
+ev.push(`BEGIN:VEVENT\r\nUID:trening-${wd}-${ev.length}-${Date.now()}@trening\r\nDTSTAMP:${st}\r\nDTSTART:${f(b)}\r\nDURATION:PT${mins}M\r\nRRULE:FREQ=WEEKLY;BYDAY=${['MO','TU','WE','TH','FR','SA','SU'][wd]}\r\nSUMMARY:${E(title)}\r\nDESCRIPTION:${E(desc)}\r\n${al}END:VEVENT\r\n`)};
+DAYS.forEach((d,wd)=>{const sp=w.syn[wd];if(sp==='Tartan')add(wd,s.remTime,75,`Trening ${kid()}: tartan`,`Trening A, B albo C, aplikacja podpowie który. Zabierz: ${GEAR_TARTAN}.`,1);else if(sp==='Solo')add(wd,s.remTime,30,`Trening ${kid()}: solo`,`Zabierz: ${gearShort('S')}.`,1);else if(sp==='Dom')add(wd,s.remTime,15,`Trening ${kid()}: dom`,`Potrzebne: ${gearShort('D')}.`,0);else if(sp==='Mecz')add(wd,'10:00',90,`Mecz: ${kid()}`,'Korki, getry, ochraniacze, strój klubowy, woda. Godzinę zmień w kalendarzu.',1);if(!kd&&w.tata[wd]==='Trening')add(wd,s.remDadTime,60,'Trening siłowy taty','Hantle, ławka, mata pod ławkę.',0)});
+return `BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Trening skrzydlowego//PL\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\n${ev.join('')}END:VCALENDAR\r\n`}
+
+/* ---------- badges ---------- */
+const BADGES=[
+['first','1','Pierwszy krok','Pierwszy trening',()=>S.logs.some(l=>l.kind==='syn')],
+['t10','10','Pracuś','10 treningów',()=>logsBy('syn').length>=10],
+['t25','25','Maszyna','25 treningów',()=>logsBy('syn').length>=25],
+['t50','50','Legenda tartanu','50 treningów',()=>logsBy('syn').length>=50],
+['all','ABC','Komplet','Trening A, B i C',()=>['A','B','C'].every(k=>S.logs.some(l=>l.kind==='syn'&&l.key===k))],
+['week','7/7','Pełny tydzień','Cały plan tygodnia zrobiony',()=>{const pl=S.settings.week.syn.filter(x=>x==='Tartan'||x==='Dom'||x==='Solo').length;if(!pl)return false;const m={};S.logs.filter(l=>l.kind==='syn').forEach(l=>{(m[wkOf(l.date)]=m[wkOf(l.date)]||new Set()).add(l.date)});return Object.values(m).some(s=>s.size>=pl)}],
+['streak','4×','Seria','4 tygodnie z rzędu z treningiem',()=>maxStreak()>=4],
+['rocket','20m','Rakieta','Poprawiony rekord sprintu',()=>{const v=S.tests.filter(t=>t.sprint!=null).sort((a,b)=>a.date<b.date?-1:1).map(t=>t.sprint);return v.some((x,i)=>i>0&&x<Math.min(...v.slice(0,i)))}],
+['sniper','15','Snajper','15+ pkt w wyzwaniu dośrodkowań',()=>S.logs.some(l=>(l.score||0)>=15)||S.tests.some(t=>(t.dosr||0)>=15)],
+['brain','6','Prymus','3 szóstki w szkole',()=>S.pts.entries.filter(e=>e.g==6).length>=3],
+['scorer','G','Strzelec','10 goli w meczach',()=>goals()>=10],
+['assist','A','Asystent','10 asyst w meczach',()=>assists()>=10]];
+const medal=(t,on)=>`<svg class="medal" viewBox="0 0 44 52" aria-hidden="true"><path d="M11 0h8l5 13h-8z" fill="${on?'#b8412b':'var(--line)'}"/><path d="M25 0h8l-5 13h-8z" fill="${on?'#2f6fd6':'var(--line)'}"/><circle cx="22" cy="32" r="18" fill="${on?'#ffd84a':'var(--card)'}" stroke="${on?'#c99a00':'var(--mut)'}" stroke-width="2.5" ${on?'':'stroke-dasharray="4 3"'}/><text x="22" y="${t.length>2?36.5:38}" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="${t.length>2?13:17}" fill="${on?'#5a3d00':'var(--mut)'}">${t}</text></svg>`;
+function checkBadges(){const got=[];BADGES.forEach(b=>{if(!S.pts.badges.includes(b[0])&&b[4]()){S.pts.badges.push(b[0]);got.push(b);pushE({id:'pb-'+b[0],ts:Date.now(),p:S.shop.tr.badge,why:'Odznaka: '+b[2],ref:null})}});if(got.length){saveMeta();setTimeout(()=>{confetti();say('Nowa odznaka: '+got.map(b=>b[2]).join(', '))},300)}return got}
+
+/* ---------- audio, voice, haptics ---------- */
+let ac=null,primed=false;
+const unlock=()=>{try{if(!ac)ac=new(window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume()}catch(e){}if(!primed&&!NATIVE&&window.speechSynthesis){primed=true;try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}catch(e){}}};
+const tone=(f,t,d)=>{try{const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.setValueAtTime(.28,ac.currentTime+t);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+t+d);o.connect(g);g.connect(ac.destination);o.start(ac.currentTime+t);o.stop(ac.currentTime+t+d+.02)}catch(e){}};
+const vib=ms=>{if(!S.settings.sound)return;try{if(NATIVE&&NATIVE.vibrate)NATIVE.vibrate(ms);else if(navigator.vibrate)navigator.vibrate(ms)}catch(e){}};
+const beep=k=>{if(!S.settings.sound)return;vib(k===2?400:60);if(!ac)return;if(k===2){tone(988,0,.18);tone(988,.22,.18);tone(1319,.44,.35)}else tone(660,0,.12)};
+const say=t=>{if(!S.settings.voice)return;try{if(NATIVE&&NATIVE.speak){NATIVE.speak(t);return}}catch(e){}try{const ss=window.speechSynthesis;if(!ss)return;ss.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pl-PL';u.rate=1.05;const v=ss.getVoices().find(x=>/^pl/i.test(x.lang));if(v)u.voice=v;ss.speak(u)}catch(e){}};
+const wake=()=>{try{navigator.wakeLock&&navigator.wakeLock.request('screen').catch(()=>{})}catch(e){}};
+function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const app=$('#app'),c=document.createElement('canvas');c.className='conf';app.appendChild(c);const W=c.width=app.clientWidth,H=c.height=app.clientHeight,x=c.getContext('2d');const cols=['#b8412b','#ffd84a','#2f6fd6','#23703f','#ff8a1a','#ffffff'];const P=Array.from({length:110},()=>({x:W/2+(Math.random()-.5)*60,y:H*.35,vx:(Math.random()-.5)*9,vy:-Math.random()*9-3,s:4+Math.random()*5,r:Math.random()*6,c:cols[Math.random()*cols.length|0]}));let t0=null;const f=ts=>{if(t0==null)t0=ts;const t=ts-t0;x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.25;p.x+=p.vx;p.y+=p.vy;p.r+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/3,p.s,p.s*.66);x.restore()});if(t<1900)requestAnimationFrame(f);else c.remove()};requestAnimationFrame(f)}
+
+/* ---------- drill block ---------- */
+const PLAY_I='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2l11 6-11 6z" fill="currentColor"/></svg>',STOP_I='<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="3" width="10" height="10" fill="currentColor"/></svg>';
+const COIN='<svg class="coin" viewBox="0 0 76 76" aria-hidden="true"><circle cx="38" cy="40" r="32" fill="#0f3d21"/><circle cx="38" cy="36" r="32" fill="#ffd84a"/><circle cx="38" cy="36" r="25" fill="none" stroke="#c99a00" stroke-width="3"/><circle cx="38" cy="36" r="14" fill="#fff" stroke="#1d1613" stroke-width="2"/><path d="M38 28l7 5-3 8h-8l-3-8z" fill="#1d1613"/></svg>';
+function drillBlock(k,i,full,lv){const st=stepOf(k,i,lv);let h='';
+if(st.f)h+=`<div class="board" style="aspect-ratio:${st.f.w}/${st.f.h}"><svg role="img" aria-label="Schemat: ${st.t}" data-s="${k}-${i}"></svg></div><button class="play" data-a="play" data-v="${k}-${i}">${PLAY_I}Odtwórz ruch</button>`;
+h+=full?`<h2>${st.t}</h2>`:`<h3>${i+1}. ${st.t}</h3>`;
+h+=`<div class="meta">${st.m.map(x=>`<span>${x}</span>`).join('')}${st.L&&st.L.some(o=>o.reps)?`<span>${st.reps} ${st.unit||'powt.'}</span>`:''}</div>`;
+if(st.p)h+=`<p class="lvnote">${st.p}</p>`;
+h+=`<div class="eq"><b>Co i gdzie ustawić</b>${st.eq}</div><p>${st.d}</p>`;
+if(st.names&&st.id==='w11')h+=`<ol class="list">${st.names.map(n=>`<li>${n}</li>`).join('')}</ol>`;
+h+=`<p class="cue">${st.c}</p>`;
+if(st.e)h+=`<details class="tips"><summary>Typowe błędy, łatwiej, trudniej</summary><dl><dt>Typowe błędy</dt><dd>${st.e}</dd><dt>Łatwiej</dt><dd>${st.ez}</dd><dt>Trudniej</dt><dd>${st.hd}</dd></dl></details>`;
+if(st.tr&&!full)h+=`<p class="mut">Mierzymy: ${st.tr.l.toLowerCase()}${st.tr.max?` (na ${st.tr.max})`:''}.</p>`;
+return h+YT(st.yt)}
+
+/* ---------- views ---------- */
+function vDzis(){
+const i=dIdx(),w=S.settings.week,dates=weekDates(),td=today(),lv=level(),bal=balance(),kd=isKid();
+let h=`<h2>${DAYS_L[i]}, ${plD(td)}</h2>`;
+if(!kd&&!S.settings.name)h+=`<div class="card"><h3>Witaj w aplikacji</h3><p class="mut">Dwa kroki na start: wpisz imię syna i ustaw jego dni w klubie.</p><div class="form one"><div><label for="onbName">Imię syna</label><input id="onbName" autocomplete="off" placeholder="np. Kuba"></div></div><button class="btn wide" data-a="onb">Zapisz i ustaw tydzień</button></div>`;
+if(!kd&&S.reqs.length)h+=`<div class="card hero"><h3>Do zatwierdzenia: ${S.reqs.length}</h3><p class="mut">${esc(kid())} zgłosił oceny albo mecze. Po zatwierdzeniu dostanie punkty.</p><button class="btn" data-a="tab" data-v="sklep">Zobacz</button></div>`;
+h+='<div class="week">'+dates.map((d,j)=>{const s=S.logs.some(l=>l.kind==='syn'&&l.date===d),t=!kd&&S.logs.some(l=>l.kind==='tata'&&l.date===d);return `<div class="day${j===i?' today':''}"><b>${DAYS[j]}</b><span class="s">${SYN_SH[w.syn[j]]}</span>${kd?'':`<br><span class="t">${TATA_SH[w.tata[j]]}</span>`}<div class="dots">${s?'<i class="ds"></i>':''}${t?'<i class="dt"></i>':''}</div></div>`}).join('')+'</div>';
+const sp=w.syn[i],sDone=S.logs.filter(l=>l.kind==='syn'&&l.date===td).sort((a,b)=>b.ts-a.ts)[0],kf=sp==='Dom'?'D':sp==='Solo'?'S':sp==='Tartan'?nextTartan():null;
+if(sDone&&sp!=='Mecz')h+=`<div class="card"><div class="who">${esc(kid())}</div><h3>Zrobione: ${esc(sDone.name)}</h3><p class="mut">${sDone.min} min${sDone.score!=null?' · wyzwanie '+sDone.score+' pkt':''}. Odpoczynek też jest częścią treningu.</p><button class="link" data-a="tab" data-v="syn">Dodatkowy trening</button></div>`;
+else if(kf){const p=SYN[kf],l=lvlOf(kf);h+=`<div class="card hero"><div class="who">${esc(kid())}</div><div class="row"><div><h3>${p.n}${l?`<span class="lvtag">Poziom ${l}</span>`:''}</h3><p class="mut">${p.s} · +${ptsFor(kf)} pkt</p></div><button class="btn" data-a="startSyn" data-v="${kf}">Start</button></div><div class="row" style="justify-content:flex-start;gap:18px"><button class="link" style="color:#fff" data-a="torba" data-v="${kf}">Co zabrać (${GEAR[kf].length})</button><button class="link" style="color:#fff" data-a="preview" data-v="${kf}">Ćwiczenia</button></div></div>`}
+else if(sp==='Mecz')h+=`<div class="card hero"><div class="who">${esc(kid())}</div><h3>Dzień meczowy</h3><p class="mut">Po meczu ${kd?'zgłoś':'wpisz'} wynik, gole i asysty. Za mecz są punkty do sklepiku.</p><button class="btn" data-a="matchAdd">${kd?'Zgłoś mecz':'Dodaj mecz'}</button></div>`;
+else h+=`<div class="card"><div class="who">${esc(kid())}</div><h3>${sp==='Wolne'?'Dzień wolny':'Trening w klubie'}</h3><p class="mut">${sp==='Wolne'?'Odpoczynek też buduje formę.':'Dziś wystarczy trening w klubie.'}</p><button class="link" data-a="tab" data-v="syn">Mimo to wybierz trening</button></div>`;
+if(!kd){const tp=w.tata[i],tDone=S.logs.filter(l=>l.kind==='tata'&&l.date===td).sort((a,b)=>b.ts-a.ts)[0];
+if(tDone)h+=`<div class="card"><div class="who" style="color:var(--blue)">Ty</div><h3>Zrobione: ${esc(tDone.name)}</h3><p class="mut">${tDone.min} min. Następny: ${PLANS[nextDad()].n}.</p></div>`;
+else if(tp==='Trening'){const k=nextDad(),p=PLANS[k];h+=`<div class="card"><div class="who" style="color:var(--blue)">Ty</div><div class="row"><div><h3>${p.n}</h3><p class="mut">${p.s} · ${p.ex.length} ćwiczeń</p></div><button class="btn blue" data-a="startTata" data-v="${k}">Start</button></div></div>`}
+else h+=`<div class="card"><div class="who" style="color:var(--blue)">Ty</div><h3>${tp==='Tartan'?'Tartan z synem':'Dzień wolny'}</h3><p class="mut">${tp==='Tartan'?'Jesteś obrońcą i podającym, to Twoja lekka aktywność.':'Regeneracja. Spacer się liczy.'}</p></div>`}
+const g=S.shop.items.find(x=>x.id===S.pts.goal);
+h+=`<div class="card"><div class="row"><h3>${esc(kid())}: ${lv.name}</h3><span class="badge" style="margin:0">ranga ${lv.i+1}</span></div><p class="mut" style="margin:6px 0 0">${bal} pkt w sklepiku · seria ${streak()} tyg. z treningiem</p>`+(g?`<p style="margin:8px 0 0;font-weight:600">Cel: ${esc(g.n)} · ${Math.min(bal,g.c)}/${g.c} pkt</p><div class="meter"><i style="width:${g.c?Math.min(100,bal/g.c*100):100}%"></i></div>`:`<button class="link" data-a="tab" data-v="sklep">Wybierz nagrodę jako cel</button>`)+`</div>`;
+const plS=w.syn.filter(x=>x==='Tartan'||x==='Dom'||x==='Solo').length,plT=w.tata.filter(x=>x==='Trening').length;
+const dnS=new Set(S.logs.filter(l=>l.kind==='syn'&&dates.includes(l.date)).map(l=>l.date)).size,dnT=new Set(S.logs.filter(l=>l.kind==='tata'&&dates.includes(l.date)).map(l=>l.date)).size;
+h+=`<div class="card"><h3>Ten tydzień</h3><p class="mut" style="margin:6px 0 0">${esc(kid())}: ${dnS} z ${plS}</p><div class="meter"><i style="width:${plS?Math.min(100,dnS/plS*100):0}%"></i></div>`+(kd?'':`<p class="mut" style="margin:0">Ty: ${dnT} z ${plT}</p><div class="meter t"><i style="width:${plT?Math.min(100,dnT/plT*100):0}%"></i></div><button class="btn sec wide" data-a="tab" data-v="tydzien">Zmień plan tygodnia</button>`)+`</div>`;
+return h}
+
+function vSyn(){const nx=nextTartan(),kd=isKid(),ms=[...S.matches].sort((a,b)=>a.date<b.date?1:-1),mins=S.matches.reduce((a,m)=>a+(m.min||0),0),rt=S.matches.length?S.matches.reduce((a,m)=>a+(m.rate||0),0)/S.matches.length:0,mq=S.reqs.filter(r=>r.type==='match');
+let h=`<h2>Treningi: ${esc(kid())}</h2><p class="mut">Na tartanie po kolei A, B, C. Solo, gdy taty nie ma, Dom w dni bez boiska. Poziom rośnie sam co 3 zrobione treningi danego typu.</p>`+['A','B','C','S','D'].map(k=>{const p=SYN[k],l=lvlOf(k);return `<div class="card"><div class="row"><div><h3>${p.n}${k===nx?'<span class="badge">następny</span>':''}${l?`<span class="lvtag">Poziom ${l}</span>`:''}</h3><p class="mut">${p.s} · +${ptsFor(k)} pkt</p></div><button class="btn" data-a="startSyn" data-v="${k}">Start</button></div><ul class="list">${p.steps.map(s=>`<li>${s.t}</li>`).join('')}</ul><div class="row" style="flex-wrap:nowrap;gap:8px"><button class="btn sec" style="flex:1" data-a="torba" data-v="${k}">Co zabrać</button><button class="btn sec" style="flex:1.4" data-a="preview" data-v="${k}">Ćwiczenia i animacje</button></div></div>`}).join('');
+h+=`<div class="card"><div class="row"><h3>Mecze</h3><button class="btn" data-a="matchAdd">${kd?'Zgłoś mecz':'Dodaj mecz'}</button></div><div class="stat"><div><b>${S.matches.length}</b><span>mecze</span></div><div><b>${goals()}</b><span>gole</span></div><div><b>${assists()}</b><span>asysty</span></div><div><b>${nf(mins)}</b><span>minuty</span></div></div>`+mq.map(r=>`<div class="hist"><div>${esc(reqTxt(r))}<small>czeka na zatwierdzenie taty</small></div></div>`).join('')+(ms.length?`<p class="mut">Średnia samoocena: ${cm(rt)} / 5</p>`+ms.slice(0,6).map(m=>`<div class="hist"><div>${esc(m.opp||'Mecz')} ${esc(m.res||'')}<small>${plD(m.date)} · ${m.min||0} min · ${m.g||0} G · ${m.a||0} A · ocena ${m.rate||'–'}/5${m.note?' · '+esc(m.note):''}</small></div>${kd?'':`<button class="del" data-a="delMatch" data-v="${esc(m.id)}">Usuń</button>`}</div>`).join(''):mq.length?'':'<p class="empty">Wpisuj mecze, żeby widzieć gole, asysty i minuty w sezonie.</p>')+`</div>`;
+return h+'<p class="mut">Na tartanie: turfy zamiast korków, sprinty z pełną przerwą, co drugie powtórzenie słabszą nogą.</p>'}
+
+let torbaBack='syn';
+const packKey=k=>'torba-'+today()+'-'+k;
+function vTorba(){const k=preview,p=SYN[k],g=GEAR[k];let st={};try{st=JSON.parse(localStorage.getItem(packKey(k))||'{}')}catch(e){}const done=g.filter((_,i)=>st[i]).length;
+return `<button class="link" data-a="up">← Wróć</button><h2>Co zabrać: ${p.n}</h2><p class="mut" id="packCnt">${done}/${g.length} spakowane. Odhaczaj przy pakowaniu.</p><div class="card">${g.map((x,i)=>`<label class="pack"><input type="checkbox" data-pack="${i}" ${st[i]?'checked':''}><span>${x[0]}${x[1]?`<small>${x[1]}</small>`:''}</span></label>`).join('')}</div><p class="mut">Na tartan zawsze: turfy zamiast korków. Przy deszczu tartan jest śliski, zrezygnujcie ze sprintów.</p><button class="btn wide xl" data-a="startSyn" data-v="${k}">Wszystko jest, zaczynamy</button>`}
+function vPodglad(){const p=SYN[preview],l=lvlOf(preview);
+return `<button class="link" data-a="up">← Wróć</button><h2>${p.n}: ${p.s}</h2><button class="btn sec wide" data-a="torba" data-v="${preview}" style="margin-bottom:10px">Co zabrać (${GEAR[preview].length})</button><p class="mut">${l?`Poziom ${l}. `:''}Naciśnij „Odtwórz ruch” pod planszą, żeby zobaczyć ruch zawodników i piłki. Przy każdym ćwiczeniu są typowe błędy i wersje łatwiejsza i trudniejsza.</p>`+p.steps.map((_,i)=>`<div class="drill">${drillBlock(preview,i,false,l)}</div>`).join('')+`<button class="btn wide xl" data-a="startSyn" data-v="${preview}">Zacznij ten trening</button>`}
+
+function vMecz(){const t=S.shop.tr,pts=t.match+form.g*t.goal+form.a*t.assist;
+return `<button class="link" data-a="up">← Wróć</button><h2>Nowy mecz</h2><div class="form"><div><label for="m-date">Data</label><input id="m-date" type="date" value="${today()}"></div><div><label for="m-opp">Rywal</label><input id="m-opp" autocomplete="off" placeholder="np. Orlęta"></div><div><label for="m-res">Wynik</label><input id="m-res" autocomplete="off" placeholder="np. 3:1"></div><div><label for="m-min">Minuty na boisku</label><input id="m-min" inputmode="numeric" placeholder="np. 40"></div></div>
+<div class="form"><div><span class="lbl">Gole</span><div class="stepper"><button data-a="mstep" data-v="g:-1" aria-label="Mniej goli">−</button><output id="m-g">${form.g}</output><button data-a="mstep" data-v="g:1" aria-label="Więcej goli">+</button></div></div><div><span class="lbl">Asysty</span><div class="stepper"><button data-a="mstep" data-v="a:-1" aria-label="Mniej asyst">−</button><output id="m-a">${form.a}</output><button data-a="mstep" data-v="a:1" aria-label="Więcej asyst">+</button></div></div></div>
+<span class="lbl">Jak mi poszło (samoocena)</span><div class="stars" role="group" aria-label="Samoocena">${[1,2,3,4,5].map(n=>`<button data-a="mrate" data-v="${n}" aria-pressed="${form.rate===n}">${n}</button>`).join('')}</div>
+<div class="form one"><div><label for="m-note">Notatka (co wyszło, co poprawić)</label><input id="m-note" autocomplete="off" placeholder="np. 2 udane zwody, słabe dośrodkowania"></div></div>
+<p class="mut" id="m-pts">Za ten mecz: +${pts} pkt (mecz ${t.match}, gol ${t.goal}, asysta ${t.assist}).</p>${isKid()?'<p class="mut">Mecz trafi do taty do zatwierdzenia.</p>':''}<button class="btn wide xl" data-a="matchSave">${isKid()?'Wyślij do zatwierdzenia':'Zapisz mecz'}</button>`}
+
+function vTata(){const r=rot(),nx=nextDad();
+return `<h2>Twoje treningi</h2><div class="seg" role="group" aria-label="Liczba dni"><button data-a="days" data-v="4" aria-pressed="${S.settings.days!==3}">4 dni</button><button data-a="days" data-v="3" aria-pressed="${S.settings.days===3}">3 dni</button></div>`+r.map(k=>{const p=PLANS[k];return `<div class="card"><div class="row"><div><h3>${p.n}${k===nx?'<span class="badge">następny</span>':''}</h3><p class="mut">${p.s}</p></div><button class="btn blue" data-a="startTata" data-v="${k}">Start</button></div><ul class="list">${p.ex.map(e=>{const b=bestKg(e[0]);return `<li><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(GYM_YT[e[0]]||e[0]+' technika')}" target="_blank" rel="noopener">${e[0]}</a>${b?` <span style="white-space:nowrap">· rekord ${cm(b)} kg</span>`:''}</li>`}).join('')}</ul></div>`}).join('')+`<p class="mut">Nazwa ćwiczenia otwiera filmy z techniką. Ciężar dobieraj tak, żeby w serii zostały 1–2 powtórzenia zapasu. ${S.settings.plates?'':'W ustawieniach wpisz swoje talerze, a aplikacja podpowie, co założyć na gryf.'}</p>`}
+
+function vSklep(){const b=balance(),sh=S.shop,pend=S.pts.orders.filter(o=>!o.done),lv=level(),kd=isKid();
+let h=`<div class="bal">${COIN}<div><b>${b}</b><br><span>punktów do wydania</span></div><div class="lvl"><div class="row"><span>Ranga ${lv.i+1}: ${lv.name}</span><span>${lv.next?`${lv.next-lv.e} pkt do kolejnej`:'najwyższa ranga'}</span></div><div class="meter"><i style="width:${lv.next?Math.min(100,(lv.e-lv.from)/(lv.next-lv.from)*100):100}%"></i></div></div></div>`;
+const rq=[...S.reqs].sort((a,b)=>a.ts-b.ts);
+if(rq.length)h+=kd?`<div class="card"><h3>Czeka na tatę</h3>${rq.map(r=>`<div class="hist"><div>${esc(reqTxt(r))}<small>po zatwierdzeniu +${reqPts(r)} pkt</small></div></div>`).join('')}</div>`:`<div class="card"><h3>Do zatwierdzenia</h3>${rq.map(r=>`<div class="hist"><div>${esc(reqTxt(r))}<small>${plD(iso(new Date(r.ts)))} · +${reqPts(r)} pkt</small></div><div class="row" style="flex-wrap:nowrap;gap:6px"><button class="del" data-a="reqNo" data-v="${esc(r.id)}">Odrzuć</button><button class="btn ok" style="min-height:44px;padding:6px 14px" data-a="reqOk" data-v="${esc(r.id)}">Zatwierdź</button></div></div>`).join('')}</div>`;
+if(pend.length)h+=`<div class="card"><h3>Do odebrania</h3>${pend.map(o=>`<div class="hist"><div>${esc(o.n)}<small>kupione ${plD(iso(new Date(o.ts)))} · ${o.c} pkt</small></div>${kd?'<small class="mut">u taty</small>':`<div class="row" style="flex-wrap:nowrap;gap:6px"><button class="del" data-a="cancelOrder" data-v="${esc(o.id)}">Anuluj</button><button class="del" data-a="deliver" data-v="${esc(o.id)}">Wydane</button></div>`}</div>`).join('')}<p class="mut" style="margin-top:6px">${kd?'Nagrodę wydaje tata.':'„Wydane” zaznacz po wręczeniu nagrody. „Anuluj” zwraca punkty.'}</p></div>`;
+const itemH=it=>{const miss=it.c-b,gl=S.pts.goal===it.id;return `<div class="item"><div>${esc(it.n)}${miss>0?`<br><small class="mut">brakuje ${miss} pkt</small>`:''}<button class="goalbtn" data-a="goal" data-v="${esc(it.id)}" aria-pressed="${gl}">${gl?'★ Twój cel':'☆ Ustaw jako cel'}</button></div><div class="row" style="flex-wrap:nowrap"><span class="cost">${it.c} pkt</span><button class="btn" data-a="buy" data-v="${esc(it.id)}" ${miss>0?'disabled':''}>Kup</button></div><div class="meter"><i style="width:${it.c?Math.min(100,b/it.c*100):100}%"></i></div></div>`};
+const used=CATS.filter(([k])=>sh.items.some(i=>i.k===k)),fil=shopCat==='stac'?sh.items.filter(i=>i.c<=b):shopCat==='all'?sh.items:sh.items.filter(i=>i.k===shopCat),srt=a=>[...a].sort((x,y)=>x.c-y.c);
+h+=`<div class="card"><h3>Nagrody</h3><div class="cats" role="group" aria-label="Kategorie nagród">${[['all','Wszystkie'],['stac','Stać mnie'],...used.map(([k,n])=>[k,n==='Czas i przywileje'?'Czas':n==='Sprzęt piłkarski'?'Sprzęt':n])].map(([k,n])=>`<button class="chip" data-a="shopCat" data-v="${k}" aria-pressed="${shopCat===k}">${n}</button>`).join('')}</div>`+(!sh.items.length?'<p class="empty">Brak nagród. Tata dodaje je w panelu rodzica.</p>':shopCat==='all'?used.map(([k,n])=>`<div class="cathd">${n}</div>`+srt(sh.items.filter(i=>i.k===k)).map(itemH).join('')).join(''):fil.length?srt(fil).map(itemH).join(''):`<p class="empty">${shopCat==='stac'?'Jeszcze na nic nie starcza. Najtańsza nagroda: '+Math.min(...sh.items.map(i=>i.c))+' pkt.':'Brak nagród w tej kategorii.'}</p>`)+`</div>`;
+if(kd)h+=`<div class="card"><h3>Zgłoś ocenę</h3><p class="mut">Dostałeś ocenę? Zgłoś ją, tata zatwierdzi i wpadną punkty.</p><div class="grades">${['1','2','3','4','5','6'].map(g=>`<button data-a="reqGrade" data-v="${g}">${g}<small>${sh.rates[g]>0?'+'+sh.rates[g]:sh.rates[g]||'0'}</small></button>`).join('')}</div><input class="inp" id="subj" placeholder="Przedmiot, np. matematyka" aria-label="Przedmiot"></div>`;
+const on=BADGES.filter(x=>S.pts.badges.includes(x[0])).length;
+h+=`<div class="card"><h3>Odznaki ${on}/${BADGES.length}</h3><p class="mut">Każda nowa odznaka to +${sh.tr.badge} pkt.</p><div class="badges">${BADGES.map(x=>{const o=S.pts.badges.includes(x[0]);return `<div class="bd${o?'':' off'}">${medal(x[1],o)}<div><b>${x[2]}</b>${x[3]}</div></div>`}).join('')}</div></div>`;
+h+=`<div class="card"><h3>Jak zdobyć punkty</h3><table class="ptab"><tbody><tr><td>Trening A, B lub C na tartanie</td><td>+${sh.tr.AB}</td></tr><tr><td>Trening solo</td><td>+${sh.tr.S}</td></tr><tr><td>Trening w domu</td><td>+${sh.tr.D}</td></tr><tr><td>Testy miesięczne</td><td>+${sh.tr.test}</td></tr><tr><td>Rekord w teście</td><td>+${sh.tr.rec}</td></tr><tr><td>Rozegrany mecz</td><td>+${sh.tr.match}</td></tr><tr><td>Gol / asysta</td><td>+${sh.tr.goal} / +${sh.tr.assist}</td></tr><tr><td>Nowa odznaka</td><td>+${sh.tr.badge}</td></tr>${['6','5','4','3','2','1'].map(g=>`<tr><td>Ocena ${g}</td><td>${sh.rates[g]>0?'+':''}${sh.rates[g]}</td></tr>`).join('')}</tbody></table><p class="mut" style="margin-top:8px">Trening liczy się, gdy trwał co najmniej ${MIN_MIN.A} min (solo ${MIN_MIN.S}, dom ${MIN_MIN.D}).</p></div>`;
+if(!kd)h+=`<div class="card"><h3>Panel rodzica</h3><p class="mut">Oceny, bonusy i zmiany nagród.</p><p style="margin:10px 0 4px;font-weight:600">Dodaj ocenę</p><div class="grades">${['1','2','3','4','5','6'].map(g=>`<button data-a="grade" data-v="${g}">${g}<small>${sh.rates[g]>0?'+'+sh.rates[g]:sh.rates[g]||'0'}</small></button>`).join('')}</div><input class="inp" id="subj" placeholder="Przedmiot (opcjonalnie), np. matematyka" aria-label="Przedmiot"><p style="margin:14px 0 4px;font-weight:600">Bonus lub kara</p><div class="ed" style="grid-template-columns:minmax(0,1fr) 6em"><input class="inp" id="bwhy" placeholder="Za co, np. pomoc w domu" aria-label="Za co"><input class="inp" id="bpts" inputmode="numeric" placeholder="+20" aria-label="Punkty"></div><button class="btn sec wide" data-a="bonus">Dodaj punkty</button><button class="btn sec wide" data-a="editShop">Edytuj nagrody i stawki</button></div>`;
+const hist=[...S.pts.entries].sort((a,b)=>b.ts-a.ts).slice(0,30);
+h+=`<div class="card"><h3>Historia punktów</h3>${hist.length?hist.map(e=>`<div class="hist"><div>${esc(e.why)}<small>${plD(iso(new Date(e.ts)))}</small></div><span class="pp ${e.p>0?'plus':'minus'}">${e.p>0?'+':''}${e.p}</span></div>`).join(''):'<p class="empty">Pierwsze punkty wpadną po pierwszym treningu.</p>'}</div>`;
+return h}
+
+const edRow=it=>`<div class="ed it" data-id="${esc(it.id)}"><input class="inp" value="${esc(it.n)}" placeholder="Nazwa nagrody" aria-label="Nagroda"><select aria-label="Kategoria">${CATS.map(([k,n])=>`<option value="${k}"${k===it.k?' selected':''}>${n}</option>`).join('')}</select><input class="inp" inputmode="numeric" value="${it.c}" aria-label="Koszt w punktach"><button class="del" data-a="edDel" aria-label="Usuń nagrodę">×</button></div>`;
+function vSklepEdit(){const sh=S.shop;
+return `<button class="link" data-a="up">← Wróć do sklepiku</button><h2>Nagrody i stawki</h2><p class="mut">Zmiany zapisują się po naciśnięciu „Zapisz”.</p><div class="card"><h3>Nagrody</h3><button class="btn wide" data-a="edAdd" style="margin:8px 0 4px">Dodaj nagrodę</button><div id="edItems">${[...sh.items].sort((x,y)=>(CATS.findIndex(c=>c[0]===x.k)-CATS.findIndex(c=>c[0]===y.k))||x.c-y.c).map(edRow).join('')}</div></div>
+<div class="card"><h3>Punkty za oceny</h3><div class="form" style="grid-template-columns:repeat(3,minmax(0,1fr))">${['6','5','4','3','2','1'].map(g=>`<div><label for="r${g}">Ocena ${g}</label><input id="r${g}" inputmode="numeric" value="${sh.rates[g]}"></div>`).join('')}</div><h3>Punkty za aktywność</h3><div class="form">${[['AB','Trening A/B/C'],['S','Trening solo'],['D','Trening w domu'],['test','Testy'],['rec','Rekord'],['match','Mecz'],['goal','Gol'],['assist','Asysta'],['badge','Odznaka']].map(([k,n])=>`<div><label for="tr${k}">${n}</label><input id="tr${k}" inputmode="numeric" value="${sh.tr[k]}"></div>`).join('')}</div></div>
+<button class="btn wide xl" data-a="edSave">Zapisz</button>`}
+
+function spark(vals,dir,color){if(vals.length<2)return '';const v=vals.map(x=>x*dir),mn=Math.min(...v),mx=Math.max(...v),r=mx-mn||1;const pts=v.map((x,i)=>`${(i/(v.length-1)*86+2).toFixed(1)},${(30-(x-mn)/r*26).toFixed(1)}`).join(' ');return `<svg viewBox="0 0 90 34" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="${color||'var(--tar)'}" stroke-width="2.5" stroke-linejoin="round"/></svg>`}
+function heat(kd){const td=today(),start=addDays(wkOf(td),-77),syn=new Set(S.logs.filter(l=>l.kind==='syn').map(l=>l.date)),tat=new Set(kd?[]:S.logs.filter(l=>l.kind==='tata').map(l=>l.date)),mz=new Set(S.matches.map(m=>m.date));let h='';
+for(let i=0;i<84;i++){const k=addDays(start,i),s=syn.has(k),t=tat.has(k),c=k>td?'f':s&&t?'st':s?'s':t?'t':mz.has(k)?'m':'';h+=`<i class="${c}" title="${plD(k)}"></i>`}return `<div class="heat" aria-label="Kalendarz 12 tygodni">${h}</div><div class="legend"><span style="--c:var(--tar)">${esc(kid())}</span>${kd?'':'<span style="--c:var(--blue2)">Ty</span>'}<span style="--c:var(--cone)">mecz</span><span style="--c:var(--line)">nic</span></div>`}
+function resultsCard(){const rows=[];['A','B','C','S'].forEach(k=>SYN[k].steps.forEach(st=>{if(!st.tr||rows.some(r=>r.id===st.id))return;const v=S.logs.filter(l=>l.kind==='syn'&&l.res&&l.res[st.id]!=null).sort((a,b)=>a.ts-b.ts).map(l=>l.res[st.id]);if(v.length)rows.push({id:st.id,t:st.t,tr:st.tr,v})}));
+return `<div class="card"><h3>Wyniki z ćwiczeń</h3>`+(rows.length?rows.map(r=>{const lo=r.tr.lower,best=lo?Math.min(...r.v):Math.max(...r.v),last=r.v[r.v.length-1],u=r.tr.u?' '+r.tr.u:'';return `<div class="metric"><div>${r.t}<small>${r.tr.l}: ostatnio ${cm(last)}${u} · rekord ${cm(best)}${u}</small></div>${spark(r.v,lo?-1:1)}</div>`}).join(''):'<p class="empty">W trakcie treningu wpisuj wyniki (celne strzały, wygrane pojedynki, czasy ze stopera). Tu zobaczysz postęp.</p>')+`</div>`}
+function vPostep(){const kd=isKid();
+const tests=[...S.tests].sort((a,b)=>a.date<b.date?-1:1);
+let h=`<h2>Postęp</h2><div class="card"><div class="row"><h3>Ostatnie 12 tygodni</h3><span class="mut">seria ${streak()} tyg.</span></div>${heat(kd)}</div>`+resultsCard();
+h+=`<div class="card"><h3>Testy: ${esc(kid())}</h3>`+(kd?`<p class="mut">Testy robicie raz w miesiącu, wyniki wpisuje tata.</p>`:`<p class="mut">Raz w miesiącu, na początku treningu. +${S.shop.tr.test} pkt, za rekord +${S.shop.tr.rec}.</p><div class="form">
+<div><label for="t-date">Data</label><input id="t-date" type="date" value="${today()}"></div>
+<div><label for="t-sprint">Sprint 20 m (s)</label><input id="t-sprint" inputmode="decimal" placeholder="np. 3,85"></div>
+<div><label for="t-slalom">Slalom z piłką (s)</label><input id="t-slalom" inputmode="decimal" placeholder="np. 12,4"></div>
+<div><label for="t-sciana">Ściana 30 s (podań)</label><input id="t-sciana" inputmode="numeric" placeholder="np. 18"></div>
+<div><label for="t-dosr">10 dośrodkowań (pkt)</label><input id="t-dosr" inputmode="numeric" placeholder="0–20"></div>
+</div><button class="btn wide" data-a="saveTest">Zapisz wyniki</button>`);
+h+=METRICS.map(([k,n,u,dir])=>{const v=tests.filter(t=>t[k]!=null);if(!v.length)return `<div class="metric"><div>${n}<small>brak wyników</small></div><div></div></div>`;const vals=v.map(t=>t[k]),best=dir<0?Math.min(...vals):Math.max(...vals),last=vals[vals.length-1];return `<div class="metric"><div>${n}<small>Ostatnio ${cm(last)} ${u} · rekord ${cm(best)} ${u}${dir<0?' (mniej = lepiej)':''}</small></div>${spark(vals,dir)}</div>`}).join('');
+const b6=logsBy('syn').filter(l=>l.score!=null).reverse();if(b6.length)h+=`<div class="metric"><div>Wyzwanie z treningów B<small>Ostatnio ${cm(b6[b6.length-1].score)} pkt · rekord ${cm(Math.max(...b6.map(l=>l.score)))} pkt</small></div>${spark(b6.map(l=>l.score),1)}</div>`;
+if(tests.length&&!kd)h+='<details><summary class="link" style="display:block">Wszystkie wpisy</summary>'+[...tests].reverse().map(t=>`<div class="hist"><div>${plD(t.date)}<small>${METRICS.filter(m=>t[m[0]]!=null).map(m=>m[1]+': '+cm(t[m[0]])).join(' · ')}</small></div><button class="del" data-a="delTest" data-v="${esc(t.id)}">Usuń</button></div>`).join('')+'</details>';
+h+='</div>';
+const body=[...S.body].sort((a,b)=>a.date<b.date?-1:1),bw=body.filter(x=>x.w!=null),bh=body.filter(x=>x.h!=null);
+const hMet=`<div class="metric"><div>Wzrost: ${esc(kid())}<small>${bh.length?`Ostatnio ${cm(bh[bh.length-1].h)} cm${bh.length>1?` · urósł ${cm(bh[bh.length-1].h-bh[0].h)} cm`:''}`:'brak pomiarów'}</small></div>${spark(bh.map(x=>x.h),1)}</div>`;
+if(!kd){const names=[];Object.values(PLANS).forEach(p=>p.ex.forEach(e=>{if(!names.some(x=>x[0]===e[0]))names.push(e)}));
+const rows=names.map(([nm,ss])=>{const l=lastFor(nm);if(!l)return '';const time=parse(ss).time,best=bestKg(nm);return `<tr><td>${esc(nm)}<br><small class="mut">${plD(l.date)}: ${esc(setsTxt(l.sets,time))}</small></td><td>${best&&!time?cm(best)+' kg':''}</td></tr>`}).join('');
+const wks=Array.from({length:8},(_,i)=>addDays(wkOf(today()),-7*(7-i)));const ton=wks.map(w=>logsBy('tata').filter(l=>wkOf(l.date)===w).reduce((a,l)=>a+(l.ex||[]).reduce((b,e)=>b+e.sets.reduce((c,s)=>c+(s.done?(num(s.kg)||0)*(num(s.reps)||0):0),0),0),0));const mxT=Math.max(...ton,1);
+h+=`<div class="card"><h3>Twoje ciężary</h3>${rows?`<table class="ptab"><tbody>${rows}</tbody></table><p class="mut" style="margin-top:6px">Po prawej rekord ciężaru w zaliczonej serii.</p>`:'<p class="empty">Po pierwszym treningu zobaczysz tu ostatnie serie i rekordy.</p>'}<h3 style="margin-top:14px">Tonaż tygodniowy</h3><p class="mut">Suma kg × powtórzenia z zaliczonych serii.</p><div class="bars">${wks.map((w,i)=>`<div class="r"><span>${plD(w)}</span><i style="width:${ton[i]/mxT*100}%"></i><span>${nf(ton[i])} kg</span></div>`).join('')}</div></div>`;
+h+=`<div class="card"><h3>Pomiary</h3><div class="form"><div><label for="b-w">Twoja waga (kg)</label><input id="b-w" inputmode="decimal" placeholder="np. 84,5"></div><div><label for="b-h">Wzrost: ${esc(kid())} (cm)</label><input id="b-h" inputmode="decimal" placeholder="np. 152"></div></div><button class="btn sec wide" data-a="saveBody">Zapisz pomiar</button>
+<div class="metric"><div>Twoja waga<small>${bw.length?`Ostatnio ${cm(bw[bw.length-1].w)} kg${bw.length>1?` · zmiana ${bw[bw.length-1].w-bw[0].w>0?'+':''}${cm(bw[bw.length-1].w-bw[0].w)} kg`:''}`:'brak pomiarów'}</small></div>${spark(bw.map(x=>x.w),1,'var(--blue2)')}</div>${hMet}<p class="mut">Szybki wzrost to czas, by uważać na bóle kolan i pięt.</p></div>`}
+else if(bh.length)h+=`<div class="card"><h3>Wzrost</h3>${hMet}</div>`;
+const hist=[...S.logs].filter(l=>!kd||l.kind==='syn').sort((a,b)=>b.ts-a.ts).slice(0,25);
+h+=`<div class="card"><h3>Historia treningów</h3>${hist.length?hist.map(l=>`<div class="hist"><div>${l.kind==='syn'?esc(kid()):'Ty'}: ${esc(l.name)}${l.lv?` (poziom ${l.lv})`:''}<small>${plD(l.date)} · ${l.min||0} min${l.score!=null?' · dośrodkowania '+esc(l.score)+' pkt':''}${l.nopts?' · bez punktów (za krótko)':''}</small></div>${kd?'':`<button class="del" data-a="delLog" data-v="${esc(l.id)}">Usuń</button>`}</div>`).join(''):'<p class="empty">Jeszcze nic. Pierwszy trening pojawi się tutaj.</p>'}</div>`;
+return h}
+
+function vTydzien(){const w=S.settings.week;
+return `<button class="link" data-a="up">← Wróć</button><h2>Plan tygodnia</h2><p class="mut">Ustaw dni klubowe i meczowe syna oraz swoje dni treningowe. Zmiany zapisują się od razu.</p><div class="wsel"><span></span><b>${esc(kid())}</b><b>Ty</b></div>`+DAYS.map((d,i)=>`<div class="wsel"><b>${d}</b><select aria-label="${esc(kid())} ${d}" data-w="syn" data-i="${i}">${SYN_OPT.map(o=>`<option${o===w.syn[i]?' selected':''}>${o}</option>`).join('')}</select><select aria-label="Ty ${d}" data-w="tata" data-i="${i}">${TATA_OPT.map(o=>`<option${o===w.tata[i]?' selected':''}>${o}</option>`).join('')}</select></div>`).join('')+`<p class="mut">Minimum 1 dzień całkiem wolny. Przy 3 treningach w klubie i meczu wystarczy 1 tartan w tygodniu.</p><button class="btn wide" data-a="up">Gotowe</button>`}
+
+function vUst(){const s=S.settings,sw=(k,t,d)=>`<label class="sw"><span>${t}${d?`<br><small class="mut">${d}</small>`:''}</span><input type="checkbox" data-set="${k}" ${s[k]?'checked':''}></label>`;
+const kd=isKid(),prof=`<div class="card"><h3>Profil na tym telefonie</h3><p class="mut">${kd?`Teraz: ${esc(kid())}. Widać treningi, punkty i sklepik syna.`:'Teraz: Tata. Pełny dostęp, Twoje treningi i panel rodzica.'}</p><button class="btn ${kd?'blue':'sec'} wide" data-a="switchProfile">${kd?'Przełącz na tatę (PIN)':'Przełącz na profil: '+esc(kid())}</button></div>`;
+const snd=`<div class="card"><h3>Dźwięk i głos</h3>${sw('sound','Sygnały i wibracje','Odliczanie 3-2-1 i koniec przerwy')}${sw('voice','Lektor','Mówi „start”, „przerwa”, czasy ze stopera')}<button class="btn sec wide" data-a="testVoice">Sprawdź głos</button></div>
+<div class="card"><h3>Wygląd</h3><div class="seg" style="grid-template-columns:repeat(3,1fr);margin:8px 0 0" role="group" aria-label="Motyw">${[['auto','Auto'],['light','Jasny'],['dark','Ciemny']].map(([k,n])=>`<button data-a="theme" data-v="${k}" aria-pressed="${s.theme===k}">${n}</button>`).join('')}</div></div>`;
+if(kd)return `<button class="link" data-a="up">← Wróć</button>${prof}${famCard()}${remCard()}${snd}<div class="card"><h3>O aplikacji</h3><p class="mut">Wersja ${VERSION}. Gdzie są dane: <span id="syncTxt">${SYNC_T[syncState]}</span></p></div>`;
+return `<button class="link" data-a="up">← Wróć</button>${prof}${famCard()}${remCard()}
+<div class="card"><h3>Poziom treningów syna</h3><p class="mut">Auto: poziom rośnie co 3 zrobione treningi danego typu (A, B, C, solo). Możesz ustawić go ręcznie.</p><div class="seg" style="grid-template-columns:repeat(4,1fr);margin:8px 0 0" role="group" aria-label="Poziom">${[['auto','Auto'],['1','1'],['2','2'],['3','3']].map(([k,n])=>`<button data-a="lvl" data-v="${k}" aria-pressed="${s.lvl===k}">${n}</button>`).join('')}</div></div>
+<div class="card"><h3>Syn</h3><div class="form one"><div><label for="s-name">Imię</label><input id="s-name" data-set="name" autocomplete="off" value="${esc(s.name)}" placeholder="np. Kuba"></div></div><button class="btn sec wide" data-a="tab" data-v="tydzien">Plan tygodnia</button></div>
+${snd}
+<div class="card"><h3>Twoje przerwy</h3><div class="form"><div><label for="s-rm">Główne ćwiczenia (s)</label><input id="s-rm" data-set="restMain" inputmode="numeric" value="${s.restMain}"></div><div><label for="s-ra">Pozostałe (s)</label><input id="s-ra" data-set="restAcc" inputmode="numeric" value="${s.restAcc}"></div></div></div>
+<div class="card"><h3>Twój sprzęt</h3><p class="mut">Po wpisaniu aplikacja podpowie przy każdej serii, jakie talerze założyć.</p><div class="form"><div><label for="s-gh">Gryf hantla (kg)</label><input id="s-gh" data-set="gymH" inputmode="decimal" value="${esc(s.gymH)}" placeholder="np. 2"></div><div><label for="s-gb">Gryf sztangi (kg)</label><input id="s-gb" data-set="gymB" inputmode="decimal" value="${esc(s.gymB)}" placeholder="np. 5"></div></div><div class="form one" style="margin-top:0"><div><label for="s-pl">Talerze (ilość × waga)</label><input id="s-pl" data-set="plates" autocomplete="off" value="${esc(s.plates)}" placeholder="np. 4×5, 4×2,5, 4×1,25"></div></div></div>
+<div class="card"><h3>PIN taty</h3><p class="mut">${s.pin?'PIN chroni profil taty na telefonie syna.':'Ustaw PIN, żeby syn nie wszedł na profil taty.'}</p><button class="btn sec wide" data-a="pinChange">${s.pin?'Zmień PIN':'Ustaw PIN'}</button></div>
+<div class="card"><h3>Kopia zapasowa</h3><p class="mut">Przenosi wszystko na inny telefon albo między wersją na Androida i iPhone.</p>${NATIVE&&NATIVE.share?'<button class="btn wide" data-a="share">Wyślij kopię (Messenger, mail, Dysk)</button>':''}<button class="btn sec wide" data-a="exp">Pokaż kopię do skopiowania</button><div id="expBox"></div><label class="btn sec wide" style="position:relative;display:flex;align-items:center;justify-content:center;margin-top:8px">Wczytaj kopię z pliku<input type="file" id="impFile" accept=".json,.txt,text/plain,application/json" style="position:absolute;width:1px;height:1px;opacity:0"></label><textarea class="inp" id="imp" placeholder="albo wklej tu tekst kopii" aria-label="Kopia do wczytania" style="margin-top:10px"></textarea><button class="btn sec wide" data-a="imp">Wczytaj wklejoną kopię</button></div>
+${NATIVE?`<div class="card"><h3>Synchronizacja z drugim telefonem</h3><p class="mut">Ta wersja zapisuje dane tylko na tym telefonie. Wersja z synchronizacją działa z linku na Androidzie i iPhonie, a wszystkie telefony widzą te same treningi, punkty i mecze. Przenieś dane: „Wyślij kopię”, a potem w wersji z synchronizacją „Wczytaj kopię”.</p><a class="btn wide" style="display:flex;align-items:center;justify-content:center;text-decoration:none" href="${SYNC_URL}" target="_blank" rel="noopener">Otwórz wersję z synchronizacją</a></div>`:syncState==='cloud'?`<div class="card"><h3>Na drugim telefonie</h3><p class="mut">Otwórz ten sam link i zaloguj się na to samo konto Claude. Ikona na ekranie: na iPhonie Safari, Udostępnij, „Do ekranu początkowego”. Na Androidzie Chrome, menu ⋮, „Dodaj do ekranu głównego”.</p></div>`:''}
+<div class="card"><h3>O aplikacji</h3><p class="mut">Wersja ${VERSION}${NATIVE?' ('+(NATIVE.platform||'Android')+')':''}. Gdzie są dane: <span id="syncTxt">${SYNC_T[syncState]}</span></p></div>`}
+
+function vSesja(){const p=SYN[active.key],n=p.steps.length,st=curStep();
+let h=`<div class="prog"><i style="width:${(active.step+1)/n*100}%"></i></div><p class="mut">Ćwiczenie ${active.step+1} z ${n}${active.lv?` · poziom ${active.lv}`:''}</p>`+drillBlock(active.key,active.step,true,active.lv);
+if(st.score)h+=`<div class="track"><label for="score">Wynik wyzwania (0–20 pkt)</label><input id="score" class="inp" inputmode="numeric" value="${esc(active.score??'')}"></div>`;
+if(st.tr){if(st.sw){const ts=active.times[active.step]||[];h+=`<div class="track"><div><b>${st.tr.l}</b><br><small class="mut">${ts.length?ts.map(cm).join(' · ')+' s':'Stoper na dole: Start przy starcie, Stop na mecie.'}</small></div><div class="pp plus" style="text-align:right;font-size:24px">${ts.length?cm(Math.min(...ts))+' s':''}</div></div>`}
+else h+=`<div class="track"><label for="trk">${st.tr.l}${st.tr.max?` (na ${st.tr.max})`:''}</label><input id="trk" class="inp" inputmode="${st.tr.u?'decimal':'numeric'}" value="${esc(active.res[st.id]??'')}" placeholder="${st.tr.max?'0–'+st.tr.max:''}"></div>`}
+return h+`<br><button class="link" data-a="abort">Przerwij trening</button>`}
+
+function vLog(){const p=PLANS[active.key];
+return active.ex.map((e,ei)=>{const src=p.ex.find(x=>x[0]===e.name)||[e.name,'3 × 10','','-'],pr=parse(src[1]),l=lastFor(e.name,active.start),eq=src[3]||'-';
+let hint='';if(l&&pr.top){const d=l.sets.filter(s=>s.done);if(d.length>=pr.n&&d.every(s=>num(s.reps)>=pr.top))hint=pr.time?'Ostatnio pełny czas. Wydłuż o 5–10 s.':'Ostatnio górna granica. Dodaj 1–2 kg.'}
+const fk=(e.sets.find(s=>s.kg)||{}).kg;
+return `<div class="ex"><div class="hd"><span class="n">${ei+1}</span><div><h3>${esc(e.name)}</h3><span class="mut">${src[1]} · ${src[2]}</span></div></div>${YT(GYM_YT[e.name]||e.name+' technika')}${l?`<div class="last">Ostatnio (${plD(l.date)}): ${esc(setsTxt(l.sets,pr.time))}</div>`:''}${hint?`<div class="hint">${hint}</div>`:''}<div class="plate" id="pl${ei}">${esc(plateTxt(fk,eq))}</div>
+${e.sets.map((s,si)=>{const ls=l&&l.sets[si];return `<div class="set"><span class="k">${si+1}</span>${pr.time?'<span></span>':`<div><label for="kg${ei}-${si}">${EQ_L[eq]}</label><input id="kg${ei}-${si}" inputmode="decimal" data-e="${ei}" data-s="${si}" data-f="kg" value="${esc(s.kg)}" placeholder="${esc(ls&&ls.kg||'')}"></div>`}<div><label for="r${ei}-${si}">${pr.time?'sekundy':'powt.'}</label><input id="r${ei}-${si}" inputmode="numeric" data-e="${ei}" data-s="${si}" data-f="reps" value="${esc(s.reps)}" placeholder="${esc(ls&&ls.reps||pr.top||'')}"></div><button class="tick${s.done?' on':''}" data-a="tick" data-v="${ei}-${si}" aria-pressed="${s.done}" aria-label="Seria ${si+1} zrobiona"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button></div>`}).join('')}<button class="link" data-a="addSet" data-v="${ei}">+ Dodaj serię</button></div>`}).join('')+`<button class="link" data-a="abort">Przerwij trening</button>`}
+
+function vKoniec(){const s=summary;if(!s)return vDzis();
+return `<div class="sum"><div class="big">${s.big}</div><h2 style="margin-top:8px">${esc(s.title)}</h2><p class="mut">${esc(s.sub)}</p></div><div class="sumrow">${s.stats.map(x=>`<div><b>${x[0]}</b><span>${x[1]}</span></div>`).join('')}</div>`+(s.lvup?`<div class="card hero"><h3>Awans!</h3><p class="mut">${esc(s.lvup)}</p></div>`:'')+(s.prs&&s.prs.length?`<div class="card"><h3>${s.prsT||'Nowe rekordy'}</h3><ul class="list">${s.prs.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:'')+(s.badges&&s.badges.length?`<div class="card"><h3>Nowe odznaki</h3><div class="badges">${s.badges.map(x=>`<div class="bd">${medal(x[1],true)}<div><b>${x[2]}</b>${x[3]}</div></div>`).join('')}</div></div>`:'')+(s.goal?`<div class="card"><p style="margin:0;font-weight:600">${esc(s.goal)}</p></div>`:'')+`<button class="btn wide xl" data-a="tab" data-v="dzis">Gotowe</button>`}
+
+/* ---------- render ---------- */
+const TABS_T=[['dzis','Dziś'],['syn','Syn'],['tata','Ty'],['sklep','Sklepik'],['postep','Postęp']],TABS_K=[['dzis','Dziś'],['syn','Treningi'],['sklep','Sklepik'],['postep','Postęp']];
+const PARENT={podglad:'syn',mecz:'syn',sklepEdit:'sklep',tydzien:'dzis',ustawienia:'dzis',koniec:'dzis'};
+function vProfil(){return `<h2>Kto korzysta z tego telefonu?</h2><p class="mut">Każdy telefon ma swój profil. Zmienisz go później w ustawieniach.</p><button class="pcard s" data-a="pickProfile" data-v="syn"><b>${esc(S.settings.name||'Syn')}</b><span>Treningi z poziomami, punkty i sklepik z nagrodami. Oceny i mecze zgłaszasz tacie do zatwierdzenia.</span></button><button class="pcard t" data-a="pickProfile" data-v="tata"><b>Tata</b><span>Wszystko, plus Twoje treningi siłowe, zatwierdzanie i panel rodzica. Chronione PIN-em.</span></button>`+(HOSTED&&FB_CFG.projectId&&!getFam()?`<div class="card"><h3>Telefon syna?</h3><p class="mut">Wpisz kod rodziny z telefonu taty (Ustawienia → Połącz telefony), a potem wybierz profil wyżej.</p><div class="form one"><div><label for="famIn">Kod rodziny</label><input id="famIn" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX"></div></div><button class="btn sec wide" data-a="famJoin">Połącz</button></div>`:HOSTED&&getFam()?`<p class="mut">Połączono z rodziną. Wybierz profil.</p>`:'')}
+const VIEWS={torba:vTorba,profil:vProfil,dzis:vDzis,syn:vSyn,podglad:vPodglad,mecz:vMecz,tata:vTata,sklep:vSklep,sklepEdit:vSklepEdit,postep:vPostep,tydzien:vTydzien,ustawienia:vUst,sesja:vSesja,log:vLog,koniec:vKoniec};
+function head(){const g=$('#gear');
+if(view==='sesja'){$('#ttl').textContent=SYN[active.key].n;$('#sub').innerHTML='czas <span id="el">'+fmt((Date.now()-active.start)/1000)+'</span>';g.style.display='none'}
+else if(view==='log'){$('#ttl').textContent=PLANS[active.key].n;$('#sub').innerHTML='czas <span id="el">'+fmt((Date.now()-active.start)/1000)+'</span>';g.style.display='none'}
+else if(view==='profil'){$('#ttl').textContent='Trening';$('#sub').textContent='wybierz profil';g.style.display='none'}
+else{g.style.display=view==='ustawienia'?'none':'';const sk=view==='sklep'||view==='sklepEdit';$('#ttl').textContent=sk?'Sklepik':view==='ustawienia'?'Ustawienia':'Trening';$('#sub').textContent=syncState==='stale'?'Brak połączenia, dane mogą być nieaktualne':isKid()?'Profil: '+kid():'Profil: Tata'}}
+function render(){
+stopAnim();const m=$('#main'),top=m.scrollTop;head();
+if(isKid()&&['tata','log','sklepEdit','tydzien'].includes(view))view='dzis';
+m.innerHTML=(VIEWS[view]||vDzis)();
+const key=view+(active&&active.step!=null?active.step:'')+(view==='podglad'||view==='torba'?preview:'');
+m.scrollTop=m.dataset.v===key?top:0;m.dataset.v=key;
+ro.disconnect();m.querySelectorAll('.board svg[data-s]').forEach(s=>{ro.observe(s);draw(s)});
+renderBottom();renderRest();pendingRender=false;syncRem()}
+function renderBottom(){const b=$('#bottom');
+if(view==='sesja'){const p=SYN[active.key],st=curStep(),last=active.step===p.steps.length-1;let pn='';
+if(st.reps){const d=active.reps[active.step]||0,all=d>=st.reps,t=active.t,sw=active.sw;
+const lab=all?'Ćwiczenie zrobione, przejdź dalej':st.names?'Teraz: '+shortN(st.names[d]):st.unit||'powtórzeń';
+pn=`<div class="panel"><div class="cnt"><b>${Math.min(d,st.reps)}<small>/${st.reps}</small></b><span>${lab}</span></div>`;
+if(!all&&st.sw)pn+=sw&&sw.start?`<div class="big" id="swd" style="flex:none">${fmtSw((Date.now()-sw.start)/1000)}</div><button class="btn xl" data-a="swStop">Stop</button>`:`<button class="btn xl ok" data-a="swGo" aria-label="Start pomiaru czasu">Start</button><button class="undo" data-a="rep">Bez<br>pomiaru</button>`;
+else if(!all&&st.work)pn+=t&&t.end?`<div class="big" id="st" style="flex:none">${fmt(t.left)}</div><button class="btn xl" data-a="workStop">Stop</button>`:`<button class="btn xl ok" data-a="workGo">Start ${st.work} s</button>`;
+else if(!all)pn+=`<button class="btn xl ok" data-a="rep">Zrobione</button>`;
+if(d>0&&!(sw&&sw.start))pn+=`<button class="undo" data-a="unrep" aria-label="Cofnij jedno powtórzenie">−1</button>`;pn+='</div>'}
+else if(st.dur){const t=active.t;pn=`<div class="panel"><div class="big${t.left===0?' done':''}" id="st">${fmt(t.left)}</div><button class="btn xl${t.end?'':' ok'}" data-a="durGo" id="durGo">${t.end?'Pauza':t.left===0?'Jeszcze raz':'Start'}</button><button class="undo" data-a="durReset" aria-label="Od nowa">Od nowa</button></div>`}
+const done=st.reps?(active.reps[active.step]||0)>=st.reps:active.t&&active.t.left===0;
+b.innerHTML=pn+`<div class="foot"><button class="btn sec" data-a="prev" ${active.step?'':'disabled'}>Wstecz</button><button class="btn${done?' ok':''}" data-a="${last?'finish':'next'}">${last?'Zakończ i zapisz':'Dalej'}</button></div>`}
+else if(view==='log')b.innerHTML=`<div class="foot"><button class="btn blue wide" data-a="finish">Zakończ i zapisz</button></div>`;
+else if(view==='koniec'||view==='profil')b.innerHTML='';
+else{const tab=view==='torba'?torbaBack:(PARENT[view]||view),T=isKid()?TABS_K:TABS_T;b.innerHTML=`<nav class="tabs" style="grid-template-columns:repeat(${T.length},minmax(0,1fr))" aria-label="Menu">${T.map(([k,n])=>`<button data-a="tab" data-v="${k}" aria-current="${k===tab}">${n==='Syn'&&S.settings.name&&S.settings.name.length<=8?esc(S.settings.name):n}</button>`).join('')}</nav>`}}
+function renderRest(){const r=$('#restbar');if(!rest){r.innerHTML='';return}r.innerHTML=`<div class="rest" role="timer"><span>Przerwa</span><b id="rl">${fmt(rest.left??(rest.end-Date.now())/1000)}</b><button data-a="restAdd">+15 s</button><button data-a="restSkip">Pomiń</button></div>`}
+
+/* ---------- drawing + animation ---------- */
+const wavy=(pts,X,Y)=>{let o=[],s=0;for(let j=0;j<pts.length-1;j++){const x1=X(pts[j][0]),y1=Y(pts[j][1]),x2=X(pts[j+1][0]),y2=Y(pts[j+1][1]);const L=Math.hypot(x2-x1,y2-y1)||1,n=Math.max(2,Math.floor(L/4));for(let i=(j?1:0);i<=n;i++){const t=i/n,ss=s+L*t,amp=(j==pts.length-2&&t>.85)?0:3.2,off=amp*Math.sin(ss/5);o.push([x1+(x2-x1)*t-(y2-y1)/L*off,y1+(y2-y1)*t+(x2-x1)/L*off])}s+=L}return 'M'+o.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L')};
+function draw(svg){const [k,i]=svg.dataset.s.split('-'),f=SYN[k].steps[+i].f;const W=svg.clientWidth,H=svg.clientHeight;if(!W||!H)return;const pd=16,sc=Math.min((W-2*pd)/f.w,(H-2*pd)/f.h),ox=(W-f.w*sc)/2,oy=(H-f.h*sc)/2,X=x=>ox+x*sc,Y=y=>oy+y*sc;const pl=p=>'M'+p.map(q=>X(q[0]).toFixed(1)+' '+Y(q[1]).toFixed(1)).join('L');
+let g='',tp='',mv='',pi=0;const paths=[],toks={};
+for(const it of f.i){const [t,a,b,c,e,l]=it;
+if(t=='line')g+=`<line x1="${X(a)}" y1="${Y(b)}" x2="${X(c)}" y2="${Y(e)}" stroke="#fff" stroke-opacity=".75" stroke-width="2"/>`;
+else if(t=='zone')g+=`<rect x="${X(a)}" y="${Y(b)}" width="${c*sc}" height="${e*sc}" rx="6" fill="#fff" fill-opacity=".12" stroke="#fff" stroke-dasharray="5 4"/><text x="${X(a+c/2)}" y="${Y(b+e/2)+5}" text-anchor="middle" class="tl">${l}</text>`;
+else if(t=='lad'){g+=`<rect x="${X(a)}" y="${Y(b)}" width="${c*sc}" height="${e*sc}" fill="none" stroke="#fff" stroke-width="2"/>`;for(let r=1;r<c;r++)g+=`<line x1="${X(a+r)}" y1="${Y(b)}" x2="${X(a+r)}" y2="${Y(b+e)}" stroke="#fff" stroke-width="2"/>`}
+else if(t=='wall')g+=`<rect x="${X(a)}" y="${Y(b)-6}" width="${(c-a)*sc}" height="12" rx="2" fill="#cfc8bd" stroke="#fff" stroke-width="1.5"/><text x="${X((a+c)/2)}" y="${Y(b)+4}" text-anchor="middle" class="tl" style="stroke:#8a8277">ściana</text>`;
+else if(t=='g')g+=`<line x1="${X(a)}" y1="${Y(b)}" x2="${X(c)}" y2="${Y(e)}" stroke="#fff" stroke-width="6" stroke-linecap="round"/>`;
+else if(t=='run'||t=='drb'||t=='pas'){const d=t=='drb'?wavy(a,X,Y):pl(a);g+=t=='pas'?`<path class="ln" d="${d}" fill="none" stroke="#ffd84a" stroke-width="2.4" stroke-dasharray="7 5" marker-end="url(#my)"/>`:`<path class="ln" d="${d}" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" marker-end="url(#mw)"/>`;mv+=`<path data-m="${pi}" d="${pl(a)}" fill="none" stroke="none"/>`;paths.push({t,par:!!b,sp:t=='pas'?11:t=='drb'?4:5.5});pi++}
+else if(t=='c')tp+=`<circle cx="${X(a)}" cy="${Y(b)}" r="7" fill="#ff8a1a" stroke="#b85a00" stroke-width="1.5"/>`;
+else if(t=='d')tp+=`<circle cx="${X(a)}" cy="${Y(b)}" r="5" fill="#ffd84a" stroke="#a8860a" stroke-width="1.2"/>`;
+else if(t=='p')tp+=`<circle cx="${X(a)}" cy="${Y(b)}" r="5" fill="#fff" stroke="#e8492f" stroke-width="2.5"/>`;
+else if(t=='S'||t=='T'){toks[t]=[X(a),Y(b)];tp+=`<g data-tok="${t}" transform="translate(${X(a)} ${Y(b)})"><circle r="11" fill="${t=='S'?'#e8492f':'#2f6fd6'}" stroke="#fff" stroke-width="2"/><text y="5" text-anchor="middle" class="tp">${t}</text></g>`}
+else if(t=='txt')tp+=`<text x="${X(a)}" y="${Y(b)+4}" text-anchor="middle" class="tl">${c}</text>`}
+svg.innerHTML=`<style>.tl{font:600 13px Barlow,sans-serif;fill:#fff;paint-order:stroke;stroke:#23703f;stroke-width:4px}.tp{font:700 14px Barlow,sans-serif;fill:#fff}.playing .ln{opacity:.35}</style><g class="lay">${g}</g>${mv}${tp}<circle class="ball" r="5" fill="#fff" stroke="#1d1613" stroke-width="2" style="display:none"/>`;
+svg._a={paths,toks,sc}}
+let anim=null;
+function stopAnim(){if(!anim)return;cancelAnimationFrame(anim.raf);const s=anim.svg,b=anim.btn;anim=null;if(s.isConnected)draw(s);if(b&&b.isConnected)b.innerHTML=PLAY_I+'Odtwórz ruch'}
+function playAnim(svg,btn){const A_=svg._a;if(!A_||!A_.paths.length)return;const groups=[];A_.paths.forEach((p,i)=>{if(p.par&&groups.length)groups[groups.length-1].push(i);else groups.push([i])});
+const ball=svg.querySelector('.ball'),lay=svg.querySelector('.lay'),tokEl=t=>svg.querySelector(`[data-tok="${t}"]`);
+const pos={};Object.keys(A_.toks).forEach(k=>pos[k]=[...A_.toks[k]]);
+const setTok=(t,x,y)=>{pos[t]=[x,y];const e=tokEl(t);if(e)e.setAttribute('transform',`translate(${x} ${y})`)};
+const setBall=(x,y)=>{ball.style.display='';ball.setAttribute('cx',x);ball.setAttribute('cy',y)};
+lay.classList.add('playing');let gi=0,t0=null,cur=null;
+const prep=()=>{cur=groups[gi].map(i=>{const p=A_.paths[i],el=svg.querySelector(`[data-m="${i}"]`),L=el.getTotalLength(),st=el.getPointAtLength(0);let who=null;
+if(p.t!=='pas'){let best=1e9;Object.keys(pos).forEach(k=>{const d=Math.hypot(pos[k][0]-st.x,pos[k][1]-st.y);if(d<best){best=d;who=k}});if(who)setTok(who,st.x,st.y)}
+if(p.t==='drb'||p.t==='pas')setBall(st.x,st.y);return{p,el,L,who,dur:Math.max(600,L/A_.sc/p.sp*1000)}})};
+prep();
+const step=ts=>{if(!anim)return;if(t0==null)t0=ts;const t=ts-t0;let done=true;
+cur.forEach(c=>{const k=Math.min(1,t/c.dur);if(k<1)done=false;const pt=c.el.getPointAtLength(k*c.L);if(c.who)setTok(c.who,pt.x,pt.y);if(c.p.t==='drb'){const b=c.el.getPointAtLength(Math.min(c.L,k*c.L+9));setBall(b.x,b.y)}else if(c.p.t==='pas')setBall(pt.x,pt.y)});
+if(done){if(cur.at==null)cur.at=t;if(t-cur.at<(gi===groups.length-1?1200:350)){anim.raf=requestAnimationFrame(step);return}gi++;t0=null;if(gi>=groups.length){gi=0;Object.keys(A_.toks).forEach(k=>setTok(k,A_.toks[k][0],A_.toks[k][1]));ball.style.display='none'}prep()}
+anim.raf=requestAnimationFrame(step)};
+anim={svg,btn,raf:requestAnimationFrame(step)};btn.innerHTML=STOP_I+'Stop'}
+const ro=new ResizeObserver(es=>es.forEach(e=>{if(anim&&anim.svg===e.target)stopAnim();draw(e.target)}));
+
+/* ---------- session logic ---------- */
+const curStep=()=>stepOf(active.key,active.step,active.lv);
+const newStep=()=>{const st=curStep();active.sw=null;active.t=st.dur?{kind:'dur',left:st.dur,end:null}:st.work?{kind:'work',left:st.work,end:null}:null};
+function startRest(sec,msg){rest={end:Date.now()+sec*1000,left:sec};if(msg)say(msg);renderRest()}
+function repDone(){const st=curStep(),n=(active.reps[active.step]||0)+1;active.reps[active.step]=n;vib(80);
+if(n>=st.reps){rest=null;renderRest();say(active.step===SYN[active.key].steps.length-1?'Ostatnie ćwiczenie zrobione. Zakończ trening.':'Ćwiczenie zrobione. Dalej.');beep(2)}
+else if(st.rest)startRest(st.rest,st.names?`Przerwa. Potem: ${shortN(st.names[n])}`:`Przerwa ${st.rest} sekund`);
+saveDraft();renderBottom()}
+function swLoop(){if(!active||!active.sw||!active.sw.start)return;const e=$('#swd');if(e)e.textContent=fmtSw((Date.now()-active.sw.start)/1000);requestAnimationFrame(swLoop)}
+function tick(){const now=Date.now();
+if(active&&active.t&&active.t.end){const l=Math.max(0,Math.ceil((active.t.end-now)/1000));if(l!==active.t.left){active.t.left=l;if(l<=3&&l>0)beep(1);const e=$('#st');if(e)e.textContent=fmt(l)}
+if(!l){const k=active.t.kind;active.t.end=null;if(k==='work'){active.t.left=curStep().work;repDone()}else{beep(2);say('Koniec czasu');renderBottom()}saveDraft()}}
+if(rest){const l=Math.max(0,Math.ceil((rest.end-now)/1000));if(l!==rest.left){rest.left=l;if(l<=3&&l>0)beep(1);const e=$('#rl');if(e)e.textContent=fmt(l)}
+if(!l){rest=null;beep(2);renderRest();if(active&&active.kind==='syn'){const st=curStep();if(st.work&&(active.reps[active.step]||0)<st.reps){say('Start');active.t={kind:'work',left:st.work,end:Date.now()+st.work*1000};renderBottom()}else say(st.names?'Start: '+shortN(st.names[active.reps[active.step]||0]):'Start')}else say('Następna seria');saveDraft()}}
+if(active){const e=$('#el');if(e)e.textContent=fmt((now-active.start)/1000)}}
+const armed=b=>{if(b.dataset.armed)return true;b.dataset.armed='1';const t=b.innerHTML;b.textContent='Dotknij jeszcze raz';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.innerHTML=t}},3000);return false};
+
+/* ---------- parent PIN ---------- */
+function needParent(cb){if(profile==='tata'&&S.settings.pin){cb();return}if(S.settings.pin&&Date.now()<parentUntil){cb();return}pinModal(cb,!S.settings.pin)}
+function pinModal(cb,set,title){pinCb=cb;$('#modal').innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-labelledby="pinT"><div class="card"><h3 id="pinT">${title||(set?'Ustaw PIN rodzica':'PIN rodzica')}</h3><p class="mut">${set?'4 cyfry. Będzie potrzebny do ocen, meczów, bonusów i zmian w sklepiku.':'Wpisz PIN, żeby kontynuować.'}</p><input class="inp" id="pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="PIN" data-set-mode="${set?1:0}"><div class="row" style="margin-top:12px;flex-wrap:nowrap"><button class="btn sec" style="flex:1" data-a="pinNo">Anuluj</button><button class="btn" style="flex:1" data-a="pinOk">OK</button></div></div></div>`;setTimeout(()=>{const i=$('#pin');if(i)i.focus()},50)}
+const closeModal=()=>{$('#modal').innerHTML='';pinCb=null;if(pendingRender&&!['log','sesja','sklepEdit','mecz'].includes(view))render()};
+
+/* ---------- actions ---------- */
+function finish(){
+const now=Date.now(),log={id:'w-'+now,kind:active.kind,key:active.key,date:today(),ts:now,min:Math.max(1,Math.round((now-active.start)/60000))};
+if(active.kind==='syn'){const k=active.key,p=SYN[k],lv0=active.lv||0;log.name=p.n;if(lv0)log.lv=lv0;const sc=num(active.score);if(sc!=null)log.score=Math.max(0,Math.min(20,Math.round(sc)));
+const res={},resL=[];p.steps.forEach((_,i)=>{const st=stepOf(k,i,lv0);if(!st.tr)return;const v=active.res[st.id];if(v==null)return;res[st.id]=v;const prev=S.logs.filter(l=>l.kind==='syn'&&l.res&&l.res[st.id]!=null).map(l=>l.res[st.id]);const rec=prev.length&&(st.tr.lower?v<Math.min(...prev):v>Math.max(...prev));resL.push(`${st.t}: ${cm(v)}${st.tr.u?' '+st.tr.u:st.tr.max?'/'+st.tr.max:''}${rec?' (rekord!)':''}`)});if(resL.length)log.res=res;
+const doneSteps=p.steps.filter((_,i)=>{const st=stepOf(k,i,lv0);return st.reps?(active.reps[i]||0)>=st.reps:true}).length;log.steps=doneSteps;
+const short=log.min<MIN_MIN[k],pts=short?0:ptsFor(k);if(short)log.nopts=1;
+S.logs.push(log);put(log.id,log);if(pts)addPts(pts,log.name+' '+plD(log.date),log.id);
+const bd=checkBadges(),g=S.shop.items.find(x=>x.id===S.pts.goal),bal=balance(),lv1=lvlOf(k);
+summary={big:short?'Zapisano':`+${pts+bd.length*S.shop.tr.badge} pkt`,title:short?p.n:`Brawo${S.settings.name?', '+S.settings.name:''}!`,sub:short?`Trening trwał ${log.min} min. Punkty są od ${MIN_MIN[k]} min, żeby liczyły się pełne treningi.`:`${p.n} zrobiony${lv0?', poziom '+lv0:''}`,stats:[[log.min+' min','czas'],[doneSteps+'/'+p.steps.length,'ćwiczenia'],[bal,'pkt w sklepiku']],prs:resL,prsT:'Wyniki z ćwiczeń',badges:bd,lvup:lv0&&lv1>lv0&&S.settings.lvl==='auto'?`Następny ${p.n} będzie na poziomie ${lv1}. Ćwiczenia będą trudniejsze.`:'',goal:g?(bal>=g.c?`Masz już punkty na: ${g.n}!`:`Do celu „${g.n}” brakuje ${g.c-bal} pkt.`):''};
+say(short?'Trening zapisany.':`Brawo! Plus ${pts} punktów.`);if(!short)setTimeout(confetti,200)}
+else{const p=PLANS[active.key];log.name=p.n;log.ex=active.ex.map(e=>({name:e.name,sets:e.sets.filter(s=>s.done||s.reps)})).filter(e=>e.sets.length);if(!log.ex.length){toast('Odhacz chociaż jedną serię');return}
+const prs=[];log.ex.forEach(e=>{const mx=Math.max(0,...e.sets.filter(s=>s.done).map(s=>num(s.kg)||0)),pb=bestKg(e.name);if(mx>0&&pb>0&&mx>pb)prs.push(`${e.name}: ${cm(mx)} kg (było ${cm(pb)})`)});
+const sets=log.ex.reduce((a,e)=>a+e.sets.filter(s=>s.done).length,0),ton=log.ex.reduce((a,e)=>a+e.sets.reduce((b,s)=>b+(s.done?(num(s.kg)||0)*(num(s.reps)||0):0),0),0);
+S.logs.push(log);put(log.id,log);
+summary={big:prs.length?'Rekord!':'Zrobione',title:p.n,sub:'Dobra robota. Następny: '+PLANS[nextDad()].n,stats:[[log.min+' min','czas'],[sets,'serie'],[nf(ton)+' kg','tonaż']],prs};
+say(prs.length?'Nowy rekord! Dobra robota.':'Trening zapisany. Dobra robota.');if(prs.length)setTimeout(confetti,200)}
+active=null;rest=null;saveDraft();view='koniec';render()}
+function saveTest(){const t={id:newId('t'),date:$('#t-date').value||today()};let any=false,rec=false;
+METRICS.forEach(([k,,,dir])=>{const x=num($('#t-'+k).value);if(x==null)return;t[k]=x;any=true;const pv=S.tests.filter(o=>o[k]!=null).map(o=>o[k]);if(pv.length&&(dir<0?x<Math.min(...pv):x>Math.max(...pv)))rec=true});
+if(!any){toast('Wpisz przynajmniej jeden wynik');return}
+S.tests.push(t);putE('t',t);addPts(S.shop.tr.test,'Testy miesięczne',t.id);if(rec)addPts(S.shop.tr.rec,'Rekord w teście!',t.id);const bd=checkBadges();render();toast(rec?`Rekord! +${S.shop.tr.test+S.shop.tr.rec} pkt`:`Zapisano wyniki, +${S.shop.tr.test} pkt`);if(rec||bd.length)confetti()}
+function importText(txt){let x;try{x=JSON.parse(txt)}catch(e){toast('To nie wygląda na kopię z aplikacji');return}if(!x||!Array.isArray(x.logs)){toast('To nie wygląda na kopię z aplikacji');return}
+needParent(()=>{S={logs:x.logs.filter(l=>l&&l.id&&l.kind),settings:normSettings(x.settings),tests:Array.isArray(x.tests)?x.tests:[],shop:normShop(x.shop),pts:normPts(x.pts),matches:Array.isArray(x.matches)?x.matches:[],body:Array.isArray(x.body)?x.body:[],reqs:Array.isArray(x.reqs)?x.reqs:[]};
+saveLocal();if(col)pushAll();applyTheme();view='dzis';render();toast('Wczytano kopię')})}
+function applyTheme(){const r=document.documentElement,t=S.settings.theme;if(t==='auto'){if(applyTheme.set){r.removeAttribute('data-theme');applyTheme.set=false}}else{r.dataset.theme=t;applyTheme.set=true}}
+window.__back=()=>{if($('#modal').innerHTML){closeModal();return true}if(view==='profil')return false;if(active){toast('Żeby wyjść z treningu, użyj „Przerwij trening”');return true}if(view!=='dzis'){view=PARENT[view]||'dzis';render();return true}return false};
+
+const ACT={
+famNew:()=>{const c=genFam();setFam(c);toast('Kod rodziny utworzony');connectFb().then(render);render()},
+famJoin:()=>{const v=cleanFam(($('#famIn')||{}).value);if(v.length<12){toast('Kod ma 12 znaków, np. ABCD-EFGH-JKLM');return}setFam(v);toast('Łączę z rodziną…');connectFb().then(render);render()},
+famShare:()=>{const t=`Kod rodziny do aplikacji Trening: ${fmtFam(getFam())}\nOtwórz ${location.origin+location.pathname} i wpisz kod w Ustawieniach (Połącz telefony).`;if(NATIVE&&NATIVE.share){try{NATIVE.share('Kod rodziny: Trening',t);return}catch(e){}}if(navigator.share){navigator.share({text:t}).catch(()=>{});return}try{navigator.clipboard.writeText(t).then(()=>toast('Skopiowano kod'),()=>toast('Kod: '+fmtFam(getFam())))}catch(e){toast('Kod: '+fmtFam(getFam()))}},
+famLeave:(v,b)=>{if(!armed(b))return;if(unsub){try{unsub()}catch(e){}unsub=null}col=null;setFam('');setSync('nofam');render();toast('Telefon odłączony. Dane zostały na nim.')},
+ics:()=>{const blob=new Blob([icsText()],{type:'text/calendar'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='trening.ics';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);toast('Otwórz plik i wybierz „Dodaj wszystkie”')},
+pickProfile:v=>{if(v==='syn'){setProfile('syn');return}pinModal(()=>setProfile('tata'),!S.settings.pin,S.settings.pin?'PIN taty':'Ustaw PIN taty')},
+switchProfile:()=>{if(isKid())pinModal(()=>setProfile('tata'),!S.settings.pin,S.settings.pin?'PIN taty':'Ustaw PIN taty');else setProfile('syn')},
+lvl:v=>{S.settings={...S.settings,lvl:v};saveSet();render()},
+swGo:()=>{rest=null;renderRest();active.sw={start:Date.now()};beep(1);renderBottom();swLoop()},
+swStop:()=>{if(!active.sw||!active.sw.start)return;const t=Math.round((Date.now()-active.sw.start)/10)/100,st=curStep();active.sw=null;const a=active.times[active.step]=active.times[active.step]||[];a.push(t);active.res[st.id]=Math.min(...a);render();repDone();say(`${cm(t)} sekundy`)},
+reqGrade:v=>{const subj=($('#subj').value||'').trim().slice(0,40),q={id:newId('q'),ts:Date.now(),type:'grade',g:+v,subj};S.reqs.push(q);putE('q',q);render();toast('Wysłane do taty do zatwierdzenia')},
+reqOk:v=>needParent(()=>{const q=S.reqs.find(x=>x.id===v);if(!q)return;S.reqs=S.reqs.filter(x=>x.id!==v);delE('q',v);const p=reqPts(q);
+if(q.type==='grade')pushE({id:newId('p'),ts:Date.now(),p,why:'Ocena '+q.g+(q.subj?' ('+q.subj+')':''),ref:null,g:q.g});
+else{const m={...q.m,id:newId('m')};S.matches.push(m);putE('m',m);addPts(p,`Mecz${m.opp?' z '+m.opp:''}${m.g?', gole: '+m.g:''}${m.a?', asysty: '+m.a:''}`,m.id)}
+const bd=checkBadges();render();toast(`Zatwierdzone: +${p} pkt`);if(bd.length||p>=25)confetti()}),
+reqNo:(v,b)=>{if(!armed(b))return;needParent(()=>{S.reqs=S.reqs.filter(x=>x.id!==v);delE('q',v);render()})},
+tab:v=>{view=v;render()},
+up:()=>{view=view==='torba'?torbaBack:(PARENT[view]||'dzis');render()},
+torba:v=>{torbaBack=view==='torba'?torbaBack:view;preview=v;view='torba';render()},
+notifAsk:()=>{try{NATIVE.requestNotif()}catch(e){}setTimeout(render,1500)},
+notifTest:()=>{try{NATIVE.testNotif('Trening: przypomnienie próbne','Tak będzie wyglądać przypomnienie. Zabierz: '+gearShort('A')+'.')}catch(e){toast('Nie udało się wysłać powiadomienia')}},
+preview:v=>{preview=v;view='podglad';render()},
+play:(v,b)=>{const svg=b.previousElementSibling&&b.previousElementSibling.querySelector('svg[data-s]');if(!svg)return;if(anim&&anim.svg===svg)stopAnim();else{stopAnim();playAnim(svg,b)}},
+onb:()=>{const n=($('#onbName').value||'').trim().slice(0,20);if(!n){toast('Wpisz imię');return}S.settings={...S.settings,name:n};saveSet();view='tydzien';render()},
+startSyn:v=>{active={kind:'syn',key:v,lv:lvlOf(v),step:0,start:Date.now(),score:null,reps:{},res:{},times:{}};newStep();rest=null;view='sesja';saveDraft();wake();say(SYN[v].n+'. Pierwsze ćwiczenie: '+SYN[v].steps[0].t);render()},
+startTata:v=>{const p=PLANS[v];active={kind:'tata',key:v,start:Date.now(),ex:p.ex.map(x=>{const pr=parse(x[1]),l=lastFor(x[0]),kg=l?(l.sets.find(s=>s.kg)||{}).kg||'':'';return{name:x[0],sets:Array.from({length:pr.n},()=>({kg:pr.time?'':kg,reps:'',done:false}))}})};rest=null;view='log';saveDraft();wake();render()},
+next:()=>{active.step++;newStep();rest=null;saveDraft();say(curStep().t);render()},
+prev:()=>{active.step--;newStep();rest=null;saveDraft();render()},
+rep:()=>repDone(),
+unrep:()=>{const d=active.reps[active.step]||0;if(d>0)active.reps[active.step]=d-1;rest=null;renderRest();saveDraft();renderBottom()},
+workGo:()=>{const st=curStep();rest=null;renderRest();active.t={kind:'work',left:st.work,end:Date.now()+st.work*1000};say('Start');saveDraft();renderBottom()},
+workStop:()=>{active.t={kind:'work',left:curStep().work,end:null};saveDraft();renderBottom()},
+durGo:()=>{const t=active.t;if(t.end){t.left=Math.max(0,Math.ceil((t.end-Date.now())/1000));t.end=null}else{if(!t.left)t.left=curStep().dur;t.end=Date.now()+t.left*1000;say('Start')}saveDraft();renderBottom()},
+durReset:()=>{newStep();saveDraft();renderBottom()},
+restAdd:()=>{if(rest){rest.end+=15000;rest.left+=15;renderRest()}},
+restSkip:()=>{rest=null;renderRest();saveDraft()},
+tick:v=>{const [ei,si]=v.split('-').map(Number),s=active.ex[ei].sets[si];s.done=!s.done;if(s.done&&!s.reps){const ph=$('#r'+ei+'-'+si).placeholder;if(ph)s.reps=ph}if(s.done&&s.kg)active.ex[ei].sets.forEach((x,j)=>{if(j>si&&!x.kg&&!x.done)x.kg=s.kg});
+const lastSet=ei===active.ex.length-1&&si===active.ex[ei].sets.length-1;if(s.done){vib(60);if(!lastSet)startRest(ei<2?S.settings.restMain:S.settings.restAcc)}saveDraft();render()},
+addSet:v=>{const e=active.ex[+v],l=e.sets[e.sets.length-1];e.sets.push({kg:l?l.kg:'',reps:'',done:false});saveDraft();render()},
+finish:()=>finish(),
+abort:(v,b)=>{if(!armed(b))return;active=null;rest=null;saveDraft();view='dzis';render()},
+days:v=>{S.settings={...S.settings,days:+v};saveSet();render()},
+saveTest:()=>saveTest(),
+delTest:(v,b)=>{if(!armed(b))return;S.tests=S.tests.filter(t=>t.id!==v);delE('t',v);dropRef(v);render()},
+delLog:(v,b)=>{if(!armed(b))return;S.logs=S.logs.filter(l=>l.id!==v);dropRef(v);del(v);render()},
+buy:(v,b)=>{const it=S.shop.items.find(i=>i.id===v);if(!it||balance()<it.c)return;if(!armed(b))return;const o={id:newId('o'),ts:Date.now(),n:it.n,c:it.c,done:false};S.pts.orders.push(o);putE('o',o);addPts(-it.c,'Nagroda: '+it.n,o.id);if(S.pts.goal===it.id){S.pts.goal=null;saveMeta()}render();confetti();toast('Kupione! Odbierz nagrodę u rodzica')},
+shopCat:v=>{shopCat=v;render()},
+goal:v=>{S.pts.goal=S.pts.goal===v?null:v;saveMeta();render()},
+deliver:v=>needParent(()=>{const o=S.pts.orders.find(x=>x.id===v);if(o){o.done=true;putE('o',o);render()}}),
+cancelOrder:v=>needParent(()=>{const o=S.pts.orders.find(x=>x.id===v);if(!o)return;S.pts.orders=S.pts.orders.filter(x=>x.id!==v);delE('o',v);dropRef(v);render();toast('Punkty wróciły')}),
+grade:v=>{const subj=($('#subj').value||'').trim().slice(0,40);needParent(()=>{const p=num(S.shop.rates[v])||0;pushE({id:newId('p'),ts:Date.now(),p,why:'Ocena '+v+(subj?' ('+subj+')':''),ref:null,g:+v});const bd=checkBadges();render();toast(p>0?`Ocena ${v}: +${p} pkt`:`Zapisano ocenę ${v}`);if(+v===6&&!bd.length)confetti()})},
+bonus:()=>{const p=Math.round(num($('#bpts').value)||0),why=($('#bwhy').value||'').trim().slice(0,60)||(p>0?'Bonus od rodzica':'Kara');if(!p){toast('Wpisz liczbę punktów, np. 20 albo -10');return}needParent(()=>{addPts(p,why);render();toast(`${p>0?'+':''}${p} pkt`)})},
+editShop:()=>needParent(()=>{view='sklepEdit';render()}),
+edAdd:()=>{const w=document.createElement('div');w.innerHTML=edRow({id:'i'+Date.now().toString(36),n:'',c:100,k:'inne'});const d=w.firstElementChild;$('#edItems').prepend(d);d.querySelector('input').focus()},
+edDel:(v,b)=>b.closest('.ed').remove(),
+edSave:()=>{const items=[...document.querySelectorAll('#edItems .ed')].map(r=>{const i=r.querySelectorAll('input');return{id:r.dataset.id,n:i[0].value.trim().slice(0,80),c:Math.max(0,Math.round(num(i[1].value)||0)),k:r.querySelector('select').value}}).filter(i=>i.n);const rates={};['1','2','3','4','5','6'].forEach(g=>rates[g]=Math.round(num($('#r'+g).value)||0));const tr={};Object.keys(DEF_SHOP.tr).forEach(k=>tr[k]=Math.max(0,Math.round(num($('#tr'+k).value)||0)));S.shop={cat:SHOP_CAT,items,rates,tr};saveShop();view='sklep';render();toast('Zapisano')},
+matchAdd:()=>{form={g:0,a:0,rate:3};view='mecz';render()},
+mstep:v=>{const [k,d]=v.split(':');form[k]=Math.max(0,Math.min(20,form[k]+(+d)));$('#m-'+k).textContent=form[k];const t=S.shop.tr;$('#m-pts').textContent=`Za ten mecz: +${t.match+form.g*t.goal+form.a*t.assist} pkt (mecz ${t.match}, gol ${t.goal}, asysta ${t.assist}).`},
+mrate:v=>{form.rate=+v;document.querySelectorAll('[data-a=mrate]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===v))},
+matchSave:()=>{const m={id:newId('m'),date:$('#m-date').value||today(),opp:$('#m-opp').value.trim().slice(0,40),res:$('#m-res').value.trim().slice(0,10),min:Math.max(0,Math.round(num($('#m-min').value)||0)),g:form.g,a:form.a,rate:form.rate,note:$('#m-note').value.trim().slice(0,120)};
+if(isKid()){const q={id:newId('q'),ts:Date.now(),type:'match',m};S.reqs.push(q);putE('q',q);view='syn';render();toast('Wysłane do taty do zatwierdzenia');return}
+needParent(()=>{S.matches.push(m);putE('m',m);const t=S.shop.tr,p=t.match+m.g*t.goal+m.a*t.assist;addPts(p,`Mecz${m.opp?' z '+m.opp:''}${m.g?', gole: '+m.g:''}${m.a?', asysty: '+m.a:''}`,m.id);const bd=checkBadges();view='syn';render();toast(`Zapisano mecz, +${p} pkt`);if(m.g||m.a||bd.length)confetti()})},
+delMatch:(v,b)=>{if(!armed(b))return;S.matches=S.matches.filter(m=>m.id!==v);delE('m',v);dropRef(v);render()},
+saveBody:()=>{const w=num($('#b-w').value),h=num($('#b-h').value);if(w==null&&h==null){toast('Wpisz wagę albo wzrost');return}const e={id:newId('b'),date:today()};if(w!=null)e.w=w;if(h!=null)e.h=h;S.body.push(e);putE('b',e);render();toast('Zapisano pomiar')},
+theme:v=>{S.settings={...S.settings,theme:v};saveSet();applyTheme();render()},
+testVoice:()=>{const was=S.settings.voice;S.settings.voice=true;say(`Cześć${S.settings.name?' '+S.settings.name:''}! Tak brzmi lektor. Trzy, dwa, jeden, start!`);S.settings.voice=was;if(!NATIVE&&!window.speechSynthesis)toast('Ta przeglądarka nie ma lektora')},
+pinChange:()=>{const go=()=>pinModal(()=>toast('PIN zmieniony'),true,'Nowy PIN rodzica');if(S.settings.pin)needParent(go);else go()},
+pinNo:()=>closeModal(),
+pinOk:()=>{const i=$('#pin'),v2=(i.value||'').trim();if(!/^\d{4}$/.test(v2)){toast('PIN to 4 cyfry');return}if(i.dataset.setMode==='1'){S.settings={...S.settings,pin:v2};saveSet()}else if(v2!==S.settings.pin){toast('Zły PIN');i.value='';return}parentUntil=Date.now()+10*60000;const cb=pinCb;closeModal();if(cb)cb()},
+share:()=>{try{NATIVE.share('Kopia: Trening skrzydłowego',JSON.stringify(S))}catch(e){toast('Nie udało się otworzyć udostępniania')}},
+exp:()=>{$('#expBox').innerHTML=`<textarea class="inp" readonly aria-label="Kopia zapasowa" style="margin-top:10px">${esc(JSON.stringify(S))}</textarea><button class="btn sec wide" data-a="copy">Skopiuj</button>`},
+copy:()=>{const ta=$('#expBox textarea');ta.focus();ta.select();let ok=false;try{ok=document.execCommand&&document.execCommand('copy')}catch(e){}if(ok){toast('Skopiowano');return}try{navigator.clipboard.writeText(ta.value).then(()=>toast('Skopiowano'),()=>toast('Tekst zaznaczony, skopiuj ręcznie'))}catch(e){toast('Tekst zaznaczony, skopiuj ręcznie')}},
+imp:()=>{const t=$('#imp').value.trim();if(!t){toast('Najpierw wklej kopię');return}importText(t)}};
+
+document.addEventListener('click',e=>{unlock();const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const f=ACT[b.dataset.a];if(f)f(b.dataset.v,b)});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='pin'){ACT.pinOk()}if(e.key==='Escape'&&$('#modal').innerHTML)closeModal()});
+document.addEventListener('input',e=>{const t=e.target;if(t.dataset.e!=null&&active&&active.ex){const ei=+t.dataset.e;active.ex[ei].sets[+t.dataset.s][t.dataset.f]=t.value;if(t.dataset.f==='kg'){const p=PLANS[active.key].ex.find(x=>x[0]===active.ex[ei].name),pl=$('#pl'+ei);if(pl&&p)pl.textContent=plateTxt(t.value,p[3])}saveDraft()}else if(t.id==='score'&&active){active.score=t.value;saveDraft()}else if(t.id==='trk'&&active){const v=num(t.value);active.res[curStep().id]=v;saveDraft()}});
+document.addEventListener('change',e=>{const t=e.target;
+if(t.dataset.w){const w={syn:[...S.settings.week.syn],tata:[...S.settings.week.tata]};w[t.dataset.w][+t.dataset.i]=t.value;S.settings={...S.settings,week:w};saveSet()}
+else if(t.dataset.pack!=null){let st={};try{st=JSON.parse(localStorage.getItem(packKey(preview))||'{}')}catch(e){}st[t.dataset.pack]=t.checked;try{localStorage.setItem(packKey(preview),JSON.stringify(st))}catch(e){}const g=GEAR[preview],n=g.filter((_,i)=>st[i]).length,c=$('#packCnt');if(c)c.textContent=`${n}/${g.length} spakowane.${n===g.length?' Wszystko jest!':' Odhaczaj przy pakowaniu.'}`;if(t.checked)vib(30)}
+else if(t.dataset.set){const k=t.dataset.set;let v=t.type==='checkbox'?t.checked:t.value.trim();if(k==='name')v=v.slice(0,20);S.settings=normSettings({...S.settings,[k]:v});saveSet();head();if(k==='remOn'&&v&&NATIVE&&NATIVE.requestNotif){try{NATIVE.requestNotif()}catch(e){}}if(k.startsWith('rem'))setTimeout(render,50);if(k==='restMain'||k==='restAcc')t.value=S.settings[k]}
+else if(t.id==='impFile'&&t.files&&t.files[0]){const r=new FileReader();r.onload=()=>importText(String(r.result||''));r.onerror=()=>toast('Nie udało się odczytać pliku');r.readAsText(t.files[0]);t.value=''}});
+
+/* ---------- data ---------- */
+function fromDocs(docs){const n=blank();
+for(const d of docs){if(!d.exists)continue;const v=JSON.parse(JSON.stringify(d.data()||{})),id=d.id,pre=id.slice(0,2);
+if(id==='settings')n.settings=normSettings(v);else if(id==='shop')n.shop=normShop(v);else if(id==='meta'){n.pts.badges=Array.isArray(v.badges)?v.badges:[];n.pts.goal=v.goal||null}
+else if(pre==='w-')n.logs.push(v);else if(pre==='p-')n.pts.entries.push(v);else if(pre==='o-')n.pts.orders.push(v);else if(pre==='t-')n.tests.push(v);else if(pre==='m-')n.matches.push(v);else if(pre==='b-')n.body.push(v);else if(pre==='q-')n.reqs.push(v);
+else if(id==='pts'){const o=normPts(v);n.pts.entries.push(...o.entries);n.pts.orders.push(...o.orders);n.pts.badges=o.badges;n.pts.goal=o.goal}else if(id==='tests'&&Array.isArray(v.entries))n.tests.push(...v.entries);else if(id==='matches'&&Array.isArray(v.entries))n.matches.push(...v.entries);else if(id==='body'&&Array.isArray(v.entries))n.body.push(...v.entries)}
+n.pts.entries.sort((a,b)=>a.ts-b.ts);return n}
+function apply(snap){const n=fromDocs(snap.docs);
+S=n;if(snap.docs.some(d=>d.id==='shop'))upgradeShop();saveLocal();applyTheme();if(['log','sesja','tydzien','sklepEdit','mecz','ustawienia','koniec'].includes(view)||$('#modal').innerHTML)pendingRender=true;else render()}
+let FB=null,unsub=null,lastSig='';
+async function fbCol(fam){
+if(!FB){const v='10.12.2',A=await import(`https://www.gstatic.com/firebasejs/${v}/firebase-app.js`),F=await import(`https://www.gstatic.com/firebasejs/${v}/firebase-firestore.js`);const app=A.initializeApp(FB_CFG);let db;try{db=F.initializeFirestore(app,{localCache:F.persistentLocalCache({tabManager:F.persistentMultipleTabManager()})})}catch(e){db=F.getFirestore(app)}FB={F,db}}
+const {F,db}=FB,base=F.collection(db,'families',fam,'docs');
+const wrap=sn=>({docs:sn.docs.map(d=>({id:d.id,exists:true,data:()=>d.data()})),empty:sn.empty,metadata:{fromCache:sn.metadata.fromCache,hasPendingWrites:sn.metadata.hasPendingWrites}});
+return{doc:id=>({set:d=>F.setDoc(F.doc(base,id),JSON.parse(JSON.stringify(d))),delete:()=>F.deleteDoc(F.doc(base,id))}),onSnapshot:(cb,err)=>F.onSnapshot(base,{includeMetadataChanges:true},sn=>cb(wrap(sn)),err),get:async()=>wrap(await F.getDocs(base))}}
+async function connectFb(){if(unsub){try{unsub()}catch(e){}unsub=null}col=null;lastSig='';
+const fam=getFam();if(!FB_CFG.projectId){setSync('local');return}if(!fam){setSync('nofam');return}
+setSync('loading');let c;try{c=await fbCol(fam)}catch(e){setSync('stale');toast('Nie udało się połączyć z bazą. Działam na tym telefonie.');return}
+if(getFam()!==fam)return;col=c;const local=JSON.parse(JSON.stringify(S));let first=true,migrating=false,lastSnap=null;
+const hasData=x=>x.logs.length||x.tests.length||x.pts.entries.length||x.matches.length||x.settings.name;
+const tm=setTimeout(()=>{if(syncState!=='cloud')setSync('stale')},10000);
+unsub=col.onSnapshot(sn=>{if(migrating){lastSnap=sn;return}if(!sn.metadata.fromCache){clearTimeout(tm);if(syncState!=='cloud'){setSync('cloud');if(view!=='sesja'&&view!=='log')head()}}
+if(first&&!sn.metadata.fromCache){first=false;if(sn.empty&&hasData(local)){migrating=true;S=local;saveLocal();pushAll();q.then(()=>{migrating=false;toast('Dane wysłane do rodziny');if(lastSnap)apply(lastSnap)});return}}
+if(sn.empty&&sn.metadata.fromCache)return;
+const sig=JSON.stringify(sn.docs.map(d=>[d.id,d.data()]));if(sig===lastSig)return;lastSig=sig;apply(sn)},err=>{clearTimeout(tm);setSync('stale')})}
+async function connect(){
+const C=window.claude;if(!C||!C.use)return connectFb();
+let db=null,uid=null,cw=null;try{db=await C.use('db');const u=await C.use('user');uid=u?await u.id():null;if(u&&u.can)cw=await u.can('data.write')}catch(e){}
+if(!db||!uid){setSync('local');return}
+if(cw===false){setSync('readonly');return}
+const local=JSON.parse(JSON.stringify(S));col=db.collection('family');let first=true;
+const tm=setTimeout(()=>setSync('stale'),10000);
+const hasData=x=>x.logs.length||x.tests.length||x.pts.entries.length||x.matches.length||x.settings.name;
+let migrating=false,lastSnap=null;
+col.onSnapshot(async snap=>{if(migrating){lastSnap=snap;return}if(!snap.metadata.fromCache){clearTimeout(tm);if(syncState!=='cloud'){setSync('cloud');if(view!=='sesja'&&view!=='log')head()}}
+if(first&&!snap.metadata.fromCache){first=false;if(snap.empty){migrating=true;let old=null;try{if(uid){const g=await db.collection('data/users/'+uid).get();if(!g.empty)old=fromDocs(g.docs)}}catch(e){}
+const src=old&&hasData(old)?old:hasData(local)?local:null;if(src){S=src;saveLocal();pushAll();render();toast('Przenoszę dane do wersji z synchronizacją…');q.then(()=>{migrating=false;toast('Dane przeniesione');if(lastSnap)apply(lastSnap)});return}migrating=false;if(lastSnap){apply(lastSnap);return}}}
+apply(snap)},err=>{clearTimeout(tm);col=null;setSync(err&&err.code==='revoked'?'local':'stale')})}
+
+function start(d){
+try{if(NATIVE&&NATIVE.takeOld&&!localStorage.getItem('trening-v2')){const o=JSON.parse(NATIVE.takeOld()||'null');if(o){['trening-v2','trening-profile','trening-family'].forEach(k=>{if(o[k])localStorage.setItem(k,o[k])});if(o['trening-profile'])profile=o['trening-profile']}}}catch(e){}
+try{const m=location.hash.match(/join=([A-Za-z0-9-]+)/);if(m){const c=cleanFam(m[1]);if(c.length>=12&&c!==getFam()){setFam(c);setTimeout(()=>toast('Połączono z rodziną'),600)}history.replaceState(null,'',location.pathname+location.search)}}catch(e){}
+if(HOSTED&&'serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+try{const x=JSON.parse(localStorage.getItem('trening-v2')||'null');if(x&&Array.isArray(x.logs))S={logs:x.logs,settings:normSettings(x.settings),tests:Array.isArray(x.tests)?x.tests:[],shop:normShop(x.shop),pts:normPts(x.pts),matches:Array.isArray(x.matches)?x.matches:[],body:Array.isArray(x.body)?x.body:[],reqs:Array.isArray(x.reqs)?x.reqs:[]}}catch(e){}
+let dr=d&&d.active?d:null;if(!dr){try{dr=JSON.parse(localStorage.getItem('trening-active')||'null')}catch(e){}}
+if(!profile)view='profil';
+if(profile&&dr&&dr.active&&(SYN[dr.active.key]||PLANS[dr.active.key])){active=dr.active;if(active.kind==='syn'){if(!active.reps)active.reps={};if(!active.res)active.res={};if(!active.times)active.times={};if(active.lv==null)active.lv=lvlOf(active.key);if(!active.t&&active.t!==null)newStep()}view=active.kind==='syn'?'sesja':'log';if(dr.rest&&dr.rest.end>Date.now())rest=dr.rest}
+upgradeShop();applyTheme();render();setInterval(tick,250);connect();
+if(window.claude&&window.claude.hot&&window.claude.hot.snapshot)window.claude.hot.snapshot(()=>({active,rest}))}
+const H=window.claude&&window.claude.hot;
+if(H&&H.ready)H.ready(start);else start(H&&H.data||{});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&active)wake();if(pendingRender&&!['log','sesja','sklepEdit','mecz'].includes(view)&&!$('#modal').innerHTML)render()});
+}
+</script>
+</body>
+</html>
