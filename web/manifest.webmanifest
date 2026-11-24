@@ -1,7 +1,7 @@
 {
   "name": "Trening skrzydłowego",
   "short_name": "Trening",
-  "description": "Treningi skrzydłowego, punkty i sklepik z nagrodami, plan taty.",
+  "description": "Treningi skrzydłowego, punkty i sklepik, plan taty, budżet domowy i lista zakupów.",
   "lang": "pl",
   "start_url": "./",
   "scope": "./",
@@ -10,7 +10,52 @@
   "background_color": "#b8412b",
   "theme_color": "#b8412b",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Lista zakupów",
+      "short_name": "Zakupy",
+      "url": "./#zakupy",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Dodaj wydatek",
+      "short_name": "Wydatek",
+      "url": "./#wydatek",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Budżet",
+      "short_name": "Budżet",
+      "url": "./#budzet",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
   ]
 }
