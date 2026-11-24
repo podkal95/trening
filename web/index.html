@@ -916,7 +916,8 @@ else if(u.who==='tata'&&!kd&&s.remDad){const p=PLANS[u.k];out.push({id:id++,at:a
 homeRem().forEach(x=>out.push({...x,id:id++}));
 return out.filter(x=>x.at>Date.now()).sort((a,b)=>a.at-b.at)}
 let remSent='',remT=null;
-function syncRem(){clearTimeout(remT);remT=setTimeout(()=>{if(!NATIVE||!NATIVE.setReminders||!profile)return;const j=JSON.stringify(remList());if(j===remSent)return;remSent=j;try{NATIVE.setReminders(j)}catch(e){}},400)}
+let scSent='';
+function syncRem(){clearTimeout(remT);remT=setTimeout(()=>{if(NATIVE&&NATIVE.shortcuts&&profile){const v=isParent()?'1':'0';if(v!==scSent){scSent=v;try{NATIVE.shortcuts(v==='1')}catch(e){}}}if(!NATIVE||!NATIVE.setReminders||!profile)return;const j=JSON.stringify(remList());if(j===remSent)return;remSent=j;try{NATIVE.setReminders(j)}catch(e){}},400)}
 const remWhen=t=>{const d=new Date(t);return DAYS[(d.getDay()+6)%7]+' '+d.getDate()+'.'+pad(d.getMonth()+1)+', '+pad(d.getHours())+':'+pad(d.getMinutes())};
 function gcal(title,details,wd,time,mins){const b=new Date();b.setHours(0,0,0,0);b.setDate(b.getDate()+((wd-dIdx()+7)%7));const [H,M]=time.split(':').map(Number);b.setHours(H,M);const e=new Date(b.getTime()+mins*60000),f=d=>d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'T'+pad(d.getHours())+pad(d.getMinutes())+'00';let tz='Europe/Warsaw';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||tz}catch(x){}
 return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(title)+'&details='+encodeURIComponent(details)+'&dates='+f(b)+'/'+f(e)+'&ctz='+encodeURIComponent(tz)+'&recur='+encodeURIComponent('RRULE:FREQ=WEEKLY;BYDAY='+['MO','TU','WE','TH','FR','SA','SU'][wd])}
