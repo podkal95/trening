@@ -429,7 +429,7 @@ button.hist.hb{width:100%;background:none;border:0;border-top:1px solid var(--li
 <div class="toast" id="toast" role="status"></div>
 <script>
 {
-const VERSION='3.9';
+const VERSION='3.9.1';
 /* Firebase project used when the app runs on its own site (not inside Claude). Filled at build time. */
 const FB_CFG=/*FB_CFG*/{"apiKey":"AIzaSyA8bdlTbQ1NeD6HAmYb176iDZ4pvonofi0","authDomain":"trening-9ab24.firebaseapp.com","projectId":"trening-9ab24","storageBucket":"trening-9ab24.firebasestorage.app","messagingSenderId":"831323601801","appId":"1:831323601801:web:92d60076e9810a3f27bf58"}/*END_FB_CFG*/;
 const HOSTED=!(window.claude&&window.claude.use);
@@ -1487,6 +1487,17 @@ tvDel:(id,b)=>{if(!armed(b))return;RC.t=RC.t.filter(t=>t.id!==id);if(RC.x===id)R
 tvBt:op=>{if(op==='btScan'){rcBt.found=[]}if(op==='btStart')rcBt.st='starting';rcCall({op});if(op==='btVisible')toast('Telefon będzie widoczny przez 5 minut');render()},
 tvBtConn:a=>{rcCall({op:'btConnect',a});rcBt.st='connecting';render()}
 };
+/* ---------- portfel: płatność telefonem prosto z listy zakupów ---------- */
+const GWALLET='com.google.android.apps.walletnfcrel';
+let walletAt=0;
+function walletKind(){const u=navigator.userAgent||'';if(NATIVE)return 'g';if(/iPhone|iPad/.test(u))return 'a';if(/Android/.test(u))return 'g';return ''}
+function walletOpen(){const k=walletKind();if(!k)return;walletAt=Date.now();vib(15);
+if(k==='a'){location.href='shoebox://';return}
+if(NATIVE){let r='';try{r=NATIVE.openApp?NATIVE.openApp(GWALLET):''}catch(e){}
+if(r==='ok')return;if(r==='store'){toast('Nie masz Portfela Google. Otwieram sklep Play.');return}
+toast('Zaktualizuj apkę do wersji 3.9.1, żeby otwierać Portfel');return}
+location.href='intent://#Intent;package='+GWALLET+';S.browser_fallback_url='+encodeURIComponent('https://play.google.com/store/apps/details?id='+GWALLET)+';end'}
+document.addEventListener('visibilitychange',()=>{if(document.hidden||!walletAt)return;const back=Date.now()-walletAt;walletAt=0;if(back<20*60000&&view==='zakupy'&&S.home.items.some(x=>x.done))setTimeout(()=>toast('Zapłacone? Naciśnij „Koniec zakupów”, żeby wpisać wydatek'),400)});
 S=blank();
 const balance=()=>S.pts.entries.reduce((a,e)=>a+(num(e.p)||0),0);
 const earned=()=>S.pts.entries.reduce((a,e)=>a+(e.p>0&&!e.refund?e.p:0),0);
@@ -1790,7 +1801,7 @@ else if(view==='koniec'||view==='profil')b.innerHTML='';
 else if(HOME_VIEWS.includes(view)){let top='';const c=S.home.items.filter(x=>x.done).length;
 if(view==='przepisy')top='<div class="hfoot"><button class="btn sec wide" data-a="rNew">+ Własny przepis</button></div>';
 else if(view==='przepis'){const r=rGet(rId),n=r?rSelOf(r).filter(Boolean).length:0;top=r&&rDone===r.id?'<div class="hfoot"><button class="btn xl wide" data-a="tab" data-v="zakupy">✓ Dodano · pokaż listę</button></div>':`<div class="hfoot"><button class="btn xl ok wide" data-a="rAdd" ${n?'':'disabled'}>🛒 Dodaj do listy (${n})</button></div>`}
-else if(view==='zakupy')top=c?`<div class="hfoot"><button class="btn xl ok wide" data-a="zDone">Koniec zakupów (${c} w koszyku)</button></div>`:'<div class="hfoot hrow"><button class="btn sec" data-a="rcPick">📷 Paragon</button><button class="btn sec" style="flex:1" data-a="txNew">+ Dodaj wydatek</button></div>';
+else if(view==='zakupy'){const w=walletKind();top=c?(w?`<div class="hfoot hrow"><button class="btn xl sec" style="flex:none;padding:0 16px" data-a="walletOpen" aria-label="${w==='a'?'Otwórz Apple Wallet, żeby zapłacić':'Otwórz Portfel Google, żeby zapłacić'}">💳 Zapłać</button><button class="btn xl ok" style="flex:1;white-space:nowrap" data-a="zDone">Koniec zakupów (${c})</button></div>`:`<div class="hfoot"><button class="btn xl ok wide" data-a="zDone">Koniec zakupów (${c} w koszyku)</button></div>`):`<div class="hfoot hrow">${w?'<button class="btn sec" data-a="walletOpen" aria-label="Otwórz portfel, żeby zapłacić">💳 Zapłać</button>':''}<button class="btn sec" data-a="rcPick">📷 Paragon</button><button class="btn sec" style="flex:1" data-a="txNew">${w?'+ Wydatek':'+ Dodaj wydatek'}</button></div>`}
 else if(view==='plan')top=`<div class="hfoot" id="psum">${psumHtml()}</div>`;
 else top=`<div class="hfoot hrow"><button class="btn xl sec" data-a="rcPick">📷 Paragon</button><button class="btn xl" style="flex:1" data-a="txNew">+ Wydatek</button></div>`;
 b.innerHTML=top+navHtml()}
@@ -2132,7 +2143,7 @@ exp:()=>{$('#expBox').innerHTML=`<textarea class="inp" readonly aria-label="Kopi
 copy:()=>{const ta=$('#expBox textarea');ta.focus();ta.select();let ok=false;try{ok=document.execCommand&&document.execCommand('copy')}catch(e){}if(ok){toast('Skopiowano');return}try{navigator.clipboard.writeText(ta.value).then(()=>toast('Skopiowano'),()=>toast('Tekst zaznaczony, skopiuj ręcznie'))}catch(e){toast('Tekst zaznaczony, skopiuj ręcznie')}},
 imp:()=>{const t=$('#imp').value.trim();if(!t){toast('Najpierw wklej kopię');return}importText(t)}};
 
-Object.assign(ACT,HOME_ACT);Object.assign(ACT,RECIPE_ACT);Object.assign(ACT,EXTRA_ACT);Object.assign(ACT,DEV_ACT);Object.assign(ACT,PILOT_ACT);Object.assign(VIEWS,{pxiaomi:vPxiaomi,puni:vPuni,ppol:vPpol});
+Object.assign(ACT,HOME_ACT);Object.assign(ACT,RECIPE_ACT);Object.assign(ACT,EXTRA_ACT);Object.assign(ACT,DEV_ACT);Object.assign(ACT,PILOT_ACT);ACT.walletOpen=()=>walletOpen();Object.assign(VIEWS,{pxiaomi:vPxiaomi,puni:vPuni,ppol:vPpol});
 document.addEventListener('paste',e=>{const t=e.target;if(t.id!=='zIn')return;const v=(e.clipboardData||window.clipboardData).getData('text');if(!/[\n\r]/.test(v))return;e.preventDefault();zAddMany(t.value+'\n'+v);t.value='';zDraft='';zRefresh()});
 function homeHash(){const hs=location.hash.slice(1);if(!isParent()||!['zakupy','wydatek','budzet'].includes(hs))return false;setModeLS('d');view=hs==='wydatek'?'wydatki':hs;history.replaceState(null,'',location.pathname+location.search);if(hs==='wydatek')setTimeout(()=>ACT.txNew(),350);return true}
 window.addEventListener('hashchange',()=>{if(!active&&homeHash())render()});
