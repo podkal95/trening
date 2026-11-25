@@ -355,6 +355,18 @@ header>div:first-child{min-width:0}header h1,header small{white-space:nowrap;ove
 .gzof{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);border-radius:12px;padding:8px;margin:8px 0}.gzof img{width:100%;max-height:120px;object-fit:contain;background:#fff;border-radius:6px}.gzof div{display:flex;flex-direction:column}.gzof span{font-size:14px;color:var(--mut)}
 .gzpv{margin-top:10px;max-height:62vh;overflow:auto;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:zoom-in}.gzpv img{display:block;width:100%;height:auto}.gzpv.z{cursor:zoom-out}.gzpv.z img{width:240%;max-width:none}
 .gzext{margin-top:12px;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.gzt{display:flex;flex-direction:column;margin:10px 8px 4px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg)}
+.gzr{display:grid;grid-template-columns:1fr auto 14px;column-gap:10px;row-gap:2px;align-items:center;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--line);padding:9px 8px 9px 12px;min-height:54px;font:inherit;color:var(--ink);cursor:pointer}
+.gzr:first-child{border-top:0}
+.gzr b{grid-column:1;grid-row:1;font-size:16px;min-width:0;overflow-wrap:anywhere}
+.gzr .gzrp{grid-column:2;grid-row:1;text-align:right;font-size:14px;color:var(--mut);white-space:nowrap}
+.gzr em{grid-column:1/3;grid-row:2;font-style:normal;font-size:13px;color:var(--ok);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.gzr.soon em{color:var(--blue)}
+.gzr .gzar{grid-column:3;grid-row:1/3;font-style:normal;font-size:22px;color:var(--mut);line-height:1}
+div.gzr{cursor:default;min-height:42px}div.gzr b{color:var(--mut);font-weight:600}div.gzr .gzrp{font-size:13px}
+.gzr.top{background:color-mix(in srgb,var(--ok) 11%,transparent)}
+.gzbest{font-style:normal;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;color:#fff;background:var(--ok);border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:2px}
+.gzsl{grid-template-columns:1fr}
 .rcard{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:8px;min-height:64px;text-align:left;font:inherit;color:var(--ink);cursor:pointer}
 .rcard:active{transform:scale(.99)}.rem{font-size:30px;line-height:1;flex:none;width:40px;text-align:center}.rem.big{font-size:44px;width:52px}
 .rtx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.rtx b{font-size:17px;overflow-wrap:anywhere}.rtx small{color:var(--mut);font-size:13px}
@@ -462,7 +474,7 @@ button.hist.hb{width:100%;background:none;border:0;border-top:1px solid var(--li
 <div class="toast" id="toast" role="status"></div>
 <script>
 {
-const VERSION='3.10';
+const VERSION='3.10.1';
 /* Firebase project used when the app runs on its own site (not inside Claude). Filled at build time. */
 const FB_CFG=/*FB_CFG*/{"apiKey":"AIzaSyA8bdlTbQ1NeD6HAmYb176iDZ4pvonofi0","authDomain":"trening-9ab24.firebaseapp.com","projectId":"trening-9ab24","storageBucket":"trening-9ab24.firebasestorage.app","messagingSenderId":"831323601801","appId":"1:831323601801:web:92d60076e9810a3f27bf58"}/*END_FB_CFG*/;
 const HOSTED=!(window.claude&&window.claude.use);
@@ -1534,7 +1546,9 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden||!walletAt)
 /* ---------- gazetki: śledzenie promocji (wyszukiwarka blix.pl, przez apkę Android) ---------- */
 HOME_VIEWS.push('gazetki');HOME_T.gazetki='Gazetki';
 const GZ_TTL=6*3600000;
-const GZ_SHOPS=[['lidl','Lidl'],['biedronka','Biedronka'],['kaufland','Kaufland'],['auchan','Auchan'],['carrefour','Carrefour'],['carrefour-market','Carrefour Market'],['aldi','Aldi'],['netto','Netto'],['dino','Dino'],['stokrotka','Stokrotka'],['intermarche','Intermarche'],['polomarket','POLOmarket'],['lewiatan','Lewiatan'],['zabka','Żabka'],['rossmann','Rossmann'],['hebe','Hebe'],['pepco','Pepco'],['action','Action'],['selgros','Selgros'],['makro','Makro'],['leclerc','Leclerc'],['spar','SPAR'],['delikatesy-centrum','Delikatesy Centrum'],['topaz','TOPAZ'],['groszek','Groszek'],['abc','ABC'],['euro-sklep','Euro Sklep']];
+const GZ_G=[['kaufland','Kaufland',['kaufland']],['lidl','Lidl',['lidl']],['carrefour','Carrefour',['carrefour','carrefour-market','carrefour-express']],['biedronka','Biedronka',['biedronka','biedronka-home']],['aldi','Aldi',['aldi']]];
+const gzSel=()=>{const st=S.home.gs.st.filter(x=>GZ_G.some(g=>g[0]===x));return st.length?st:GZ_G.map(g=>g[0])};
+const gzEff=()=>GZ_G.filter(g=>gzSel().includes(g[0])).flatMap(g=>g[2]);
 const GZN=()=>!!(NATIVE&&NATIVE.promo);
 const gzKey=s=>znorm(s).replace(/ /g,'-').slice(0,60);
 const gzSl=s=>String(s||'').toLowerCase().replace(/[^\p{L}\p{N}]+/gu,'-').replace(/^-+|-+$/g,'');
@@ -1557,7 +1571,8 @@ const gzPr=h=>{let m=0;(h.o||[]).forEach(f=>{if(f.c>0&&(!m||f.c<m))m=f.c});retur
 const gzSort=hs=>hs.slice().sort((x,y)=>{const cx=gzCur(x),cy=gzCur(y);if(cx!==cy)return cx?-1:1;if(!cx)return x.a-y.a;const px=gzPr(x),py=gzPr(y);if(!!px!==!!py)return px?-1:1;if(px&&py&&px!==py)return px-py;return x.e-y.e});
 const gzBest=hs=>{let b=null;hs.forEach(h=>{const p=gzPr(h);if(p&&(!b||p<b.p))b={p,h}});return b};
 const gzOffImg=f=>f&&f.im?'https://imgproxy.blix.pl/'+f.im.split('/').map(encodeURIComponent).join('/'):'';
-const gzMine=h=>{const st=S.home.gs.st;return !st.length||st.includes(h.s)};
+const gzMine=h=>gzEff().includes(h.s);
+const gzPg=h=>{const p=gzPr(h),f=p&&(h.o||[]).find(f=>f.c===p);return f&&f.p?f.p:+h.p||1};
 function gzHits(k){const r=S.home.gr[k];if(!r||!Array.isArray(r.h))return null;const nm=gzNow();return gzSort(r.h.filter(h=>h&&h.e>=nm&&h.l&&h.s))}
 function gzAgo(t){const s=(Date.now()-t)/1000;if(s<90)return 'przed chwilą';if(s<3600)return Math.round(s/60)+' min temu';const d=new Date(t),hm=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');if(s<20*3600&&d.getDate()===new Date().getDate())return 'dziś '+hm;if(s<48*3600)return 'wczoraj '+hm;return Math.round(s/86400)+' dni temu'}
 const gzItemKey=x=>gzKey(gzQ(x.n));
@@ -1567,7 +1582,7 @@ function gzTick(force){if(!GZN()||!isParent()||!gzReady())return;const now=Date.
 const need=W.filter(w=>!gzBusy.has(w.k)&&(force||!gzFail[w.k]||now-gzFail[w.k]>10*60000)).filter(w=>{const r=S.home.gr[w.k];return force||!r||now-(r.t||0)>GZ_TTL});
 if(!need.length)return;const fresh=need.some(w=>!S.home.gr[w.k]);if(!force&&!fresh&&now-gzLast<60000)return;
 const batch=need.sort((a,b)=>(!!S.home.gr[a.k]-!!S.home.gr[b.k])||(b.w-a.w)).slice(0,20);gzLast=now;batch.forEach(w=>gzBusy.add(w.k));
-try{NATIVE.promo(JSON.stringify({q:batch.map(w=>({k:w.k,q:w.q})),st:S.home.gs.st}))}catch(e){batch.forEach(w=>gzBusy.delete(w.k));return}gzPaintSoon()}
+try{NATIVE.promo(JSON.stringify({q:batch.map(w=>({k:w.k,q:w.q})),st:gzEff()}))}catch(e){batch.forEach(w=>gzBusy.delete(w.k));return}gzPaintSoon()}
 const gzSoon=()=>{clearTimeout(gzSoonT);gzSoonT=setTimeout(()=>gzTick(false),400)};
 function gzEv(e){if(!e)return;if(e.st==='done'){gzBusy.clear();gzFlush();gzPaintSoon();return}if(!e.k){if(e.err)gzPaintSoon();return}gzBusy.delete(e.k);
 if(e.err){gzFail[e.k]=Date.now();gzPaintSoon();return}delete gzFail[e.k];
@@ -1575,7 +1590,7 @@ const r={k:String(e.k).slice(0,60),q:String(e.q||'').slice(0,80),u:String(e.u||'
 const o=S.home.gr[r.k];if(o&&(o.t||0)>=r.t)return;S.home.gr[r.k]=r;gzPend[r.k]=r;clearTimeout(gzFlushT);gzFlushT=setTimeout(gzFlush,2500);gzPaintSoon()}
 function gzFlush(){clearTimeout(gzFlushT);const p=gzPend;gzPend={};Object.keys(p).forEach(k=>put('gz-'+k,p[k]))}
 function gzPickup(){if(!NATIVE||!NATIVE.promoCached)return;let a=[];try{a=JSON.parse(NATIVE.promoCached()||'[]')}catch(e){}if(!Array.isArray(a))return;a.forEach(x=>{if(x&&x.r&&x.r.k&&!x.r.err)gzEv(Object.assign({},x.r,{ft:x.ft}))});if(a.length)gzFlush()}
-function gzCfgSync(){if(!gzCanBell())return;const w=S.home.gw.filter(gzBell).map(g=>({k:gzKey(g.n),q:g.n,n:g.n}));const c=JSON.stringify({w,st:S.home.gs.st});if(c===gzCfgLast)return;gzCfgLast=c;try{NATIVE.promoCfg(c)}catch(e){}}
+function gzCfgSync(){if(!gzCanBell())return;const w=S.home.gw.filter(gzBell).map(g=>({k:gzKey(g.n),q:g.n,n:g.n}));const c=JSON.stringify({w,st:gzEff()});if(c===gzCfgLast)return;gzCfgLast=c;try{NATIVE.promoCfg(c)}catch(e){}}
 function gzClean(){const want=new Set(gzWanted().map(w=>w.k)),now=Date.now();Object.keys(S.home.gr).forEach(k=>{const r=S.home.gr[k];if(!want.has(k)&&now-(r&&r.t||0)>2*86400000){delete S.home.gr[k];del('gz-'+k)}})}
 function gzHook(){if(!isParent())return;gzCfgSync();if(!gzReady())return;if(!gzPicked){gzPicked=true;gzPickup()}if(view==='zakupy'||view==='gazetki')gzSoon();if(!gzCleaned&&GZN()&&syncState==='cloud'){gzCleaned=true;setTimeout(gzClean,8000)}}
 const gzNotifAsk=()=>{try{if(NATIVE&&NATIVE.notifAllowed&&!NATIVE.notifAllowed()&&NATIVE.requestNotif)NATIVE.requestNotif()}catch(e){}};
@@ -1583,6 +1598,10 @@ function gzPaint(){const m=$('#gzM');if(m){m.innerHTML=gzModalBody(m.dataset.k);
 if(view==='gazetki'){const b=$('#gzBody');if(b)b.innerHTML=gzBody();const s=$('#gzStat');if(s)s.innerHTML=gzStat();const g=$('.gzseg');if(g)g.outerHTML=gzSeg('gazetki')}else if(view==='zakupy'){const b=$('#zBody');if(b)b.innerHTML=zBody();const g=$('.gzseg');if(g)g.outerHTML=gzSeg('zakupy')}}
 const gzPaintSoon=()=>{clearTimeout(gzPaintT);gzPaintT=setTimeout(gzPaint,250)};
 function gzListHits(){const out=[],seen=new Set();S.home.items.filter(x=>!x.done).forEach(x=>{const k=gzItemKey(x);if(k.length<3||seen.has(k))return;seen.add(k);const hs=(gzHits(k)||[]).filter(h=>gzCur(h)&&gzMine(h));if(hs.length)out.push({x,k,hs})});return out}
+function gzStores(hs){return GZ_G.filter(g=>gzSel().includes(g[0])).map(g=>{const H=(hs||[]).filter(h=>g[2].includes(h.s));return {g,h:H[0]||null,n:H.length}})}
+function gzTable(k,hs){const rows=gzStores(hs),best=gzBest(rows.filter(r=>r.h&&gzCur(r.h)).map(r=>r.h));
+return `<div class="gzt">${rows.map(r=>{const h=r.h;if(!h)return `<div class="gzr none"><b>${esc(r.g[1])}</b><span class="gzrp">brak promki</span></div>`;const pr=gzPr(h),f=pr&&(h.o||[]).find(f=>f.c===pr),cur=gzCur(h),top=!!(best&&best.h===h&&rows.filter(x=>x.h&&gzPr(x.h)).length>1);
+return `<button class="gzr${cur?'':' soon'}${top?' top':''}" data-a="gzPage" data-v="${esc(k+'|'+h.l)}" aria-label="${esc((h.b||r.g[1])+': '+(pr?gzZl(pr):'cena na stronie '+gzPg(h))+', '+gzWhen(h))}"><b>${esc(h.b||r.g[1])}${top?' <i class="gzbest">najtaniej</i>':''}</b><span class="gzrp">${pr?`<strong class="gzpr">${gzZl(pr)}</strong>${f&&f.d?` <i class="gzd">−${f.d}%</i>`:''}`:`cena na str. ${gzPg(h)}`}</span><em>${cur?'teraz, do '+gzDay(h.e):'od '+gzDay(h.a)}${f&&f.n?' · '+esc(f.n):''}${r.n>1?' · '+r.n+' gazetki':''}</em><i class="gzar" aria-hidden="true">›</i></button>`}).join('')}</div>`}
 const gzBrands=hs=>[...new Set(hs.map(h=>h.b||h.s))];
 function gzCount(){let n=gzListHits().length;S.home.gw.forEach(g=>{if((gzHits(gzKey(g.n))||[]).some(h=>gzMine(h)))n++});return n}
 function gzTag(x){if(x.done)return '';const k=gzItemKey(x);if(k.length<3)return '';const hs=(gzHits(k)||[]).filter(h=>gzCur(h)&&gzMine(h));if(!hs.length)return '';const b=gzBrands(hs),f=b[0].length>10?b[0].slice(0,9)+'…':b[0],best=gzBest(hs);
@@ -1593,26 +1612,23 @@ function gzStat(){const ts=Object.values(S.home.gr).map(r=>r&&r.t||0),last=ts.le
 if(GZN()){if(gzBusy.size)return `<span class="gzspin" aria-hidden="true"></span> Szukam w gazetkach… (${gzBusy.size})`;const f=Object.keys(gzFail).length;return `${last?'Sprawdzone '+gzAgo(last):'Jeszcze nie sprawdzone'}${f?' · brak internetu?':''} · <button class="link" data-a="gzRefresh">Odśwież</button>`}
 const app=Object.values(DEVS).some(d=>d.pl==='app'&&!d.rm);
 return `Gazetki przegląda telefon z apką Trening (Android)${last?', ostatnio '+gzAgo(last):''}. ${app?'Tu widzisz to, co znalazł.':'W rodzinie nie ma jeszcze telefonu z apką, więc wyniki się nie pojawią.'}`}
-function gzShopsLine(){const st=S.home.gs.st,m=new Map(GZ_SHOPS);Object.values(S.home.gr).forEach(r=>(r&&r.h||[]).forEach(h=>{if(!m.has(h.s))m.set(h.s,h.b)}));
-return `<div class="gzshops"><span>Sklepy: <b>${st.length?esc(st.map(s=>m.get(s)||s).join(', ')):'wszystkie'}</b></span><button class="link" data-a="gzShops">${st.length?'Zmień':'Wybierz swoje'}</button></div>`}
+function gzShopsLine(){const sel=gzSel();return `<div class="gzshops"><span>Sklepy: <b>${esc(GZ_G.filter(g=>sel.includes(g[0])).map(g=>g[1]).join(', '))}</b></span><button class="link" data-a="gzShops">Zmień</button></div>`}
 function vGazetki(){return gzSeg('gazetki')+`<div class="zadd"><input id="gzIn" class="inp" placeholder="Śledź produkt, np. syrop sodastream" autocomplete="off" autocapitalize="none" enterkeyhint="done" maxlength="60" aria-label="Produkt do śledzenia w gazetkach" value="${esc(gzDraft)}"><button class="btn" data-a="gzAdd" aria-label="Śledź produkt">+</button></div><p class="gzstat" id="gzStat">${gzStat()}</p>${gzShopsLine()}<div id="gzBody">${gzBody()}</div>`}
-function gzCard(g){const k=gzKey(g.n),r=S.home.gr[k],hs=gzHits(k),busy=gzBusy.has(k),bell=gzBell(g),st=S.home.gs.st;
-const mine=hs?hs.filter(gzMine):[],other=hs?hs.length-mine.length:0;let sub;
+function gzCard(g){const k=gzKey(g.n),r=S.home.gr[k],hs=gzHits(k),busy=gzBusy.has(k),bell=gzBell(g);
+const mine=hs?hs.filter(gzMine):[];let sub;
 if(!r||!hs)sub=busy?'Szukam…':GZN()?'Jeszcze nie sprawdzone':'Czeka na telefon z apką';
-else{const c=mine.filter(gzCur).length,s=mine.length-c;sub=mine.length?[c?c+' teraz':'',s?s+' wkrótce':''].filter(Boolean).join(' · '):'Brak w gazetkach'+(st.length?' Twoich sklepów':'');const best=gzBest(mine);if(best)sub+=` · najtaniej ${gzZl(best.p)} (${best.h.b||best.h.s})`;if(other)sub+=` · ${other} w innych sklepach`;if(busy)sub+=' · szukam…'}
+else{const rows=gzStores(mine).filter(x=>x.h),c=rows.filter(x=>gzCur(x.h)).length,s2=rows.length-c,all=gzSel().length;sub=rows.length?[c?`promka teraz w ${c} z ${all}`:'',s2?`wkrótce w ${s2}`:''].filter(Boolean).join(' · '):'Brak promek w wybranych sklepach';const best=gzBest(rows.filter(x=>gzCur(x.h)).map(x=>x.h));if(best)sub+=` · najtaniej ${gzZl(best.p)} (${best.h.b||best.h.s})`;if(busy)sub+=' · szukam…'}
 const used=r&&r.u&&gzSl(gzPretty(r.u))!==gzSl(g.n)?` · szukano „${esc(gzPretty(r.u))}”`:'';
 const hint=r&&r.br&&hs&&!hs.length?`<p class="gzhint">„${esc(g.n)}” to w gazetkach nazwa sklepu. Dopisz rodzaj produktu, np. „syrop ${esc(g.n)}”.</p>`:'';
-const open=gzOpen[g.id],show=open?mine:mine.slice(0,3);
-return `<div class="card gzp"><div class="gzph"><div class="gzpt"><b>${esc(g.n)}</b><small>${esc(sub)}${used}</small></div>${gzCanBell()?`<button class="gzbell" data-a="gzBell" data-v="${esc(g.id)}" aria-pressed="${bell}" aria-label="Powiadomienia o „${esc(g.n)}”: ${bell?'włączone':'wyłączone'}">${bell?'🔔':'🔕'}</button>`:''}<button class="zmore" data-a="gzMenu" data-v="${esc(g.id)}" aria-label="Więcej: ${esc(g.n)}">⋯</button></div>${hint}${show.length?`<div class="gzhits">${show.map(h=>gzHitHtml(h,k)).join('')}</div>`:''}${mine.length>3?`<button class="link" data-a="gzMore" data-v="${esc(g.id)}">${open?'Zwiń':'Pokaż wszystkie ('+mine.length+')'}</button>`:''}${other?`<button class="link" data-a="gzShow" data-v="${esc(k)}">Inne sklepy (${other})</button>`:''}</div>`}
+return `<div class="card gzp"><div class="gzph"><div class="gzpt"><b>${esc(g.n)}</b><small>${esc(sub)}${used}</small></div>${gzCanBell()?`<button class="gzbell" data-a="gzBell" data-v="${esc(g.id)}" aria-pressed="${bell}" aria-label="Powiadomienia o „${esc(g.n)}”: ${bell?'włączone':'wyłączone'}">${bell?'🔔':'🔕'}</button>`:''}<button class="zmore" data-a="gzMenu" data-v="${esc(g.id)}" aria-label="Więcej: ${esc(g.n)}">⋯</button></div>${hint}${r&&hs?gzTable(k,mine):''}</div>`}
 function gzBody(){const W=S.home.gw.slice().sort((a,b)=>(b.ts||0)-(a.ts||0));let h='';
-if(!W.length)h+=`<div class="card zempty"><h3>Śledź promki w gazetkach</h3><p class="mut">Wpisz produkt, np. „syrop sodastream”, „kawa jacobs”, „pampersy 4”. Apka przejrzy aktualne i przyszłe gazetki sklepów i pokaże, w którym sklepie i na której stronie jest promka.${gzCanBell()?' Dzwonek 🔔 da znać, gdy produkt pojawi się w nowej gazetce.':''}</p><p class="mut">Produkty z listy zakupów sprawdzam same, a promki pokazuję przy nich na liście.</p></div>`;
+if(!W.length)h+=`<div class="card zempty"><h3>Śledź promki w gazetkach</h3><p class="mut">Wpisz produkt, np. „syrop sodastream”, „kawa jacobs”, „pampersy 4”. Apka przejrzy aktualne i przyszłe gazetki Kauflandu, Lidla, Carrefoura, Biedronki i Aldi i pokaże cenę w każdym z nich.${gzCanBell()?' Dzwonek 🔔 da znać, gdy produkt pojawi się w nowej gazetce.':''}</p><p class="mut">Produkty z listy zakupów sprawdzam same, a promki pokazuję przy nich na liście.</p></div>`;
 else h+=W.map(gzCard).join('');
 const L=gzListHits();if(L.length)h+=`<h3 class="gzh">Promki na produkty z listy</h3><div class="card gzl">${L.map(o=>{const b=gzBrands(o.hs);const best=gzBest(o.hs);return `<button class="gzlrow" data-a="gzShow" data-v="${esc(o.k)}"><b>${esc(o.x.n)}${best?` <strong class="gzpr">od ${gzZl(best.p)}</strong>`:''}</b><span>🏷 ${esc(b.slice(0,3).join(', '))}${b.length>3?' +'+(b.length-3):''}</span></button>`}).join('')}</div>`;
-return h+`<p class="mut gzsrc">Dane z gazetek w blix.pl. Cena jest tam, gdzie blix ją opisał; przy pozostałych dotknij promki i zobacz stronę gazetki.</p>`}
+return h+`<p class="mut gzsrc">Dane z gazetek w blix.pl. Gdzie blix nie podał ceny, jest „cena na str.”: dotknij sklepu, a zobaczysz tę stronę gazetki.</p>`}
 function gzName(k){const g=S.home.gw.find(g=>gzKey(g.n)===k);if(g)return g.n;const x=S.home.items.find(x=>gzItemKey(x)===k);if(x)return x.n;const r=S.home.gr[k];return r&&r.q||k}
-function gzModalBody(k){const r=S.home.gr[k],hs=gzHits(k)||[],mine=hs.filter(gzMine),oth=hs.filter(h=>!gzMine(h)),st=S.home.gs.st;
-return `<h3 id="gzT">🏷 ${esc(gzName(k))}</h3><p class="mut gzsub">${r?'Sprawdzone '+gzAgo(r.t)+(r.u&&gzSl(gzPretty(r.u))!==gzSl(r.q)?' · szukano „'+esc(gzPretty(r.u))+'”':''):'Jeszcze nie sprawdzone'}</p>${mine.length?`<div class="gzhits">${mine.map(h=>gzHitHtml(h,k)).join('')}</div>`:`<p class="mut">Brak w gazetkach${st.length?' Twoich sklepów':''}.</p>`}${oth.length?`<details class="gzoth"${mine.length?'':' open'}><summary>Inne sklepy (${oth.length})</summary><div class="gzhits">${oth.map(h=>gzHitHtml(h,k)).join('')}</div></details>`:''}<p class="mut gzsrc">Dotknij promki, żeby zobaczyć stronę gazetki z ceną.</p><button class="btn wide" data-a="closeM">Zamknij</button>`}
-function gzShopList(){const m=new Map(GZ_SHOPS);Object.values(S.home.gr).forEach(r=>(r&&r.h||[]).forEach(h=>{if(h.s&&!m.has(h.s))m.set(h.s,h.b||h.s)}));const base=new Set(GZ_SHOPS.map(x=>x[0]));return [...m].sort((a,b)=>(base.has(b[0])-base.has(a[0]))||(base.has(a[0])?0:a[1].localeCompare(b[1],'pl')))}
+function gzModalBody(k){const r=S.home.gr[k],hs=(gzHits(k)||[]).filter(gzMine);
+return `<h3 id="gzT">🏷 ${esc(gzName(k))}</h3><p class="mut gzsub">${r?'Sprawdzone '+gzAgo(r.t)+(r.u&&gzSl(gzPretty(r.u))!==gzSl(r.q)?' · szukano „'+esc(gzPretty(r.u))+'”':''):'Jeszcze nie sprawdzone'}</p>${r?gzTable(k,hs):''}<p class="mut gzsrc">Dotknij sklepu, żeby zobaczyć stronę gazetki z ceną.</p><button class="btn wide" data-a="closeM">Zamknij</button>`}
 const GZ_ACT={
 gzAdd:()=>{const i=$('#gzIn'),n=(i?i.value:gzDraft).trim().replace(/\s+/g,' ').slice(0,60);if(gzKey(n).length<2){toast('Wpisz nazwę produktu');if(i)i.focus();return}
 const k=gzKey(n);if(S.home.gw.some(g=>gzKey(g.n)===k)){toast('Ten produkt już jest na liście');return}
@@ -1630,8 +1646,8 @@ gzMenu:v=>{const g=S.home.gw.find(x=>x.id===v);if(!g)return;gzMenuId=v;$('#modal
 gzRenOk:()=>{const g=S.home.gw.find(x=>x.id===gzMenuId),i=$('#gmN');if(!g||!i){closeModal();return}const n=i.value.trim().replace(/\s+/g,' ').slice(0,60);if(gzKey(n).length<2){toast('Wpisz nazwę produktu');return}
 if(n!==g.n){if(S.home.gw.some(x=>x.id!==g.id&&gzKey(x.n)===gzKey(n))){toast('Ten produkt już jest na liście');return}g.n=n;putE('g',g)}closeModal();render()},
 gzDel:(v,b)=>{if(!armed(b))return;const g=S.home.gw.find(x=>x.id===v);S.home.gw=S.home.gw.filter(x=>x.id!==v);delE('g',v);closeModal();if(g)toast('Usunięto „'+g.n+'”');render()},
-gzShops:()=>{const st=new Set(S.home.gs.st);$('#modal').innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-labelledby="gsT"><div class="card tall"><h3 id="gsT">Wasze sklepy</h3><p class="mut">Zaznacz sklepy, w których robicie zakupy. Promki z pozostałych schowam pod „Inne sklepy”. Nic nie zaznaczone: wszystkie sklepy.</p><div class="gzsl">${gzShopList().map(([s,b])=>`<label class="gzsc"><input type="checkbox" value="${esc(s)}"${st.has(s)?' checked':''}><span>${esc(b)}</span></label>`).join('')}</div><div class="row" style="margin-top:12px;flex-wrap:nowrap"><button class="btn sec" style="flex:1" data-a="closeM">Anuluj</button><button class="btn" style="flex:1" data-a="gzShopsOk">Zapisz</button></div></div></div>`},
-gzShopsOk:()=>{const st=[...document.querySelectorAll('.gzsl input:checked')].map(i=>i.value).slice(0,40);S.home.gs={st};put('gzcfg',S.home.gs);closeModal();vib(10);render()}
+gzShops:()=>{const st=new Set(gzSel());$('#modal').innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-labelledby="gsT"><div class="card"><h3 id="gsT">Sklepy do porównania</h3><p class="mut">Szukam promek i cen tylko w zaznaczonych sklepach.</p><div class="gzsl">${GZ_G.map(([s,b])=>`<label class="gzsc"><input type="checkbox" value="${esc(s)}"${st.has(s)?' checked':''}><span>${esc(b)}</span></label>`).join('')}</div><div class="row" style="margin-top:12px;flex-wrap:nowrap"><button class="btn sec" style="flex:1" data-a="closeM">Anuluj</button><button class="btn" style="flex:1" data-a="gzShopsOk">Zapisz</button></div></div></div>`},
+gzShopsOk:()=>{const st=[...document.querySelectorAll('.gzsl input:checked')].map(i=>i.value).slice(0,10);if(!st.length){toast('Zaznacz przynajmniej jeden sklep');return}S.home.gs={st};put('gzcfg',S.home.gs);closeModal();vib(10);render();if(GZN())setTimeout(()=>gzTick(true),300)}
 };
 window.__gzEv=gzEv;
 {const prev=window.__rc;window.__rc=e=>{if(e&&e.t==='promo'){try{gzEv(e)}catch(x){}return}if(prev)return prev(e)}}
