@@ -1,7 +1,7 @@
 {
-  "name": "Trening skrzydłowego",
-  "short_name": "Trening",
-  "description": "Treningi skrzydłowego, punkty i sklepik, plan taty, budżet domowy i lista zakupów.",
+  "name": "Podkale",
+  "short_name": "Podkale",
+  "description": "Rodzinna apka Podkale: treningi z animacjami, punkty i sklepik, budżet domowy, lista zakupów i gazetki.",
   "lang": "pl",
   "start_url": "./",
   "scope": "./",

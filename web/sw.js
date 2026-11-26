@@ -1,5 +1,5 @@
 /* Offline support: app shell cached; the page itself is network-first so updates arrive. */
-const V = 'trening-3.14';
+const V = 'trening-3.15';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 const CDN = ['www.gstatic.com', 'fonts.googleapis.com', 'fonts.gstatic.com'];
 
